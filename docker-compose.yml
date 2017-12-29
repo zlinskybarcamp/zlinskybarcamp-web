@@ -1,0 +1,25 @@
+version: '3'
+services:
+    web:
+        build:
+            context: docker/web
+        ports:
+            - "8000:80"
+        volumes:
+            - ".:/var/www/html"
+        restart: always
+        environment:
+            - NETTE_DEBUG=1
+        depends_on:
+            - mysqldb
+    mysqldb:
+        image: mysql
+        restart: always
+        ports:
+            - "8686:3306"
+        volumes:
+            - "./docker/mysql/data:/var/lib/mysql"
+            - "./docker/mysql/conf.d:/etc/mysql/conf.d"
+        environment:
+            - MYSQL_DATABASE=zlinskybarcamp
+            - MYSQL_ROOT_PASSWORD=redbitmasters

@@ -1,0 +1,130 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#001630">
+    <title>{ifset title}{include title|stripHtml} | {/ifset}Zlínský barcamp</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800,900|Roboto:300,300i,400,400i,700,900&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="{$basePath}/css/pure/pure.css">
+    <link rel="stylesheet" href="{$basePath}/fonts/style.css">
+    <link rel="stylesheet" href="{$basePath}/plugins/slick/slick.css">
+    <link rel="stylesheet" href="{$basePath}/css/main.css">
+</head>
+
+<body class="preload {if $isHp}hp{/if}">
+
+<header>
+    <div class="header">
+        <div class="header-inner">
+            <h1 class="logo">
+                <a href="index.html">
+                    <img src="{$basePath}/img/logo.png" width="310" height="70" alt="Zlínský Barcamp">
+                </a>
+            </h1>
+
+            <div class="header-nav">
+                <ul class="nav">
+                    <li class="active"><a href="index.html"><span class="nav-link">Home</span></a></li>
+                    {*<li><a href="#"><span class="nav-link">O akci</span></a></li>
+                    <li><a href="#program" class="scrollto"><span class="nav-link">Program</span></a></li>
+                    <li><a href="prednasky.html"><span class="nav-link">Přednášky</span></a></li>
+                    <li><a href="#"><span class="nav-link">Workshopy</span></a></li>
+                    <li><a href="#"><span class="nav-link">Afterpárty</span></a></li>
+                    <li><a href="#"><span class="nav-link">Blog</span></a></li>
+                    <li><a href="#"><span class="nav-link">Kontakt</span></a></li>*}
+                </ul>
+            </div>
+
+            <div class="btn-mobile-menu-open-container">
+                <span class="btn-mobile-menu-open"><span></span></span>
+                <span class="item-text">Menu</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+    {include content}
+
+</main>
+
+<footer>
+    <div class="footer">
+        <div class="container">
+
+            {*<div class="row pure-g pure-p">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                    <h4 class="footer-title">Registrace</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Registrovat se přes Facebook</a></li>
+                        <li><a href="#">Registrovat se přes Twitter</a></li>
+                        <li><a href="#">Registrovat se e-mailem</a></li>
+                    </ul>
+                </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                    <h4 class="footer-title">Přednášející</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Hlasovat pro přednášejícího</a></li>
+                        <li><a href="#">Vypsat svou přednášku</a></li>
+                    </ul>
+                </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                    <h4 class="footer-title">Kontakt</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Chci být partner zlínského Barcampu</a></li>
+                        <li><a href="#">Chci být dobrovolník</a></li>
+                        <li><a href="#">O nás</a></li>
+                        <li><a href="#">Všechny kontakty</a></li>
+                    </ul>
+                </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                    <h4 class="footer-title">Ke stažení</h4>
+                    <ul class="footer-nav">
+                        <li><a href="#">Tisková zpráva (PDF)</a></li>
+                        <li><a href="#">Program (PDF)</a></li>
+                        <li><a href="#">Logo (ZIP)</a></li>
+                        <li><a href="#">Záštita UTB</a></li>
+                    </ul>
+                </div>
+            </div>*}
+
+            {*<div class="footer-social">
+                Jsme lapeni v sítích
+
+                <a href="#" class="item">
+                    <span class="icon icon-facebook"></span>
+                </a>
+                <a href="#" class="item">
+                    <span class="icon icon-twitter-1"></span>
+                </a>
+                <a href="#" class="item">
+                    <span class="icon icon-youtube"><span class="path1"></span><span class="path2"></span></span>
+                </a>
+                <a href="#" class="item">
+                    <span class="icon">
+                        <img src="{$basePath}/img/instagram.svg" alt="instagram" width="32" height="32">
+                    </span>
+                </a>
+            </div>*}
+
+            <div class="footer-copyright">
+                © 2017 Zlínský Barcamp | <a href="https://www.redbit.cz/">Redbit s.r.o.</a> | Webdesign Roman Káčerek
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{$basePath}/js/jquery-3.1.1.min.js"></script>
+<script src="{$basePath}/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="{$basePath}/plugins/slick/slick.min.js"></script>
+<script src="{$basePath}/js/main.js"></script>
+</body>
+</html>
