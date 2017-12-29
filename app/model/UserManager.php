@@ -5,7 +5,6 @@ namespace App\Model;
 use Nette;
 use Nette\Security\Passwords;
 
-
 /**
  * Users management.
  */
@@ -47,10 +46,8 @@ class UserManager implements Nette\Security\IAuthenticator
 
         if (!$row) {
             throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
-
         } elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
             throw new Nette\Security\AuthenticationException('The password is incorrect.', self::INVALID_CREDENTIAL);
-
         } elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD_HASH])) {
             $row->update([
                 self::COLUMN_PASSWORD_HASH => Passwords::hash($password),
@@ -83,10 +80,4 @@ class UserManager implements Nette\Security\IAuthenticator
             throw new DuplicateNameException;
         }
     }
-}
-
-
-
-class DuplicateNameException extends \Exception
-{
 }

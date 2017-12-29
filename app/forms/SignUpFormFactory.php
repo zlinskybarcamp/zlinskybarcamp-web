@@ -6,7 +6,6 @@ use App\Model;
 use Nette;
 use Nette\Application\UI\Form;
 
-
 class SignUpFormFactory
 {
     use Nette\SmartObject;

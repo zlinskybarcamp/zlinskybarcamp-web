@@ -2,7 +2,6 @@
 
 namespace App\Presenters;
 
-
 class HomepagePresenter extends BasePresenter
 {
     public function __construct()
@@ -13,6 +12,5 @@ class HomepagePresenter extends BasePresenter
 
     public function renderDefault()
     {
-
     }
 }

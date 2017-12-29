@@ -5,7 +5,6 @@ namespace App\Presenters;
 use App\Forms;
 use Nette\Application\UI\Form;
 
-
 class SignPresenter extends BasePresenter
 {
     /** @var Forms\SignInFormFactory */
