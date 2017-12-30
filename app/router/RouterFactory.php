@@ -10,13 +10,21 @@ class RouterFactory
 {
     use Nette\StaticClass;
 
+
     /**
      * @return Nette\Application\IRouter
      */
     public static function createRouter()
     {
+
+        $adminRouter = new RouteList('Admin');
+        $adminRouter[] = new Route('admin/<presenter>/<action>', 'Dashboard:default');
+
         $router = new RouteList;
+        $router[] = $adminRouter;
+
         $router[] = new Route('<presenter>/<action>', 'Homepage:default');
+
         return $router;
     }
 }
