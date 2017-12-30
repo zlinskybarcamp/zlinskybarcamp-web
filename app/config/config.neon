@@ -24,6 +24,7 @@ database:
 
 
 services:
+    - App\Model\ConfigManager
     - App\Model\UserManager
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory
