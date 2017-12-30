@@ -16,7 +16,7 @@ session:
 
 
 database:
-    dsn: 'mysql:host=127.0.0.1;port=8686;dbname=zlinskybarcamp'
+    dsn: 'mysql:host=zlinskybarcampweb_mysqldb_1;dbname=zlinskybarcamp'
     user: root
     password: redbitmasters
     options:

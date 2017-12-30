@@ -14,6 +14,7 @@ services:
             - mysqldb
     mysqldb:
         image: mysql
+        container_name: zlinskybarcampweb_mysqldb_1
         restart: always
         ports:
             - "8686:3306"
