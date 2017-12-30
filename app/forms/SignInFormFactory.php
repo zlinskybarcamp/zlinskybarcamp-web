@@ -30,8 +30,8 @@ class SignInFormFactory
     public function create(callable $onSuccess)
     {
         $form = $this->factory->create();
-        $form->addText('username', 'Username:')
-            ->setRequired('Please enter your username.');
+        $form->addText('email', 'E-mail:')
+            ->setRequired('Please enter your e-mail.');
 
         $form->addPassword('password', 'Password:')
             ->setRequired('Please enter your password.');
@@ -43,7 +43,7 @@ class SignInFormFactory
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
                 $this->user->setExpiration($values->remember ? '14 days' : '20 minutes');
-                $this->user->login($values->username, $values->password);
+                $this->user->login($values->email, $values->password);
             } catch (Nette\Security\AuthenticationException $e) {
                 $form->addError('The username or password you entered is incorrect.');
                 return;
