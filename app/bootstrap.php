@@ -6,7 +6,10 @@ $configurator = new Nette\Configurator;
 
 if (($debug = getenv('NETTE_DEBUG')) !== false) {
     $configurator->setDebugMode($debug === '1');
+} else {
+    //$configurator->setDebugMode('90.177.225.193');
 }
+
 
 $configurator->enableTracy(__DIR__ . '/../log');
 
