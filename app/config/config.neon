@@ -29,5 +29,6 @@ services:
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
-    - App\Components\Schedule\Schedule
+    - App\Components\Schedule\ScheduleFactory
+    - App\Components\SignupButtons\SignupButtonsFactory
     router: App\RouterFactory::createRouter
