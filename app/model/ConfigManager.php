@@ -113,6 +113,6 @@ class ConfigManager
             'value' => new SqlLiteral("VALUES(`value`)")
         ];
 
-        $this->database->query("INSERT INTO `$tableName`", $values, ' ON DUPLICATE KEY UPDATE ', $updateStatement);
+        $this->database->query('INSERT INTO ?name ?values ON DUPLICATE KEY UPDATE ?;', $tableName, $values, $updateStatement);
     }
 }
