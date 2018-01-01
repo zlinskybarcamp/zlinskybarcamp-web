@@ -23,7 +23,8 @@ class RouterFactory
         $router = new RouteList;
         $router[] = $adminRouter;
 
-        $router[] = new Route('<presenter>/<action>', 'Homepage:default');
+        $router[] = new Route('<action>', 'Homepage:default');
+        $router[] = new Route('<presenter>/<action>');
 
         return $router;
     }
