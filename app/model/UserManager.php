@@ -84,7 +84,7 @@ class UserManager implements Nette\Security\IAuthenticator
                 self::COLUMN_EMAIL => $email,
             ]);
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
-            throw new DuplicateNameException;
+            throw new DuplicateNameException();
         }
     }
 }

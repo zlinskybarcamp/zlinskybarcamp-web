@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.20)
 # Database: zlinskybarcamp
-# Generation Time: 2017-12-31 04:06:19 +0000
+# Generation Time: 2018-01-01 11:50:28 +0000
 # ************************************************************
 
 
@@ -28,6 +28,20 @@ CREATE TABLE `config` (
   `value` text NOT NULL COMMENT 'JSON encoded config value',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+
+
+# Dump of table newsletter_subscribe
+# ------------------------------------------------------------
+
+CREATE TABLE `newsletter_subscribe` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(200) NOT NULL DEFAULT '' COMMENT 'E-mail to subscribe',
+  `consent_date` datetime NOT NULL COMMENT 'Date of user''s consent',
+  `consent_desc` varchar(200) NOT NULL DEFAULT '' COMMENT 'Way to get user''s consent',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4;
 
 
 

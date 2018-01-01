@@ -1,0 +1,24 @@
+<div class="form-newsletter">
+    <span class="item-title">Chceš o všem vědět jako první?</span>
+    <span class="text-md">Nech nám e-mail nebo nás sleduj na sociálních sítích.</span>
+
+    <form n:name="form" class="mt-md">
+        <div class="form-row errors" n:if="$form->hasErrors()">
+            <div n:foreach="$form->errors as $error">{$error}</div>
+        </div>
+        <div class="form-row">
+            <input n:name="email" placeholder="Tvoje emailová adresa">
+        </div>
+        <div class="form-row">
+            <div class="checkbox">
+                <input n:name="consent">
+                <label n:name="consent">
+                    Souhlasím se zpracováním osobních údajů de zákona č. 101/2000 Sb.
+                </label>
+            </div>
+        </div>
+        <div class="form-row">
+            <button n:name="submit" class="btn btn-action btn-block">Přihlásit odběr</button>
+        </div>
+    </form>
+</div>

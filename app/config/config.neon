@@ -25,10 +25,12 @@ database:
 
 services:
     - App\Model\ConfigManager
+    - App\Model\NewsletterSignupManager
     - App\Model\UserManager
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
     - App\Components\Schedule\ScheduleFactory
     - App\Components\SignupButtons\SignupButtonsFactory
+    - App\Components\Newsletter\NewsletterSignupFactory
     router: App\RouterFactory::createRouter
