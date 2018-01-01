@@ -1,0 +1,26 @@
+{
+  "name": "zlinskybarcamp-web",
+  "version": "1.0.0",
+  "description": "Web Zlínského barcampu ======================",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zlinskybarcamp/zlinskybarcamp-web.git"
+  },
+  "author": "Redbit s.r.o.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zlinskybarcamp/zlinskybarcamp-web/issues"
+  },
+  "homepage": "https://github.com/zlinskybarcamp/zlinskybarcamp-web#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0"
+  }
+}

@@ -1,4 +1,5 @@
 log/*
+node_modules/*
 temp/*
 vendor/*
 !.gitignore
@@ -6,3 +7,4 @@ vendor/*
 !web.config
 app/config/config.local.neon
 docker/mysql/data/*
+www/js/netteForms.min.js
