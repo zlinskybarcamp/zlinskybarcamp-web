@@ -1,9 +1,6 @@
 <?php
 
-
 namespace App\Components\SignupButtons;
-
-
 
 class SignupButtonsFactory
 {

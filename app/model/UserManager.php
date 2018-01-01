@@ -60,7 +60,7 @@ class UserManager implements Nette\Security\IAuthenticator
         unset($user[self::COLUMN_PASSWORD_HASH]);
 
         $user['roles'] = [];
-        foreach($userRow->related(self::TABLE_ROLE, self::COLUMN_USER_ID) as $roleRow) {
+        foreach ($userRow->related(self::TABLE_ROLE, self::COLUMN_USER_ID) as $roleRow) {
             $user['roles'][] = $roleRow[self::COLUMN_ROLE];
         }
 

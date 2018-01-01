@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Components\SignupButtons;
-
 
 use Nette\Application\UI\Control;
 

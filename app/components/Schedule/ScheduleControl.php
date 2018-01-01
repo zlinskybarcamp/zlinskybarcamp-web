@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Components\Schedule;
 
 use Nette\Application\UI\Control;
