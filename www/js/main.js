@@ -252,6 +252,19 @@ barcamp.program = function() {
 
 };
 
+// TODO: Remove placeholders
+barcamp.disabledLinks = function() {
+    $('a.disabled, a[href="#"]').click(function(e){
+        e.preventDefault();
+        console.log('Clicked to disabled link');
+    });
+    $('a.only-placeholder').click(function(e){
+        e.preventDefault();
+        console.log('Clicked to placeholder link');
+        alert('Odkaz čeká na doplnění ze strany zadavatele');
+    })
+}
+
 barcamp.init = function () {
     barcamp.viewportWidth();
     barcamp.openNav();
@@ -263,6 +276,7 @@ barcamp.init = function () {
     barcamp.forms();
     barcamp.tabs();
     barcamp.program();
+    barcamp.disabledLinks();
 };
 
 $(document).ready(function () {
