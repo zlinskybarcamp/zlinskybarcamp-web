@@ -26,9 +26,17 @@ class HomepagePresenter extends BasePresenter
      */
     public function __construct(ScheduleFactory $scheduleFactory, SignupButtonsFactory $buttonsFactory)
     {
-        $this->isHp = true;
         $this->scheduleFactory = $scheduleFactory;
         $this->buttonsFactory = $buttonsFactory;
+    }
+
+
+    /**
+     *
+     */
+    public function renderDefault()
+    {
+        $this->template->isHp = true;
     }
 
 

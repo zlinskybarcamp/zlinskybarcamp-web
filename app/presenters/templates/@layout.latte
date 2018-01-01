@@ -15,10 +15,11 @@
     <link rel="stylesheet" href="{$basePath}/fonts/style.css">
     <link rel="stylesheet" href="{$basePath}/plugins/slick/slick.css">
     <link rel="stylesheet" href="{$basePath}/css/main.css">
+    <link rel="stylesheet" href="{$basePath}/css/flash.css">
     <link rel="shortcut icon" href="{$basePath}/favicon.ico">
 </head>
 
-<body class="preload {if $isHp}hp{/if}">
+<body class="preload {ifset $isHp}hp{/ifset}">
 
 <header>
     <div class="header">
@@ -51,8 +52,9 @@
 </header>
 
 <main>
-
-    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <div class="flash-wrapper" n:if="$flashes">
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    </div>
 
     {include content}
 
