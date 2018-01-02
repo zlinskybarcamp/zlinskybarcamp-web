@@ -9,6 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#001630">
     <title>{ifset title}{include title|stripHtml} | {/ifset}Zlínský barcamp</title>
+    <script>
+        window.dataLayer = [
+            {'event': 'gtm.js', 'gtm.start': new Date().getTime()},
+            {'event': 'error', 'error.code': {$errorCode}, 'error.message': {$errorMessage}}
+        ];
+    </script>
+    <script src="https://www.googletagmanager.com/gtm.js?id=GTM-TWSPHGQ" async></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800,900|Roboto:300,300i,400,400i,700,900&amp;subset=latin-ext"
           rel="stylesheet">
     <link rel="stylesheet" href="{$basePath}/css/pure/pure.css">

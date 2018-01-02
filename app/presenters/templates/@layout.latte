@@ -9,6 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#001630">
     <title>{ifset title}{include title|stripHtml} | {/ifset}Zlínský barcamp</title>
+    <script>
+        window.dataLayer = [
+            {'gtm.start': new Date().getTime(), event:'gtm.js'}
+        ];
+    </script>
+    <script src="https://www.googletagmanager.com/gtm.js?id=GTM-TWSPHGQ" async></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800,900|Roboto:300,300i,400,400i,700,900&amp;subset=latin-ext"
           rel="stylesheet">
     <link rel="stylesheet" href="{$basePath}/css/pure/pure.css">
@@ -17,9 +23,11 @@
     <link rel="stylesheet" href="{$basePath}/css/main.css">
     <link rel="stylesheet" href="{$basePath}/css/flash.css">
     <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+    <meta name="google-site-verification" content="GFEt0ZfmjMebcNwHAGLHD7Mg6JL5WEbmwnrcGgetftQ">
 </head>
 
 <body class="preload {ifset $isHp}hp{/ifset}">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWSPHGQ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <header>
     <div class="header">
