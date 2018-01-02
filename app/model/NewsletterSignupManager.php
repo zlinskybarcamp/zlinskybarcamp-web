@@ -20,12 +20,21 @@ class NewsletterSignupManager
     private $database;
 
 
+    /**
+     * NewsletterSignupManager constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
 
+    /**
+     * @param $email
+     * @param $consentDesc
+     * @throws DuplicateNameException
+     */
     public function add($email, $consentDesc)
     {
         try {

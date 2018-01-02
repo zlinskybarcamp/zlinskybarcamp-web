@@ -15,12 +15,19 @@ class NewsletterSignupControl extends Control
     private $manager;
 
 
+    /**
+     * NewsletterSignupControl constructor.
+     * @param NewsletterSignupManager $signupManager
+     */
     public function __construct(NewsletterSignupManager $signupManager)
     {
         $this->manager = $signupManager;
     }
 
 
+    /**
+     *
+     */
     public function render()
     {
         $this->template->setFile(__DIR__ . '/NewsletterSignup.latte');
@@ -28,6 +35,9 @@ class NewsletterSignupControl extends Control
     }
 
 
+    /**
+     * @return Form
+     */
     protected function createComponentForm()
     {
         $form = new Form();
@@ -44,6 +54,11 @@ class NewsletterSignupControl extends Control
     }
 
 
+    /**
+     * @param Form $form
+     * @param $values
+     * @throws \Nette\Application\AbortException
+     */
     public function formSucceeded(Form $form, $values)
     {
         try {

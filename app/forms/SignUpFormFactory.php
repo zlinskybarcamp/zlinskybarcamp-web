@@ -27,6 +27,7 @@ class SignUpFormFactory
 
 
     /**
+     * @param callable $onSuccess
      * @return Form
      */
     public function create(callable $onSuccess)

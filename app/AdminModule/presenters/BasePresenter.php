@@ -8,6 +8,10 @@ use Nette\Application\UI\Presenter;
 
 class BasePresenter extends Presenter
 {
+    /**
+     * @throws ForbiddenRequestException
+     * @throws \Nette\Application\AbortException
+     */
     protected function startup()
     {
         parent::startup();
@@ -19,7 +23,7 @@ class BasePresenter extends Presenter
 
         if (!$this->user->isInRole('admin')) {
             $this->flashMessage('Váš učet nemá do administrace přístup.');
-            throw new ForbiddenRequestException('Nemáte přístup do administrace', 403);
+            throw new ForbiddenRequestException('Nemáte přístup do administrace');
         }
     }
 }
