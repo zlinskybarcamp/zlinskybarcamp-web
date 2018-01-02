@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#001630">
-    <title>{ifset title}{include title|stripHtml} | {/ifset}Zlínský barcamp</title>
+    <title>{ifset title}{include title|stripHtml} | {/ifset}Chyba | Zlínský barcamp</title>
     <script>
         window.dataLayer = [
             {'event': 'gtm.js', 'gtm.start': new Date().getTime()},
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{$basePath}/fonts/style.css">
     <link rel="stylesheet" href="{$basePath}/plugins/slick/slick.css">
     <link rel="stylesheet" href="{$basePath}/css/main.css">
+    <link rel="stylesheet" href="{$basePath}/css/flash.css">
     <link rel="shortcut icon" href="{$basePath}/favicon.ico">
     <script src="{$basePath}/js/jquery-3.1.1.min.js" defer></script>
     <script src="{$basePath}/plugins/jquery-ui/jquery-ui.min.js" defer></script>
@@ -56,7 +57,9 @@
 
 <main>
 
-    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <div class="flash-wrapper" n:if="$flashes">
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    </div>
 
     {include content}
 
