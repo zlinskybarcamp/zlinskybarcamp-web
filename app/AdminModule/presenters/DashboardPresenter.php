@@ -15,8 +15,8 @@ class DashboardPresenter extends BasePresenter
         'features.registerTalk.enabled' => ['bool', 'Povolení zapisování přednášek'],
         'features.voteTalk.enabled' => ['bool', 'Povolení hlasování přednášek'],
         'features.showVoteTalk.enabled' => ['bool', 'Povolení zobrazení pořadí přednášek (podle hlasování)'],
-        'features.showProgram' => ['bool', 'Zobrazení programu přednášek'],
-        'features.showRecordings' => ['bool', 'Zobrazení záznamů přednášek (YouTube)'],
+        'features.showProgram.enabled' => ['bool', 'Zobrazení programu přednášek'],
+        'features.showRecordings.enabled' => ['bool', 'Zobrazení záznamů přednášek (YouTube)'],
     ];
 
 
@@ -42,13 +42,29 @@ class DashboardPresenter extends BasePresenter
                     $form->addCheckbox($id, $data[1])->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 case 'int':
-                    $form->addText($id, $data[1])->setDefaultValue($this->configManager->get($key, ''));
+                    $form->addInteger($id, $data[1])->setDefaultValue($this->configManager->get($key, ''));
                     break;
             }
         }
         $form->addSubmit('submit', 'Uložit');
+        $form->onValidate[] = [$this, 'onFormValidate'];
         $form->onSuccess[] = [$this, 'onFormSuccess'];
         return $form;
+    }
+
+
+    public function onFormValidate(Form $form, $values)
+    {
+        $confereeLimit = $values[$this->ideable('features.registerConferee.limit')];
+        $allowedRegisterConferee = $values[$this->ideable('features.registerConferee.enabled')];
+        $allowedRegisterTalk = $values[$this->ideable('features.registerTalk.enabled')];
+
+        if($allowedRegisterConferee && $confereeLimit <= 0) {
+            $form->addError('Registrace účastníků je povolena, ale současně je Počet účastníků nulový');
+        }
+        if($allowedRegisterTalk && !$allowedRegisterConferee) {
+            $form->addError('Je-li povoleno zapisování přednášek, potřebujeme povolit registraci účastníků');
+        }
     }
 
 
@@ -60,6 +76,9 @@ class DashboardPresenter extends BasePresenter
                 $this->configManager->set($key, $values[$id]);
             }
         }
+
+        $this->flashMessage('Nastavení uloženo', 'success');
+        $this->redirect('this');
     }
 
 
