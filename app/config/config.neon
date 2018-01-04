@@ -25,6 +25,7 @@ database:
 
 services:
     - App\Model\ConfigManager
+    - App\Model\EventInfoProvider
     - App\Model\NewsletterSignupManager
     - App\Model\UserManager
     - App\Forms\FormFactory

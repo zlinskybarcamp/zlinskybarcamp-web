@@ -17,7 +17,7 @@
             </div>
             <h2 class="hero-subtitle">KREATIVNÍ KONFERENCE O PODNIKÁNÍ</h2>
             <h1 class="hero-title">#zlinskybarcamp</h1>
-            <span class="hero-date">21. dubna 2018 od 9:00</span>
+            <span class="hero-date">{$eventDate|date:'j. n. Y \o\d G:i'}</span>
             Univerzita Tomáše Bati ve Zlíně
 
             <div class="hero-numbers">
@@ -49,8 +49,8 @@
 <div class="icons-info">
     <div class="item">
         <span class="icon icon-calendar"></span>
-        <b>21. dubna 2018</b><br />
-        9:00 - 17:00
+        <b>{$eventDate|date:'j. n. Y'}</b><br />
+        {$eventDate|date:'G:i'}
     </div>
     <div class="item">
         <span class="icon icon-placeholder"></span>

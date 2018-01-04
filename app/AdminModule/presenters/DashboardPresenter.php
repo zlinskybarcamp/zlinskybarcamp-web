@@ -4,6 +4,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\ConfigManager;
+use App\Model\EventInfoProvider;
 use Nette\Application\UI\Form;
 
 class DashboardPresenter extends BasePresenter
@@ -13,7 +14,7 @@ class DashboardPresenter extends BasePresenter
     const REQUIRED = 1;
 
     private $simpleConfigs = [
-        'dates.eventDate' => ['datetime-local', 'Datum akce', self::REQUIRED, 'Pozor, zobrazuje se na více místech webu'],
+        EventInfoProvider::EVENT_DATE => ['datetime-local', 'Datum akce', self::REQUIRED, 'Pozor, zobrazuje se na více místech webu'],
         'features.registerConferee.limit' => ['int', 'Počet účastníků', self::NOFLAG, 'Pozor, zobrazuje se na úvodní stránce'],
         'features.registerConferee.enabled' => ['bool', 'Povolení registrace účastníků'],
         'features.registerTalk.enabled' => ['bool', 'Povolení zapisování přednášek'],
