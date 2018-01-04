@@ -10,6 +10,10 @@ use App\Components\SignupButtons\SignupButtonsControl;
 use App\Components\SignupButtons\SignupButtonsFactory;
 use App\Model\EventInfoProvider;
 
+/**
+ * Class HomepagePresenter
+ * @package App\Presenters
+ */
 class HomepagePresenter extends BasePresenter
 {
     /**
@@ -24,21 +28,15 @@ class HomepagePresenter extends BasePresenter
      * @var NewsletterSignupFactory
      */
     private $newsletterFactory;
-    /**
-     * @var EventInfoProvider
-     */
-    private $eventInfo;
 
 
     /**
      * HomepagePresenter constructor.
-     * @param EventInfoProvider $eventInfo
      * @param ScheduleFactory $scheduleFactory
      * @param SignupButtonsFactory $buttonsFactory
      * @param NewsletterSignupFactory $newsletterFactory
      */
     public function __construct(
-        EventInfoProvider $eventInfo,
         ScheduleFactory $scheduleFactory,
         SignupButtonsFactory $buttonsFactory,
         NewsletterSignupFactory $newsletterFactory
@@ -46,17 +44,18 @@ class HomepagePresenter extends BasePresenter
         $this->scheduleFactory = $scheduleFactory;
         $this->buttonsFactory = $buttonsFactory;
         $this->newsletterFactory = $newsletterFactory;
-        $this->eventInfo = $eventInfo;
     }
 
 
     /**
      *
+     * @throws \Nette\Utils\JsonException
      */
     public function renderDefault()
     {
         $this->template->isHp = true;
         $this->template->eventDate = $this->eventInfo->getEventDate();
+        $this->template->counts = $this->eventInfo->getCounts();
     }
 
 
