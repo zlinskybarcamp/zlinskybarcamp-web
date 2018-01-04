@@ -41,7 +41,7 @@ CREATE TABLE `newsletter_subscribe` (
   `consent_desc` varchar(200) NOT NULL DEFAULT '' COMMENT 'Way to get user''s consent',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MEMORY DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 
