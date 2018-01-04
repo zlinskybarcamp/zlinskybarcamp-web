@@ -9,8 +9,12 @@ use Nette\Application\UI\Form;
 class DashboardPresenter extends BasePresenter
 {
 
+    const NOFLAG = 0;
+    const REQUIRED = 1;
+
     private $simpleConfigs = [
-        'features.registerConferee.limit' => ['int', 'Počet účastníků'],
+        'dates.eventDate' => ['datetime-local', 'Datum akce', self::REQUIRED, 'Pozor, zobrazuje se na více místech webu'],
+        'features.registerConferee.limit' => ['int', 'Počet účastníků', self::NOFLAG, 'Pozor, zobrazuje se na úvodní stránce'],
         'features.registerConferee.enabled' => ['bool', 'Povolení registrace účastníků'],
         'features.registerTalk.enabled' => ['bool', 'Povolení zapisování přednášek'],
         'features.voteTalk.enabled' => ['bool', 'Povolení hlasování přednášek'],
@@ -37,13 +41,37 @@ class DashboardPresenter extends BasePresenter
         $form = new Form();
         foreach ($this->simpleConfigs as $key => $data) {
             $id = $this->ideable($key);
+            $item = null;
             switch ($data[0]) {
+                case 'text':
+                    $item = $form->addText($id, $data[1])
+                        ->setDefaultValue($this->configManager->get($key, ''));
+                    break;
+                case 'date':
+                case 'time':
+                case 'datetime-local':
+                    $item = $form->addText($id, $data[1])
+                        ->setType($data[0])
+                        ->setDefaultValue($this->configManager->get($key, ''));
+                    break;
                 case 'bool':
-                    $form->addCheckbox($id, $data[1])->setDefaultValue($this->configManager->get($key, ''));
+                    $item = $form->addCheckbox($id, $data[1])
+                        ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 case 'int':
-                    $form->addInteger($id, $data[1])->setDefaultValue($this->configManager->get($key, ''));
+                    $item = $form->addInteger($id, $data[1])
+                        ->setDefaultValue($this->configManager->get($key, ''));
                     break;
+                default:
+                    throw new \LogicException('Unknown form item type reqested');
+            }
+            if (isset($data[2])) {
+                if ($data[2] | self::REQUIRED) {
+                    $item->setRequired("Pole '$data[1]' musí být vyplněno.'");
+                }
+            }
+            if (isset($data[3])) {
+                $item->setOption('description', $data[3]);
             }
         }
         $form->addSubmit('submit', 'Uložit');
@@ -59,10 +87,10 @@ class DashboardPresenter extends BasePresenter
         $allowedRegisterConferee = $values[$this->ideable('features.registerConferee.enabled')];
         $allowedRegisterTalk = $values[$this->ideable('features.registerTalk.enabled')];
 
-        if($allowedRegisterConferee && $confereeLimit <= 0) {
+        if ($allowedRegisterConferee && $confereeLimit <= 0) {
             $form->addError('Registrace účastníků je povolena, ale současně je Počet účastníků nulový');
         }
-        if($allowedRegisterTalk && !$allowedRegisterConferee) {
+        if ($allowedRegisterTalk && !$allowedRegisterConferee) {
             $form->addError('Je-li povoleno zapisování přednášek, potřebujeme povolit registraci účastníků');
         }
     }
