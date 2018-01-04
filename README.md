@@ -13,9 +13,22 @@ Po stažení repozitáře naisntalujte závislosti:
 
 Vytvořte soubor `app/config/config.local.neon` (není verzován v Gitu). Může být i prázdný.
 
+Pro úpravy JavaScriptových souborů a nebo stylů je potřeba nainstalovat závislosti pro generátor:
+
+    npm install
+    
+Po úpravě souborů v `assets/` zavolejte `grunt` a vygenerují se soubory:
+- `www/js/main.js`
+- `www/js/admin.js`
+- `www/css/main.css`
+
+které obsahují veškeré scripty a styly stránek (kromě admin sekce, ta využívá css z oficiálních CDN). Tyto soubory jsou
+součástí repozitáře, takže je lze rovnou použít. 
+ 
+
 Spuštění webového serveru
 -------------------------
-Spusťe Docker 
+Spusťte Docker 
 
     docker-composer up -d
 
@@ -32,4 +45,3 @@ License
 -------
 - Web: The MIT License (MIT)
 - Nette: New BSD License or GPL 2.0 or 3.0
-- Adminer: Apache License 2.0 or GPL 2

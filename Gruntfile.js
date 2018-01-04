@@ -2,15 +2,47 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        copy: {
+        less: {
             main: {
-                src: 'vendor/nette/forms/src/assets/netteForms.min.js',
-                dest: 'www/js/netteForms.min.js',
-            },
+                options: {
+                    compress: true,
+                    sourceMap: false
+                },
+                files: {
+                    'www/css/main.css': [
+                        'assets/css/pure/pure.css',
+                        'www/css/fonts.css',
+                        'www/plugins/slick/slick.css',
+                        'assets/less/main.less',
+                        'assets/css/flash.css'
+                    ]
+                }
+            }
         },
+        uglify: {
+            options: {
+                sourceMap: false,
+                beautify: false
+            },
+            default: {
+                files: {
+                    'www/js/main.js': [
+                        'assets/js/jquery-3.1.1.js',
+                        'www/plugins/jquery-ui/jquery-ui.js',
+                        'www/plugins/slick/slick.js',
+                        'assets/js/main.js',
+                        'vendor/nette/forms/src/assets/netteForms.js'
+                    ],
+                    'www/js/admin.js': [
+                        'vendor/nette/forms/src/assets/netteForms.js'
+                    ]
+                }
+            }
+        }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['copy']);
+    grunt.registerTask('default', ['less', 'uglify']);
 };
