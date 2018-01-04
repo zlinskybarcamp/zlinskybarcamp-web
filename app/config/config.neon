@@ -13,6 +13,9 @@ application:
 
 session:
     expiration: 14 days
+    cookie_secure: %productionMode%
+    debugger: true
+
 
 
 database:
