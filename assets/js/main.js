@@ -261,14 +261,14 @@ barcamp.program = function() {
 
 // TODO: Remove placeholders
 barcamp.disabledLinks = function() {
-    $('a.disabled, a[href="#"]').click(function(e){
+    $('a.disabled').click(function(e){
         e.preventDefault();
         console.log('Clicked to disabled link');
     });
-    $('a.only-placeholder').click(function(e){
+    $('a[href="#"], a[href^="https://example.com"]').click(function(e){
         e.preventDefault();
         console.log('Clicked to placeholder link');
-        alert('Odkaz čeká na doplnění ze strany zadavatele');
+        alert('Omlouváme se, tato funkce ještě není dostupná');
     })
 }
 
