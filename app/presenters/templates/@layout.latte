@@ -43,6 +43,7 @@
                     <li><a href="prednasky.html"><span class="nav-link">Přednášky</span></a></li>
                     <li><a href="#"><span class="nav-link">Workshopy</span></a></li>
                     <li><a href="#"><span class="nav-link">Afterpárty</span></a></li>*}
+                    <li><a href="https://blog.zlinskybarcamp.cz/kulate-stoly/"><span class="nav-link">Kulaté stoly</span></a></li>
                     <li><a href="https://blog.zlinskybarcamp.cz/"><span class="nav-link">Blog</span></a></li>
                     <li {ifCurrent Homepage:contact}class="active"{/ifCurrent}><a href="{link :Homepage:contact}"><span class="nav-link">Kontakt</span></a></li>
                 </ul>
@@ -70,14 +71,15 @@
         <div class="container">
 
             <div class="row pure-g pure-p">
-                {*<div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
                     <h4 class="footer-title">Registrace</h4>
                     <ul class="footer-nav">
-                        <li><a href="#">Registrovat se přes Facebook</a></li>
-                        <li><a href="#">Registrovat se přes Twitter</a></li>
-                        <li><a href="#">Registrovat se e-mailem</a></li>
+                        {*<li><a href="#">Registrovat se přes Facebook</a></li>
+                        <li><a href="#">Registrovat se přes Twitter</a></li>*}
+                        <li><a href="{link :Sign:up}">Registrovat se e-mailem</a></li>
+                        <li><a href="{link :Sign:in}">Přihlášení</a></li>
                     </ul>
-                </div>*}
+                </div>
                 {*<div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
                     <h4 class="footer-title">Přednášející</h4>
                     <ul class="footer-nav">
@@ -85,15 +87,16 @@
                         <li><a href="#">Vypsat svou přednášku</a></li>
                     </ul>
                 </div>*}
-                {*<div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
-                    <h4 class="footer-title">Kontakt</h4>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
+                    <h4 class="footer-title">O Barcampu</h4>
                     <ul class="footer-nav">
-                        <li><a href="#">Chci být partner zlínského Barcampu</a></li>
+                        <li><a href="https://blog.zlinskybarcamp.cz/kulate-stoly/">Kulaté stoly</a></li>
+                        {*<li><a href="#">Chci být partner zlínského Barcampu</a></li>
                         <li><a href="#">Chci být dobrovolník</a></li>
-                        <li><a href="#">O nás</a></li>
-                        <li><a href="#">Všechny kontakty</a></li>
+                        <li><a href="#">O nás</a></li>*}
+                        <li><a href="{link :Homepage:contact}">Všechny kontakty</a></li>
                     </ul>
-                </div>*}
+                </div>
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4">
                     <h4 class="footer-title">Ke stažení</h4>
                     <ul class="footer-nav">

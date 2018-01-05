@@ -33,6 +33,4 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         parent::beforeRender();
         $this->template->socialUrls = $this->eventInfo->getSocialUrls();
     }
-
-
 }
