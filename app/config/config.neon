@@ -11,11 +11,14 @@ application:
         *: App\*Module\Presenters\*Presenter
 
 
+extensions:
+    replicator: Kdyby\Replicator\DI\ReplicatorExtension
+
+
 session:
     expiration: 14 days
     cookie_secure: %productionMode%
     debugger: true
-
 
 
 database:
@@ -29,6 +32,7 @@ database:
 services:
     - App\Model\ConfigManager
     - App\Model\EventInfoProvider
+    - App\Model\FaqManager
     - App\Model\NewsletterSignupManager
     - App\Model\UserManager
     - App\Forms\FormFactory

@@ -5,7 +5,10 @@ namespace App\AdminModule\Presenters;
 
 use App\Model\ConfigManager;
 use App\Model\EventInfoProvider as Event;
+use App\Model\FaqManager;
 use Nette\Application\UI\Form;
+use Nette\Forms\Container;
+use Nette\Forms\Controls\SubmitButton;
 
 class DashboardPresenter extends BasePresenter
 {
@@ -29,25 +32,31 @@ class DashboardPresenter extends BasePresenter
         Event::COUNTS_WORKSHOPS => ['int', 'Počet workshopů', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_PARTY => ['int', 'Počet párty', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::URL_FACEBOOK => ['url', 'URL profilu na Facebook'],
-        Event::URL_TWITTER=> ['url', 'URL profilu na Twitter'],
+        Event::URL_TWITTER => ['url', 'URL profilu na Twitter'],
         Event::URL_YOUTUBE => ['url', 'URL profilu na YouTube'],
         Event::URL_INSTAGRAM => ['url', 'URL profilu na Instagram'],
     ];
 
 
     /**
-     * @var ConfigManager $configManager
+     * @var ConfigManager
      */
     private $configManager;
+    /**
+     * @var FaqManager
+     */
+    private $faqManager;
 
 
     /**
      * DashboardPresenter constructor.
      * @param ConfigManager $configManager
+     * @param FaqManager $faqManager
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, FaqManager $faqManager)
     {
         $this->configManager = $configManager;
+        $this->faqManager = $faqManager;
     }
 
 
@@ -55,7 +64,7 @@ class DashboardPresenter extends BasePresenter
      * @return Form
      * @throws \Nette\Utils\JsonException
      */
-    public function createComponentDashboardForm()
+    public function createComponentConfigForm()
     {
         $form = new Form();
         foreach ($this->simpleConfigs as $key => $data) {
@@ -100,8 +109,8 @@ class DashboardPresenter extends BasePresenter
             }
         }
         $form->addSubmit('submit', 'Uložit');
-        $form->onValidate[] = [$this, 'onFormValidate'];
-        $form->onSuccess[] = [$this, 'onFormSuccess'];
+        $form->onValidate[] = [$this, 'onConfigFormValidate'];
+        $form->onSuccess[] = [$this, 'onConfigFormSuccess'];
         return $form;
     }
 
@@ -110,7 +119,7 @@ class DashboardPresenter extends BasePresenter
      * @param Form $form
      * @param $values
      */
-    public function onFormValidate(Form $form, $values)
+    public function onConfigFormValidate(Form $form, $values)
     {
         $confereeLimit = $values[$this->ideable(Event::COUNTS_CONFEREE)];
         $allowedRegisterConferee = $values[$this->ideable('features.registerConferee.enabled')];
@@ -131,7 +140,7 @@ class DashboardPresenter extends BasePresenter
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Utils\JsonException
      */
-    public function onFormSuccess(Form $form, $values)
+    public function onConfigFormSuccess(Form $form, $values)
     {
         foreach ($this->simpleConfigs as $key => $data) {
             $id = $this->ideable($key);
@@ -142,6 +151,93 @@ class DashboardPresenter extends BasePresenter
 
         $this->flashMessage('Nastavení uloženo', 'success');
         $this->redirect('this');
+    }
+
+
+    /**
+     * @throws \Nette\Utils\JsonException
+     */
+    public function actionFaq()
+    {
+        $form = $this['faqForm'];
+        if (!$form->isSubmitted()) {
+            $faqs = $this->faqManager->get();
+            foreach ($faqs as $i => $faq) {
+                $form['faqs'][$i]->setDefaults($faq);
+            }
+        }
+    }
+
+
+    /**
+     * @return Form
+     */
+    public function createComponentFaqForm()
+    {
+        $form = new Form();
+
+        $removeEvent = [$this, 'faqRemoveClicked'];
+
+        $faq = $form->addDynamic('faqs', function (Container $faq) use ($removeEvent) {
+            $faq->addText('question', 'Otázka', 30);
+            $faq->addText('answer', 'Odpověď', 50);
+            $faq->addSubmit('remove', 'Odstranit')
+                ->setValidationScope(false)
+                ->onClick[] = $removeEvent;
+        }, 1);
+
+        $faq->addSubmit('add', 'Přidat další otázku')
+            ->setValidationScope(false)
+            ->onClick[] = [$this, 'faqAddClicked'];
+
+        $form->addSubmit('submit', 'Uložit');
+        $form->onSuccess[] = [$this, 'onFaqFormSuccess'];
+        return $form;
+    }
+
+
+    /**
+     * @param Form $form
+     * @param $values
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function onFaqFormSuccess(Form $form, $values)
+    {
+        if ($form['submit']->isSubmittedBy() === false) {
+            return;
+        }
+
+        $faqs = [];
+        foreach ($form['faqs']->values as $faq) {
+            if (empty($faq['question']) || empty($faq['answer'])) {
+                continue;
+            }
+            $faqs[] = $faq;
+        }
+        $this->faqManager->set($faqs);
+
+        $this->flashMessage('Nastavení uloženo', 'success');
+        $this->redirect('this');
+    }
+
+
+    /**
+     * @param SubmitButton $button
+     */
+    public function faqAddClicked(SubmitButton $button)
+    {
+        $button->parent->createOne();
+    }
+
+
+    /**
+     * @param SubmitButton $button
+     */
+    public function faqRemoveClicked(SubmitButton $button)
+    {
+        $faqs = $button->parent->parent;
+        $faqs->remove($button->parent, true);
     }
 
 
