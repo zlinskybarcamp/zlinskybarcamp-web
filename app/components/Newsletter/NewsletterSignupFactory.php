@@ -12,6 +12,10 @@ class NewsletterSignupFactory
     private $signupManager;
 
 
+    /**
+     * NewsletterSignupFactory constructor.
+     * @param NewsletterSignupManager $signupManager
+     */
     public function __construct(NewsletterSignupManager $signupManager)
     {
 
@@ -19,6 +23,9 @@ class NewsletterSignupFactory
     }
 
 
+    /**
+     * @return NewsletterSignupControl
+     */
     public function create()
     {
         return new NewsletterSignupControl($this->signupManager);

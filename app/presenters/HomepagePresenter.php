@@ -2,13 +2,13 @@
 
 namespace App\Presenters;
 
+use App\Components\Faq\FaqFactory;
 use App\Components\Newsletter\NewsletterSignupControl;
 use App\Components\Newsletter\NewsletterSignupFactory;
 use App\Components\Schedule\ScheduleControl;
 use App\Components\Schedule\ScheduleFactory;
 use App\Components\SignupButtons\SignupButtonsControl;
 use App\Components\SignupButtons\SignupButtonsFactory;
-use App\Model\EventInfoProvider;
 
 /**
  * Class HomepagePresenter
@@ -28,6 +28,10 @@ class HomepagePresenter extends BasePresenter
      * @var NewsletterSignupFactory
      */
     private $newsletterFactory;
+    /**
+     * @var FaqFactory
+     */
+    private $faqFactory;
 
 
     /**
@@ -35,15 +39,18 @@ class HomepagePresenter extends BasePresenter
      * @param ScheduleFactory $scheduleFactory
      * @param SignupButtonsFactory $buttonsFactory
      * @param NewsletterSignupFactory $newsletterFactory
+     * @param FaqFactory $faqFactory
      */
     public function __construct(
         ScheduleFactory $scheduleFactory,
         SignupButtonsFactory $buttonsFactory,
-        NewsletterSignupFactory $newsletterFactory
+        NewsletterSignupFactory $newsletterFactory,
+        FaqFactory $faqFactory
     ) {
         $this->scheduleFactory = $scheduleFactory;
         $this->buttonsFactory = $buttonsFactory;
         $this->newsletterFactory = $newsletterFactory;
+        $this->faqFactory = $faqFactory;
     }
 
 
@@ -83,5 +90,14 @@ class HomepagePresenter extends BasePresenter
     protected function createComponentNewsletterForm()
     {
         return $this->newsletterFactory->create();
+    }
+
+
+    /**
+     * @return \App\Components\Faq\FaqControl
+     */
+    protected function createComponentFaq()
+    {
+        return $this->faqFactory->create();
     }
 }

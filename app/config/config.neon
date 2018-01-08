@@ -38,7 +38,8 @@ services:
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
+    - App\Components\Faq\FaqFactory
+    - App\Components\Newsletter\NewsletterSignupFactory
     - App\Components\Schedule\ScheduleFactory
     - App\Components\SignupButtons\SignupButtonsFactory
-    - App\Components\Newsletter\NewsletterSignupFactory
     router: App\RouterFactory::createRouter
