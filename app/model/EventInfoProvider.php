@@ -13,7 +13,8 @@ class EventInfoProvider
     const COUNTS_CONFEREE = 'counts.conferee';
     const COUNTS_TALKS = 'counts.talks';
     const COUNTS_WORKSHOPS = 'counts.workshops';
-    const COUNTS_PARTY = 'counts.party';
+    const COUNTS_WARMUPPARTY = 'counts.warmupparty';
+    const COUNTS_AFTERPARTY = 'counts.afterparty';
     const EVENT_DATE = 'dates.eventDate';
     const URL_FACEBOOK = 'url.social.facebook';
     const URL_TWITTER = 'url.social.twitter';
@@ -73,7 +74,8 @@ class EventInfoProvider
             'conferee' => $this->config->get(self::COUNTS_CONFEREE),
             'talks' => $this->config->get(self::COUNTS_TALKS),
             'workshops' => $this->config->get(self::COUNTS_WORKSHOPS),
-            'party' => $this->config->get(self::COUNTS_PARTY),
+            'warmupparty' => $this->config->get(self::COUNTS_WARMUPPARTY),
+            'afterparty' => $this->config->get(self::COUNTS_AFTERPARTY),
         ]);
     }
 }

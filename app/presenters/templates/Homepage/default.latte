@@ -21,17 +21,20 @@
             Baťův institut ve Zlíně
 
             <div class="hero-numbers">
-                <div class="item">
+                <div n:if="$counts->conferee" class="item">
                     <span class="item-number">{$counts->conferee}<span>+</span></span> účastníků
                 </div>
-                <div class="item">
+                <div n:if="$counts->talks" class="item">
                     <span class="item-number">{$counts->talks}<span>+</span></span> přednášek
                 </div>
-                <div class="item">
+                <div n:if="$counts->workshops" class="item">
                     <span class="item-number">{$counts->workshops}</span> workshopů
                 </div>
-                <div class="item">
-                    <span class="item-number">{$counts->party}</span> afterparty
+                <div n:if="$counts->warmupparty" class="item">
+                    <span class="item-number">{$counts->warmupparty}</span> warp-up party
+                </div>
+                <div n:if="$counts->afterparty" class="item">
+                    <span class="item-number">{$counts->afterparty}</span> afterparty
                 </div>
             </div>
 
