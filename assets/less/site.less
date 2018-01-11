@@ -722,13 +722,6 @@
       font-weight: 400;
     }
 
-    &.done {
-      background-color: @color-secondary;
-      color: @color-default;
-      border-color: @color-secondary;
-      font-weight: 700;
-      font-size: 2.1rem;
-    }
   }
 
   .item-content {
@@ -777,6 +770,58 @@
     display: block;
     font-size: 1.5rem;
     font-weight: 700;
+  }
+
+  li{
+    &.item-primary {
+
+      .item-circle {
+        background-image: url('../img/logo-icon-96.png');
+        background-size: cover;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    &.item-done {
+
+      .item-circle {
+        background-color: @color-secondary;
+        background-image: none;
+        color: @color-default;
+        border-color: @color-secondary;
+        font-weight: 700;
+        font-size: 2.1rem;
+
+        &:before {
+          font-family: 'icomoon' !important;
+          speak: none;
+          font-style: normal;
+          font-variant: normal;
+          text-transform: none;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          font-size: 2rem;
+          position: relative;
+          top: 50%;
+          -webkit-transform: translate(0, -50%);
+          -moz-transform: translate(0, -50%);
+          -ms-transform: translate(0, -50%);
+          -o-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+          line-height: 0;
+          display: block;
+          font-weight: 400;
+          content: "\e920";
+        }
+
+        span {
+          display: none;
+        }
+      }
+    }
   }
 
 }
