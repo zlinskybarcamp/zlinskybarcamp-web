@@ -34,6 +34,7 @@ module.exports = function(grunt) {
                         'vendor/nette/forms/src/assets/netteForms.js'
                     ],
                     'www/js/admin.js': [
+                        'assets/js/jquery-3.1.1.js',
                         'vendor/nette/forms/src/assets/netteForms.js'
                     ]
                 }
