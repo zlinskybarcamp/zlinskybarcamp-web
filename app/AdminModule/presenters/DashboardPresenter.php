@@ -1,14 +1,16 @@
 <?php
 
-
 namespace App\AdminModule\Presenters;
 
 use App\Model\ConfigManager;
 use App\Model\EventInfoProvider as Event;
 use App\Model\FaqManager;
+use App\Model\ScheduleManager;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime;
 
 class DashboardPresenter extends BasePresenter
 {
@@ -20,18 +22,21 @@ class DashboardPresenter extends BasePresenter
      * @var array
      */
     private $simpleConfigs = [
-        Event::EVENT_DATE => ['datetime-local', 'Datum akce', self::REQUIRED, 'Pozor, zobrazuje se na více místech webu'],
-        'features.registerConferee.enabled' => ['bool', 'Povolení registrace účastníků'],
-        'features.registerTalk.enabled' => ['bool', 'Povolení zapisování přednášek'],
-        'features.voteTalk.enabled' => ['bool', 'Povolení hlasování přednášek'],
-        'features.showVoteTalk.enabled' => ['bool', 'Povolení zobrazení pořadí přednášek (podle hlasování)'],
-        'features.showProgram.enabled' => ['bool', 'Zobrazení programu přednášek'],
-        'features.showRecordings.enabled' => ['bool', 'Zobrazení záznamů přednášek (YouTube)'],
+        Event::EVENT_DATE => ['datetime-local', 'Datum akce', self::REQUIRED,
+            'Pozor, zobrazuje se na více místech webu'],
+        'features.registerConferee.enabled' => ['bool', 'Povolit registraci účastníků'],
+        'features.registerTalk.enabled' => ['bool', 'Povolit zapisování přednášek'],
+        'features.voteTalk.enabled' => ['bool', 'Povolit hlasování přednášek'],
+        'features.showVoteTalk.enabled' => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
+        'features.showProgram.enabled' => ['bool', 'Zobrazit program přednášek'],
+        'features.showRecordings.enabled' => ['bool', 'Zobrazit záznamy přednášek (YouTube)'],
         Event::COUNTS_CONFEREE => ['int', 'Počet účastníků', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_TALKS => ['int', 'Počet přednášek', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_WORKSHOPS => ['int', 'Počet workshopů', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
-        Event::COUNTS_WARMUPPARTY => ['int', 'Počet warm-up párty', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
-        Event::COUNTS_AFTERPARTY => ['int', 'Počet afterpárty', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
+        Event::COUNTS_WARMUPPARTY => ['int', 'Počet warm-up párty', self::REQUIRED,
+            'Pozor, zobrazuje se na úvodní stránce'],
+        Event::COUNTS_AFTERPARTY => ['int', 'Počet afterpárty', self::REQUIRED,
+            'Pozor, zobrazuje se na úvodní stránce'],
         Event::URL_FACEBOOK => ['url', 'URL profilu na Facebook'],
         Event::URL_TWITTER => ['url', 'URL profilu na Twitter'],
         Event::URL_YOUTUBE => ['url', 'URL profilu na YouTube'],
@@ -47,17 +52,38 @@ class DashboardPresenter extends BasePresenter
      * @var FaqManager
      */
     private $faqManager;
+    /**
+     * @var ScheduleManager
+     */
+    private $scheduleManager;
 
 
     /**
      * DashboardPresenter constructor.
      * @param ConfigManager $configManager
      * @param FaqManager $faqManager
+     * @param ScheduleManager $scheduleManager
      */
-    public function __construct(ConfigManager $configManager, FaqManager $faqManager)
+    public function __construct(ConfigManager $configManager, FaqManager $faqManager, ScheduleManager $scheduleManager)
     {
         $this->configManager = $configManager;
         $this->faqManager = $faqManager;
+        $this->scheduleManager = $scheduleManager;
+    }
+
+
+    /**
+     * @throws \Nette\Utils\JsonException
+     */
+    public function actionFaq()
+    {
+        $form = $this['faqForm'];
+        if (!$form->isSubmitted()) {
+            $faqs = $this->faqManager->get();
+            foreach ($faqs as $i => $faq) {
+                $form['faqs'][$i]->setDefaults($faq);
+            }
+        }
     }
 
 
@@ -69,34 +95,34 @@ class DashboardPresenter extends BasePresenter
     {
         $form = new Form();
         foreach ($this->simpleConfigs as $key => $data) {
-            $id = $this->ideable($key);
+            $formId = $this->ideable($key);
             $item = null;
             $isRequired = isset($data[2]) && ($data[2] | self::REQUIRED);
             switch ($data[0]) {
                 case 'text':
-                    $item = $form->addText($id, $data[1])
+                    $item = $form->addText($formId, $data[1])
                         ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 case 'url':
-                    $item = $form->addText($id, $data[1])
+                    $item = $form->addText($formId, $data[1])
                         ->setType($data[0])
                         ->setDefaultValue($this->configManager->get($key, ''))
                         ->addCondition(Form::FILLED)
-                            ->addRule(Form::URL, 'Toto není platné URL');
+                        ->addRule(Form::URL, 'Toto není platné URL');
                     break;
                 case 'date':
                 case 'time':
                 case 'datetime-local':
-                    $item = $form->addText($id, $data[1])
+                    $item = $form->addText($formId, $data[1])
                         ->setType($data[0])
                         ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 case 'bool':
-                    $item = $form->addCheckbox($id, $data[1])
+                    $item = $form->addCheckbox($formId, $data[1])
                         ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 case 'int':
-                    $item = $form->addInteger($id, $data[1])
+                    $item = $form->addInteger($formId, $data[1])
                         ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 default:
@@ -118,7 +144,7 @@ class DashboardPresenter extends BasePresenter
 
     /**
      * @param Form $form
-     * @param $values
+     * @param ArrayHash $values
      */
     public function onConfigFormValidate(Form $form, $values)
     {
@@ -137,7 +163,7 @@ class DashboardPresenter extends BasePresenter
 
     /**
      * @param Form $form
-     * @param $values
+     * @param ArrayHash $values
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Utils\JsonException
      */
@@ -156,21 +182,6 @@ class DashboardPresenter extends BasePresenter
 
 
     /**
-     * @throws \Nette\Utils\JsonException
-     */
-    public function actionFaq()
-    {
-        $form = $this['faqForm'];
-        if (!$form->isSubmitted()) {
-            $faqs = $this->faqManager->get();
-            foreach ($faqs as $i => $faq) {
-                $form['faqs'][$i]->setDefaults($faq);
-            }
-        }
-    }
-
-
-    /**
      * @return Form
      */
     public function createComponentFaqForm()
@@ -179,6 +190,7 @@ class DashboardPresenter extends BasePresenter
 
         $removeEvent = [$this, 'faqRemoveClicked'];
 
+        /** @var \Kdyby\Replicator\Container $faq */
         $faq = $form->addDynamic('faqs', function (Container $faq) use ($removeEvent) {
             $faq->addText('question', 'Otázka', 30);
             $faq->addText('answer', 'Odpověď', 50);
@@ -199,7 +211,7 @@ class DashboardPresenter extends BasePresenter
 
     /**
      * @param Form $form
-     * @param $values
+     * @param ArrayHash $values
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Utils\JsonException
      */
@@ -228,7 +240,9 @@ class DashboardPresenter extends BasePresenter
      */
     public function faqAddClicked(SubmitButton $button)
     {
-        $button->parent->createOne();
+        /** @var \Kdyby\Replicator\Container $faqs */
+        $faqs = $button->parent;
+        $faqs->createOne();
     }
 
 
@@ -237,17 +251,131 @@ class DashboardPresenter extends BasePresenter
      */
     public function faqRemoveClicked(SubmitButton $button)
     {
-        $faqs = $button->parent->parent;
-        $faqs->remove($button->parent, true);
+        /** @var Container $container */
+        $container = $button->parent;
+        /** @var \Kdyby\Replicator\Container $faqs */
+        $faqs = $container->parent;
+        $faqs->remove($container, true);
     }
 
 
     /**
-     * @param $key
-     * @return mixed
+     * @return Form
+     * @throws \Nette\Utils\JsonException
+     */
+    public function createComponentScheduleLevelForm()
+    {
+        $steps = $this->scheduleManager->getSteps(true);
+        $currentStep = $this->scheduleManager->getCurrentStep();
+
+        $form = new Form();
+
+        $items = [];
+        foreach ($steps as $step) {
+            $items[$step['key']] = $step['name'];
+        }
+        $form->addRadioList('currentStep', 'Aktuální krok harmonoramu', $items)
+            ->setDefaultValue($currentStep);
+
+        $form->addSubmit('submit', 'Nastavit');
+        $form->onSuccess[] = [$this, 'onScheduleLevelFormSuccess'];
+        return $form;
+    }
+
+
+    /**
+     * @param Form $form
+     * @param ArrayHash $values
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function onScheduleLevelFormSuccess(Form $form, $values)
+    {
+        $this->scheduleManager->setCurrentStep($values['currentStep']);
+
+        $this->flashMessage('Nastavení uloženo', 'success');
+        $this->redirect('this');
+    }
+
+
+    /**
+     * @return Form
+     * @throws \Nette\Utils\JsonException
+     */
+    public function createComponentScheduleForm()
+    {
+        $steps = $this->scheduleManager->getSteps(true);
+
+        $form = new Form();
+
+        foreach ($steps as $stepNum => $step) {
+            $form->addGroup(sprintf('Kroč č. %d: %s', $stepNum + 1, $step['name']));
+            foreach ($step['config'] as $config) {
+                $fomId = $this->ideable($config['id']);
+                switch ($config['type']) {
+                    case 'bool':
+                        $item = $form->addCheckbox($fomId, $config['name'])
+                            ->setDefaultValue($config['value']);
+                        break;
+                    case 'datetime-local':
+                        $item = $form->addText($fomId, $config['name'])
+                            ->setType($config['type'])
+                            ->setDefaultValue($config['value'] ? $this->dateToHtml5($config['value']) : null);
+                        break;
+                    default:
+                        throw new \LogicException("Invalid form field type: $config[type]");
+                }
+                if ($config['isRequired']) {
+                    $item->setRequired("Pole '$config[name]' v sekci '$step[name]' je povinné, ale není vyplněno.'");
+                }
+            }
+        }
+
+        $form->addGroup();
+        $form->addSubmit('submit', 'Uožit');
+        $form->onSuccess[] = [$this, 'onScheduleFormSuccess'];
+        return $form;
+    }
+
+
+    /**
+     * @param Form $form
+     * @param ArrayHash $values
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function onScheduleFormSuccess(Form $form, $values)
+    {
+        $steps = $this->scheduleManager->getSteps(false);
+
+        foreach ($steps as $step) {
+            foreach ($step['config'] as $config) {
+                $formId = $this->ideable($config['id']);
+                $value = $values[$formId];
+                $this->scheduleManager->setConfig($step['key'], $config['key'], $value, $config['type']);
+            }
+        }
+        $this->flashMessage('Nastavení uloženo', 'success');
+        $this->redirect('this');
+    }
+
+
+    /**
+     * @param string $key
+     * @return string
      */
     private function ideable($key)
     {
         return str_replace('.', '', $key);
+    }
+
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    private function dateToHtml5($date)
+    {
+        return (new DateTime($date))->format('Y-m-d\TH:i:s');
     }
 }
