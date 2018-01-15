@@ -5,9 +5,12 @@ namespace App\AdminModule\Presenters;
 
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
+use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 class BasePresenter extends Presenter
 {
+    use SecuredLinksPresenterTrait;
+
     /**
      * @throws ForbiddenRequestException
      * @throws \Nette\Application\AbortException

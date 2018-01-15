@@ -1,0 +1,21 @@
+{block title}{block h1}Ladění webu{/block} - Zlínský barcamp{/block}
+{block content}
+
+<p>Ladění webu je nyní <strong>
+        {if $isDebug}
+            <span class="glyphicon glyphicon-ok"></span> zapnuto
+        {else}
+            <span class="glyphicon glyphicon-remove"></span> vypnuto
+        {/if}
+    </strong>.</p>
+
+{if !$secured}
+    <p>Aplikace není provozována na HTTPS, takže jej nelze aktivovat.</p>
+{elseif $isDebugByEnv}
+    <p>Ale je zapnuto přes Environment, takže jej nelze deaktivovat.</p>
+{elseif $isDebug}
+    <p><a n:href="turnOff!" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Vypnout</a></p>
+{else}
+    <p><a n:href="turnOn!" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Zapnout</a></p>
+{/if}
+

@@ -3,9 +3,11 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\ConfigManager;
+use App\Model\DebugEnabler;
 use App\Model\EventInfoProvider as Event;
 use App\Model\FaqManager;
 use App\Model\ScheduleManager;
+use Nette\Application\Request;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
@@ -86,6 +88,40 @@ class DashboardPresenter extends BasePresenter
 
 
     /**
+     *
+     */
+    public function renderDebug()
+    {
+        $this->template->isDebug = DebugEnabler::isDebug();
+        $this->template->isDebugByEnv = DebugEnabler::isDebugByEnv();
+        $this->template->secured = $this->getRequest()->hasFlag(Request::SECURED);
+    }
+
+
+    /**
+     * @throws \Nette\Application\AbortException
+     * @secured
+     */
+    public function handleTurnOff()
+    {
+        DebugEnabler::turnOff();
+        $this->flashMessage('Ladící režim vypnut', 'success');
+        $this->redirect('this');
+    }
+
+
+    /**
+     * @throws \Nette\Application\AbortException
+     * @secured
+     */
+    public function handleTurnOn()
+    {
+        DebugEnabler::turnOn();
+        $this->flashMessage('Ladící režim zapnut', 'success');
+        $this->redirect('this');
+    }
+
+    /**
      * @return Form
      * @throws \Nette\Utils\JsonException
      */
@@ -134,6 +170,7 @@ class DashboardPresenter extends BasePresenter
             }
         }
         $form->addSubmit('submit', 'Uložit');
+        $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
         $form->onValidate[] = [$this, 'onConfigFormValidate'];
         $form->onSuccess[] = [$this, 'onConfigFormSuccess'];
         return $form;
@@ -202,6 +239,7 @@ class DashboardPresenter extends BasePresenter
             ->onClick[] = [$this, 'faqAddClicked'];
 
         $form->addSubmit('submit', 'Uložit');
+        $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
         $form->onSuccess[] = [$this, 'onFaqFormSuccess'];
         return $form;
     }
@@ -278,6 +316,7 @@ class DashboardPresenter extends BasePresenter
             ->setDefaultValue($currentStep);
 
         $form->addSubmit('submit', 'Nastavit');
+        $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
         $form->onSuccess[] = [$this, 'onScheduleLevelFormSuccess'];
         return $form;
     }
@@ -334,6 +373,7 @@ class DashboardPresenter extends BasePresenter
 
         $form->addGroup();
         $form->addSubmit('submit', 'Uožit');
+        $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
         $form->onSuccess[] = [$this, 'onScheduleFormSuccess'];
         return $form;
     }

@@ -4,10 +4,13 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
 
-if (($debug = getenv('NETTE_DEBUG')) !== false) {
-    $configurator->setDebugMode($debug === '1');
+require_once __DIR__ . '/model/DebugEnabler.php';
+App\Model\DebugEnabler::setWorkDir(__DIR__ . '/../temp');
+
+if (App\Model\DebugEnabler::isDebug()) {
+    $configurator->setDebugMode(true);
 } else {
-    //$configurator->setDebugMode('90.177.225.193');
+    $configurator->setDebugMode([]); // Automatic detect by Nette
 }
 
 $configurator->enableTracy(__DIR__ . '/../log', 'pan@jakubboucek.cz');

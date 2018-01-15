@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8bf66ba89314d2eba3d0780882c45e51",
+    "content-hash": "d74f13d7f0e87ec5642ad0e19b233191",
     "packages": [
         {
             "name": "kdyby/forms-replicator",
@@ -1278,6 +1278,63 @@
                 "validation"
             ],
             "time": "2017-08-20T17:32:29+00:00"
+        },
+        {
+            "name": "nextras/secured-links",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nextras/secured-links.git",
+                "reference": "39fe1b12fc737c584974bd8c4667fa4745aa561b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nextras/secured-links/zipball/39fe1b12fc737c584974bd8c4667fa4745aa561b",
+                "reference": "39fe1b12fc737c584974bd8c4667fa4745aa561b",
+                "shasum": ""
+            },
+            "require": {
+                "nette/application": "~2.4",
+                "nette/utils": "~2.4",
+                "php": ">=5.6"
+            },
+            "replace": {
+                "nextras/application": "self.version"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "nette/tester": "~1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nextras\\Application\\UI\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Skrasek",
+                    "email": "hrach.cz@gmail.com",
+                    "homepage": "http://jan.skrasek.com"
+                }
+            ],
+            "description": "Package secures Nette Framework signals against CSRF attack.",
+            "keywords": [
+                "application",
+                "nette",
+                "nextras",
+                "secured signals"
+            ],
+            "time": "2016-09-12T09:01:23+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
