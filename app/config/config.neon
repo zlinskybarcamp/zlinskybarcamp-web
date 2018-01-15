@@ -3,6 +3,9 @@
 # https://nette.org/security-warning
 #
 parameters:
+    wordpress:
+        url: https://blog.zlinskybarcamp.cz/
+        maxItems: 4
 
 
 application:
@@ -36,10 +39,12 @@ services:
     - App\Model\NewsletterSignupManager
     - App\Model\ScheduleManager
     - App\Model\UserManager
+    - App\Model\WordpressPostReader(%wordpress%)
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
     - App\Components\Faq\FaqFactory
+    - App\Components\Feed\FeedFactory
     - App\Components\Newsletter\NewsletterSignupFactory
     - App\Components\Schedule\ScheduleFactory
     - App\Components\SignupButtons\SignupButtonsFactory

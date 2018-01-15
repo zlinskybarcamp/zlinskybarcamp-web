@@ -1,0 +1,19 @@
+            <ul class="row list-articles">
+                <li n:foreach="$feed as $post">
+                    <div class="item">
+                        <a href="{$post->url}" class="item-image">
+                            <img src="{$post->thumbnailUrl}" alt="$post->name">
+                        </a>
+                        <h2 class="item-title">
+                            <a href="{$post->url}">{$post->name}</a>
+                        </h2>
+                        <div class="item-text">
+                            {$post->content|striptags}
+                        </div>
+                        <a href="{$post->url}" class="link-arrow">Více informací</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="text-center mt-xs">
+                <a href="{$sourceUrl}" class="btn btn-brand btn-section">Zobrazit všechny informace</a>
+            </div>
