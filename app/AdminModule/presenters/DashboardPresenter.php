@@ -22,8 +22,6 @@ class DashboardPresenter extends BasePresenter
      * @var array
      */
     private $simpleConfigs = [
-        Event::EVENT_DATE => ['datetime-local', 'Datum akce', self::REQUIRED,
-            'Pozor, zobrazuje se na více místech webu'],
         'features.registerConferee.enabled' => ['bool', 'Povolit registraci účastníků'],
         'features.registerTalk.enabled' => ['bool', 'Povolit zapisování přednášek'],
         'features.voteTalk.enabled' => ['bool', 'Povolit hlasování přednášek'],
@@ -270,7 +268,9 @@ class DashboardPresenter extends BasePresenter
 
         $form = new Form();
 
-        $items = [];
+        $items = [
+            '' => '(žádný)',
+        ];
         foreach ($steps as $step) {
             $items[$step['key']] = $step['name'];
         }
@@ -291,7 +291,8 @@ class DashboardPresenter extends BasePresenter
      */
     public function onScheduleLevelFormSuccess(Form $form, $values)
     {
-        $this->scheduleManager->setCurrentStep($values['currentStep']);
+        $value = $values['currentStep'];
+        $this->scheduleManager->setCurrentStep($value);
 
         $this->flashMessage('Nastavení uloženo', 'success');
         $this->redirect('this');

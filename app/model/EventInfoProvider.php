@@ -15,7 +15,11 @@ class EventInfoProvider
     const COUNTS_WORKSHOPS = 'counts.workshops';
     const COUNTS_WARMUPPARTY = 'counts.warmupparty';
     const COUNTS_AFTERPARTY = 'counts.afterparty';
-    const EVENT_DATE = 'dates.eventDate';
+    const DATE_TALKS = 'schedule.talks.date';
+    const DATE_VOTE = 'schedule.vote.date';
+    const DATE_EVENT = 'schedule.event.date';
+    const DATE_PROGRAM = 'schedule.program.date';
+    const DATE_REPORT = 'schedule.report.date';
     const URL_FACEBOOK = 'url.social.facebook';
     const URL_TWITTER = 'url.social.twitter';
     const URL_YOUTUBE = 'url.social.youtube';
@@ -44,8 +48,24 @@ class EventInfoProvider
      */
     public function getEventDate()
     {
-        $string = (string)$this->config->get(self::EVENT_DATE);
+        $string = (string)$this->config->get(self::DATE_EVENT);
         return DateTime::from($string);
+    }
+
+
+    /**
+     * @return ArrayHash
+     * @throws \Nette\Utils\JsonException
+     */
+    public function getDates()
+    {
+        return ArrayHash::from([
+            'talks' => DateTime::from($this->config->get(self::DATE_TALKS)),
+            'vote' => DateTime::from($this->config->get(self::DATE_VOTE)),
+            'program' => DateTime::from($this->config->get(self::DATE_PROGRAM)),
+            'event' => DateTime::from($this->config->get(self::DATE_EVENT)),
+            'report' => DateTime::from($this->config->get(self::DATE_REPORT)),
+        ]);
     }
 
 

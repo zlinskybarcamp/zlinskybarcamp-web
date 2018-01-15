@@ -34,6 +34,7 @@ services:
     - App\Model\EventInfoProvider
     - App\Model\FaqManager
     - App\Model\NewsletterSignupManager
+    - App\Model\ScheduleManager
     - App\Model\UserManager
     - App\Forms\FormFactory
     - App\Forms\SignInFormFactory

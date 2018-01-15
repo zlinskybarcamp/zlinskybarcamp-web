@@ -31,6 +31,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function beforeRender()
     {
         parent::beforeRender();
+        $this->template->dates = $this->eventInfo->getDates();
         $this->template->socialUrls = $this->eventInfo->getSocialUrls();
     }
 }
