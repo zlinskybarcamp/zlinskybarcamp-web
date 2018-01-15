@@ -1,6 +1,13 @@
 {block content}
-<h1 n:block=title>Sign Up</h1>
 
-{control signUpForm}
+<section>
+    <div class="wrapper bg-gray">
+        <div class="container">
+            <h1><span class="dot-end" n:block=title>Registrace</span></h1>
 
-<p><a n:href="in">Already have an account? Log in.</a></p>
+            {control signUpForm}
+
+            <p>Už u nás máte účet? <a n:href="in">Přihlaste se</a>.</p>
+        </div>
+    </div>
+</section>

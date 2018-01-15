@@ -1,11 +1,15 @@
 {block content}
-<h1 n:block=title>Sign In</h1>
 
-{control signInForm}
+<section>
+    <div class="wrapper bg-gray">
+        <div class="container">
+            <h1><span class="dot-end" n:block=title>Přihlášení</span></h1>
 
-{* OR
-{import '../components/form.latte'}
-{include form signInForm}
-*}
+            {control signInForm}
 
-<p><a n:href="up">Don't have an account yet? Sign up.</a></p>
+            <p>Jste tu poprvé? <a n:href="up">Registrujte se</a>.</p>
+        </div>
+    </div>
+</section>
+
+
