@@ -33,11 +33,19 @@ class WordpressPostReader
 
     /**
      * @return array
-     * @throws \Nette\Utils\JsonException
      */
     public function get()
     {
-        return $this->load();
+        $feed = $this->cache->load('feed', function (&$dependencies) {
+            $dependencies = [Caching\Cache::EXPIRE => '10 minutes'];
+            return $this->load();
+        });
+
+        if (!is_array($feed)) {
+            $feed = [];
+        }
+
+        return $feed;
     }
 
 
