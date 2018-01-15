@@ -69,7 +69,6 @@ class HomepagePresenter extends BasePresenter
     public function renderDefault()
     {
         $this->template->isHp = true;
-        $this->template->eventDate = $this->eventInfo->getEventDate();
         $this->template->counts = $this->eventInfo->getCounts();
     }
 

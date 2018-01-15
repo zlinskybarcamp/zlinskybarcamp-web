@@ -17,7 +17,7 @@
             </div>
             <h2 class="hero-subtitle">KREATIVNÍ KONFERENCE O PODNIKÁNÍ</h2>
             <h1 class="hero-title">#zlinskybarcamp</h1>
-            <span class="hero-date">{$eventDate|date:'j. n. Y \o\d G:i'}</span>
+            <span class="hero-date">{$dates->event|date:'j. n. Y \o\d G:i'}</span>
             Baťův institut ve Zlíně
 
             <div class="hero-numbers">
@@ -43,7 +43,7 @@
                 <a href="#" class="btn disabled btn-lg btn-default-bordered btn-section">Vypsat přednášku</a>
             </div>
 
-            <span class="hero-note">Přihlašování a registrace přednášek už od <span>12. 3. 2018</span> </span>
+            <span class="hero-note">Přihlašování a registrace přednášek už od <span>{$dates->talks|date:'j. n. Y'}</span> </span>
             {*<span class="hero-note">Už se přihlásilo <span>219</span> účastníků a je vypsáno <span>32</span> přednášek</span>*}
         </div>
     </div>
@@ -52,8 +52,8 @@
 <div class="icons-info">
     <div class="item">
         <span class="icon icon-calendar"></span>
-        <b>{$eventDate|date:'j. n. Y'}</b><br />
-        {$eventDate|date:'G:i'}
+        <b>{$dates->event|date:'j. n. Y'}</b><br />
+        {$dates->event|date:'G:i'}
     </div>
     <div class="item">
         <span class="icon icon-placeholder"></span>
