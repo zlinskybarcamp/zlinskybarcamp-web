@@ -33,6 +33,7 @@ class WordpressPostReader
 
     /**
      * @return array
+     * @throws \Nette\Utils\JsonException
      */
     public function get()
     {
