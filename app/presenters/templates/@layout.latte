@@ -106,24 +106,31 @@
                 </div>
             </div>
 
+            {if}
+            {var $socialCount = 0}
             <div class="footer-social">
                 Jsme lapeni v sítích
 
-                <a href="{$socialUrls->facebook}" class="item">
+                <a n:if="$socialUrls->facebook" href="{$socialUrls->facebook}" class="item">
                     <span class="icon icon-facebook"></span>
+                    {php $socialCount++}
                 </a>
-                <a href="{$socialUrls->twitter}" class="item">
+                <a n:if="$socialUrls->twitter" href="{$socialUrls->twitter}" class="item">
                     <span class="icon icon-twitter-1"></span>
+                    {php $socialCount++}
                 </a>
-                <a href="{$socialUrls->youtube}" class="item">
+                <a n:if="$socialUrls->youtube" href="{$socialUrls->youtube}" class="item">
                     <span class="icon icon-youtube"><span class="path1"></span><span class="path2"></span></span>
+                    {php $socialCount++}
                 </a>
-                <a href="{$socialUrls->instagram}" class="item">
+                <a n:if="$socialUrls->instagram" href="{$socialUrls->instagram}" class="item">
                     <span class="icon">
                         <img src="{$basePath}/img/instagram.svg" alt="instagram" width="32" height="32">
                     </span>
+                    {php $socialCount++}
                 </a>
             </div>
+            {/if $socialCount}
 
             <div class="footer-copyright">
                 © 2017 Zlínský Barcamp | <a href="https://www.redbit.cz/">Redbit s.r.o.</a> | Webdesign Roman Káčerek

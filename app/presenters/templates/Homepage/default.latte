@@ -97,26 +97,36 @@
 
             {control signupButtons}
 
+            {if}
+            {var $socialCount = 0}
             <div class="social">
-                <a href="{$socialUrls->facebook}" class="item">
+                <a n:if="$socialUrls->facebook" href="{$socialUrls->facebook}" class="item">
                     <span class="icon icon-facebook"></span>
                     Facebook
+                    {php $socialCount++}
+
                 </a>
-                <a href="{$socialUrls->twitter}" class="item">
+                <a n:if="$socialUrls->twitter" href="{$socialUrls->twitter}" class="item">
                     <span class="icon icon-twitter-1"></span>
                     Twitter
+                    {php $socialCount++}
+
                 </a>
-                <a href="{$socialUrls->youtube}" class="item">
+                <a n:if="$socialUrls->youtube" href="{$socialUrls->youtube}" class="item">
                     <span class="icon icon-youtube"><span class="path1"></span><span class="path2"></span></span>
                     Youtube
+                    {php $socialCount++}
+
                 </a>
-                <a href="{$socialUrls->instagram}" class="item">
+                <a n:if="$socialUrls->instagram" href="{$socialUrls->instagram}" class="item">
                         <span class="icon">
                             <img src="{$basePath}/img/instagram.svg" alt="instagram" width="50" height="50">
                         </span>
                     Instagram
+                    {php $socialCount++}
                 </a>
             </div>
+            {/if $socialCount}
 
             {control newsletterForm}
 
