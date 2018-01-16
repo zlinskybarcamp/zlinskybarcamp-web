@@ -16,12 +16,25 @@ class SignPresenter extends BasePresenter
     /** @var Forms\SignUpFormFactory */
     private $signUpFactory;
 
+    /** @var Forms\RegisterConfereeForm */
+    private $registerConfereeForm;
 
-    public function __construct(Forms\SignInFormFactory $signInFactory, Forms\SignUpFormFactory $signUpFactory)
-    {
+
+    /**
+     * SignPresenter constructor.
+     * @param Forms\SignInFormFactory $signInFactory
+     * @param Forms\SignUpFormFactory $signUpFactory
+     * @param Forms\RegisterConfereeForm $registerConfereeForm
+     */
+    public function __construct(
+        Forms\SignInFormFactory $signInFactory,
+        Forms\SignUpFormFactory $signUpFactory,
+        Forms\RegisterConfereeForm $registerConfereeForm
+    ) {
         parent::__construct();
         $this->signInFactory = $signInFactory;
         $this->signUpFactory = $signUpFactory;
+        $this->registerConfereeForm = $registerConfereeForm;
     }
 
 
@@ -53,5 +66,14 @@ class SignPresenter extends BasePresenter
     public function actionOut()
     {
         $this->getUser()->logout();
+    }
+
+
+    protected function createComponentRegisterConfereeForm()
+    {
+        return $this->registerConfereeForm->create(function () {
+            $this->flashMessage('Právě jste se zaregistrovali na Barcamp!');
+            $this->redirect('Homepage:');
+        });
     }
 }

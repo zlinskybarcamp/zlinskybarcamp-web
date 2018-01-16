@@ -24,6 +24,7 @@ class SignupButtonsControl extends Control
     {
         $this->template->setFile(__DIR__ . '/SignupButtons.latte');
         $this->template->dates = $this->eventInfo->getDates();
+        $this->template->features = $this->eventInfo->getFeatures();
         $this->template->render();
     }
 }

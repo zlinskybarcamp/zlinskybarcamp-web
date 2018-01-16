@@ -367,17 +367,14 @@ label {
   font-weight: 300;
 }
 
-.required {
+.required label:after {
+  content: " *";
   display: inline-block;
   color: @color-action;
   text-transform: uppercase;
-  font-size: 120%;
   vertical-align: top;
   line-height: 1;
-
-  &.text {
-    font-size: 75%;
-  }
+  font-size: 75%;
 }
 
 

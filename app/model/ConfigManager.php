@@ -2,20 +2,18 @@
 
 namespace App\Model;
 
-use Nette\Database\Context;
-use Nette\Database\SqlLiteral;
+use Nette\Database;
 use Nette\Utils\Json;
 
 class ConfigManager
 {
-    const
-        TABLE_NAME = 'config',
-        COLUMN_ID = 'id',
-        COLUMN_VALUE = 'value';
+    const TABLE_NAME = 'config';
+    const COLUMN_ID = 'id';
+    const COLUMN_VALUE = 'value';
 
 
     /**
-     * @var Context
+     * @var Database\Context
      */
     private $database;
 
@@ -27,9 +25,9 @@ class ConfigManager
 
     /**
      * ConfigManager constructor.
-     * @param Context $database
+     * @param Database\Context $database
      */
-    public function __construct(Context $database)
+    public function __construct(Database\Context $database)
     {
         $this->database = $database;
     }
@@ -104,15 +102,22 @@ class ConfigManager
 
         $tableName = self::TABLE_NAME;
 
-        $values = [[
-            'id' => $key,
-            'value' => $json,
-        ]];
-
-        $updateStatement = [
-            'value' => new SqlLiteral("VALUES(`value`)")
+        $values = [
+            [
+                'id' => $key,
+                'value' => $json,
+            ]
         ];
 
-        $this->database->query('INSERT INTO ?name ?values ON DUPLICATE KEY UPDATE ?;', $tableName, $values, $updateStatement);
+        $updateStatement = [
+            'value' => new Database\SqlLiteral("VALUES(`value`)")
+        ];
+
+        $this->database->query(
+            'INSERT INTO ?name ?values ON DUPLICATE KEY UPDATE ?;',
+            $tableName,
+            $values,
+            $updateStatement
+        );
     }
 }

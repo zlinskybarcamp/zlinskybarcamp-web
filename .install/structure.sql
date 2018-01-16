@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.20)
 # Database: zlinskybarcamp
-# Generation Time: 2018-01-01 11:50:28 +0000
+# Generation Time: 2018-01-16 07:06:30 +0000
 # ************************************************************
 
 
@@ -18,6 +18,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table conferee
+# ------------------------------------------------------------
+
+CREATE TABLE `conferee` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+  `user_id` int(11) DEFAULT NULL COMMENT 'Foreign key - used:id',
+  `name` varchar(200) NOT NULL DEFAULT '' COMMENT 'Users name',
+  `email` varchar(200) NOT NULL DEFAULT '' COMMENT 'Users e-mail',
+  `bio` text COMMENT 'Short info about user',
+  `allow_mail` tinyint(1) unsigned NOT NULL COMMENT 'Boolean - allow to send e-mails',
+  `consens` datetime DEFAULT NULL COMMENT 'Cosnens to keep users private data',
+  `extended` text COMMENT 'JSON - Extending data',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
 
 
 # Dump of table config
