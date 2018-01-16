@@ -21,13 +21,13 @@ class WordpressPostReader
 
     /**
      * WordpressPostReader constructor.
-     * @param $config
+     * @param array $config
      * @param Caching\IStorage $cacheStorage
      */
     public function __construct($config, Caching\IStorage $cacheStorage)
     {
         $this->config = $config;
-        $this->cache = new Caching\Cache($cacheStorage, __NAMESPACE__ . '\\' . __CLASS__);
+        $this->cache = new Caching\Cache($cacheStorage, self::class);
     }
 
 
@@ -97,7 +97,7 @@ class WordpressPostReader
 
 
     /**
-     * @param $originFeed
+     * @param array $originFeed
      * @return array
      * @throws \Nette\Utils\JsonException
      */
@@ -118,7 +118,7 @@ class WordpressPostReader
 
 
     /**
-     * @param $item
+     * @param array $item
      * @return null
      * @throws \Nette\Utils\JsonException
      */
@@ -145,7 +145,7 @@ class WordpressPostReader
 
 
     /**
-     * @param $mediaUrl
+     * @param string $mediaUrl
      * @return mixed
      * @throws \Nette\Utils\JsonException
      */

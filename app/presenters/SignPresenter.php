@@ -19,6 +19,7 @@ class SignPresenter extends BasePresenter
 
     public function __construct(Forms\SignInFormFactory $signInFactory, Forms\SignUpFormFactory $signUpFactory)
     {
+        parent::__construct();
         $this->signInFactory = $signInFactory;
         $this->signUpFactory = $signUpFactory;
     }

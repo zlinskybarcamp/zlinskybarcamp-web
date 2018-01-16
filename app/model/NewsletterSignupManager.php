@@ -31,8 +31,8 @@ class NewsletterSignupManager
 
 
     /**
-     * @param $email
-     * @param $consentDesc
+     * @param string $email
+     * @param string $consentDesc
      * @throws DuplicateNameException
      */
     public function add($email, $consentDesc)

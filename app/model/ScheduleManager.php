@@ -85,9 +85,9 @@ class ScheduleManager
 
 
     /**
-     * @param $stepName
-     * @param $configName
-     * @param null $type
+     * @param string $stepName
+     * @param string $configName
+     * @param string $type
      * @return bool|mixed|null|string
      * @throws \Nette\Utils\JsonException
      */
@@ -104,10 +104,10 @@ class ScheduleManager
 
 
     /**
-     * @param $stepName
-     * @param $configName
-     * @param $value
-     * @param null $type
+     * @param string $stepName
+     * @param string $configName
+     * @param mixed $value
+     * @param string $type
      * @throws \Nette\Utils\JsonException
      */
     public function setConfig($stepName, $configName, $value, $type = null)
@@ -121,8 +121,8 @@ class ScheduleManager
 
 
     /**
-     * @param $stepName
-     * @param $configName
+     * @param string $stepName
+     * @param string $configName
      * @return string
      */
     private function getConfigKey($stepName, $configName)
@@ -142,7 +142,7 @@ class ScheduleManager
 
 
     /**
-     * @param $value
+     * @param string $value
      * @throws \Nette\Utils\JsonException
      */
     public function setCurrentStep($value)
@@ -152,8 +152,8 @@ class ScheduleManager
 
 
     /**
-     * @param $value
-     * @param $type
+     * @param mixed $value
+     * @param string $type
      * @return bool|null|string
      */
     private function strictType($value, $type)

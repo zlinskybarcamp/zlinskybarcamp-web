@@ -132,7 +132,7 @@ class DebugEnabler
 
 
     /**
-     * @param $tokenFile
+     * @param string $tokenFile
      * @return string
      */
     private static function createToken($tokenFile)

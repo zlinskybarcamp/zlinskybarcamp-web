@@ -20,6 +20,7 @@ class FaqControl extends Control
      */
     public function __construct(FaqManager $faqManager)
     {
+        parent::__construct();
         $this->faqManager = $faqManager;
     }
 

@@ -70,9 +70,8 @@ class UserManager implements Nette\Security\IAuthenticator
 
     /**
      * Adds new user.
-     * @param  string
-     * @param  string
-     * @param  string
+     * @param string $email
+     * @param string $password
      * @return void
      * @throws DuplicateNameException
      */

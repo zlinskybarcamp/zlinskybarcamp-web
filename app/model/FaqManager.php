@@ -38,7 +38,7 @@ class FaqManager
 
 
     /**
-     * @param $faqs
+     * @param array $faqs
      * @throws \Nette\Utils\JsonException
      */
     public function set($faqs)

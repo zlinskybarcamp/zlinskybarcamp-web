@@ -15,6 +15,7 @@ class SignupButtonsControl extends Control
 
     public function __construct(EventInfoProvider $eventInfo)
     {
+        parent::__construct();
         $this->eventInfo = $eventInfo;
     }
 

@@ -66,6 +66,7 @@ class DashboardPresenter extends BasePresenter
      */
     public function __construct(ConfigManager $configManager, FaqManager $faqManager, ScheduleManager $scheduleManager)
     {
+        parent::__construct();
         $this->configManager = $configManager;
         $this->faqManager = $faqManager;
         $this->scheduleManager = $scheduleManager;

@@ -15,6 +15,7 @@ class FeedControl extends Control
 
     public function __construct(WordpressPostReader $postReader)
     {
+        parent::__construct();
         $this->postReader = $postReader;
     }
 

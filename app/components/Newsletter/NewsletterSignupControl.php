@@ -6,6 +6,7 @@ use App\Model\DuplicateNameException;
 use App\Model\NewsletterSignupManager;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
 
 class NewsletterSignupControl extends Control
 {
@@ -21,6 +22,7 @@ class NewsletterSignupControl extends Control
      */
     public function __construct(NewsletterSignupManager $signupManager)
     {
+        parent::__construct();
         $this->manager = $signupManager;
     }
 
@@ -56,7 +58,7 @@ class NewsletterSignupControl extends Control
 
     /**
      * @param Form $form
-     * @param $values
+     * @param ArrayHash $values
      * @throws \Nette\Application\AbortException
      */
     public function formSucceeded(Form $form, $values)
