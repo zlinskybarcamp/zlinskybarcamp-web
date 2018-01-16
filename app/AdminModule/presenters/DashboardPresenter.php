@@ -24,12 +24,12 @@ class DashboardPresenter extends BasePresenter
      * @var array
      */
     private $simpleConfigs = [
-        'features.registerConferee.enabled' => ['bool', 'Povolit registraci účastníků'],
-        'features.registerTalk.enabled' => ['bool', 'Povolit zapisování přednášek'],
-        'features.voteTalk.enabled' => ['bool', 'Povolit hlasování přednášek'],
-        'features.showVoteTalk.enabled' => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
-        'features.showProgram.enabled' => ['bool', 'Zobrazit program přednášek'],
-        'features.showRecordings.enabled' => ['bool', 'Zobrazit záznamy přednášek (YouTube)'],
+        Event::FEATURE_CONFEREE => ['bool', 'Povolit registraci účastníků'],
+        Event::FEATURE_TALK => ['bool', 'Povolit zapisování přednášek'],
+        Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
+        Event::FEATURE_SHOW_VOTE => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
+        Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
+        Event::FEATURE_REPORT => ['bool', 'Zobrazit výstupy (YouTube/Reporty)'],
         Event::COUNTS_CONFEREE => ['int', 'Počet účastníků', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_TALKS => ['int', 'Počet přednášek', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_WORKSHOPS => ['int', 'Počet workshopů', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],

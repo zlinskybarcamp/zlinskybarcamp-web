@@ -31,7 +31,7 @@ class ScheduleManager
         ['features.voteTalk.enabled', 'bool', 'Povolit hlasování přednášek'],
         ['features.showVoteTalk.enabled', 'bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
         ['features.showProgram.enabled', 'bool', 'Zobrazit program přednášek'],
-        ['features.showRecordings.enabled', 'bool', 'Zobrazit záznamy přednášek (YouTube)'],
+        ['features.showReport.enabled', 'bool', 'Zobrazit výstupy (YouTube/Reporty)'],
     ];
 
     /**

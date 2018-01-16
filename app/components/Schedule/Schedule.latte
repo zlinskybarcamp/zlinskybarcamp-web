@@ -8,9 +8,9 @@
             <span class="item-circle">
                 <span>01</span>
             </span>
-            <div class="item-content disabled">
+            <div class="item-content {if !$features->talks}disabled{/if}">
                 <span class="item-title">Vypsání přednášek</span>
-                Přednášky lze vypsat od 12. 3. 2018
+                Přednášky lze vypsat od {$dates->talks|date:'j. n. Y'}
                 <div>
                     <span class="btn btn-action btn-sm">Chci vypsat přednášku</span>
                 </div>
@@ -21,9 +21,9 @@
             <span class="item-circle">
                 <span>02</span>
             </span>
-            <div class="item-content disabled">
+            <div class="item-content {if !$features->vote}disabled{/if}">
                 <span class="item-title">Hlasování o přednáškách</span>
-                Hlasování bude možné od 26. 3. 2018
+                Hlasování bude možné od {$dates->vote|date:'j. n. Y'}
                 <div>
                     <span class="btn btn-action btn-sm">Chci hlasovat</span>
                 </div>
@@ -34,9 +34,9 @@
             <span class="item-circle">
                 <span>03</span>
             </span>
-            <div class="item-content disabled">
+            <div class="item-content {if !$features->program}disabled{/if}">
                 <span class="item-title">Zveřejnění programu</span>
-                Jaký bude program, bude jasné od 9. 4. 2018
+                Jaký bude program, bude jasné od {$dates->program|date:'j. n. Y'}
                 <div>
                     <a href="#" class="btn btn-action btn-sm">Chci kouknout na program</a>
                 </div>
@@ -47,11 +47,11 @@
             <span class="item-circle">
                 <span>04</span>
             </span>
-            <div class="item-content">
+            <div class="item-content disabled">
                 <span class="item-title">Barcamp</span>
-                Barcamp bude 21. 4. 2018 od 9 hodin
+                Barcamp bude {$dates->event|date:'j. n. Y \o\d G:i'}
                 <div>
-                    <span class="btn btn-action btn-sm disabled">Jak se tam dostanu?</span>
+                    <span class="btn btn-action btn-sm">Jak se tam dostanu?</span>
                 </div>
             </div>
             <div class="progress" style="width: 0;height: 0;"></div>
@@ -60,11 +60,11 @@
             <span class="item-circle">
                 <span>05</span>
             </span>
-            <div class="item-content">
+            <div class="item-content {if !$features->report}disabled{/if}">
                 <span class="item-title">Vydání výstupu</span>
-                Výstupy barcampu vydáme online do 7. 5. 2018
+                Výstupy barcampu vydáme online do {$dates->report|date:'j. n. Y'}
                 <div>
-                    <span class="btn btn-action btn-sm disabled">Prohlédnout výstupy</span>
+                    <span class="btn btn-action btn-sm">Prohlédnout výstupy</span>
                 </div>
             </div>
         </li>

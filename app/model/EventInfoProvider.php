@@ -20,6 +20,12 @@ class EventInfoProvider
     const DATE_EVENT = 'schedule.event.date';
     const DATE_PROGRAM = 'schedule.program.date';
     const DATE_REPORT = 'schedule.report.date';
+    const FEATURE_CONFEREE = 'features.registerConferee.enabled';
+    const FEATURE_TALK = 'features.registerTalk.enabled';
+    const FEATURE_VOTE = 'features.voteTalk.enabled';
+    const FEATURE_SHOW_VOTE = 'features.showVoteTalk.enabled';
+    const FEATURE_PROGRAM = 'features.showProgram.enabled';
+    const FEATURE_REPORT = 'features.showReport.enabled';
     const URL_FACEBOOK = 'url.social.facebook';
     const URL_TWITTER = 'url.social.twitter';
     const URL_YOUTUBE = 'url.social.youtube';
@@ -39,17 +45,6 @@ class EventInfoProvider
     public function __construct(ConfigManager $config)
     {
         $this->config = $config;
-    }
-
-
-    /**
-     * @return DateTime
-     * @throws \Nette\Utils\JsonException
-     */
-    public function getEventDate()
-    {
-        $string = (string)$this->config->get(self::DATE_EVENT);
-        return DateTime::from($string);
     }
 
 
@@ -96,6 +91,23 @@ class EventInfoProvider
             'workshops' => $this->config->get(self::COUNTS_WORKSHOPS),
             'warmupparty' => $this->config->get(self::COUNTS_WARMUPPARTY),
             'afterparty' => $this->config->get(self::COUNTS_AFTERPARTY),
+        ]);
+    }
+
+
+    /**
+     * @return ArrayHash
+     * @throws \Nette\Utils\JsonException
+     */
+    public function getFeatures()
+    {
+        return ArrayHash::from([
+            'conferee' => $this->config->get(self::FEATURE_CONFEREE),
+            'talks' => $this->config->get(self::FEATURE_TALK),
+            'vote' => $this->config->get(self::FEATURE_VOTE),
+            'show_vote' => $this->config->get(self::FEATURE_SHOW_VOTE),
+            'program' => $this->config->get(self::FEATURE_PROGRAM),
+            'report' => $this->config->get(self::FEATURE_REPORT),
         ]);
     }
 }
