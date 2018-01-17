@@ -30,7 +30,7 @@
                         {input $input}
                     {/if}
                     <span class="error-text" n:ifcontent>{$input->error}</span>
-                    <span class=help-block n:ifcontent>{$input->getOption(description)}</span>
+                    <span class="help-text" n:ifcontent>{$input->getOption(description)}</span>
                 </div>
             {/form}
         </div>

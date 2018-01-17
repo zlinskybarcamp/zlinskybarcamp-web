@@ -52,8 +52,8 @@ class RegisterConfereeForm
             ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte');
 
         $form->addTextArea('extendedAddress', 'Celá adresa bydlíště, nebo sídla firmy')
-            ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte (nebo adresu bydliště)')
-            ->setOption('description', 'Děkujeme za pochopení');
+            ->setOption('description', 'Děkujeme za pochopení')
+            ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte (nebo adresu bydliště)');
 
         $form->addGroup();
 
