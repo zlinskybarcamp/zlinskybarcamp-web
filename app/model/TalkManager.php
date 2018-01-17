@@ -6,10 +6,10 @@ use Nette\Database;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 
-class ConfereeManager
+class TalkManager
 {
 
-    const TABLE_NAME = 'conferee';
+    const TABLE_NAME = 'talk';
 
     /**
      * @var Database\Context
@@ -26,14 +26,11 @@ class ConfereeManager
     public function fromForm($values)
     {
         $data = [
-            'name' => $values->name,
-            'email' => $values->email,
-            'bio' => $values->bio,
-            'allow_mail' => $values->allow_mail,
-            'consens' => $values->consens ? new DateTime() : null,
+            'title' => $values->title,
+            'description' => $values->description,
+            'purpose' => $values->purpose,
             'extended' => Json::encode([
-                'organization' => $values->extendedOrganization,
-                'address' => $values->extendedAddress,
+                'requested_duration' => $values->duration
             ]),
         ];
 
@@ -43,12 +40,22 @@ class ConfereeManager
 
     public function save($data)
     {
-
         $data += [
             'created' => new DateTime()
         ];
 
         $this->database->table(self::TABLE_NAME)
             ->insert($data);
+    }
+
+
+    public function getCategories()
+    {
+        return [
+            'teambuilding' => 'Teambuilding',
+            'seo' => 'SEO',
+            'media' => 'Marketing a média',
+            'leadership' => 'Leadership'
+        ];
     }
 }

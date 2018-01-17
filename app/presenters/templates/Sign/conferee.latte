@@ -1,0 +1,44 @@
+{block content}
+
+<section>
+    <div class="wrapper bg-gray" id="new-conferee">
+        <div class="container text-center">
+            <span class="heading-subtitle">Zlínský Barcamp</span>
+            <h1 class="dot-end" n:block=title>Registrace účastníka</h1>
+        </div>
+
+        <div class="container-condensed form-lecture">
+            {form registerConfereeForm}
+            <ul class=error n:if="$form->ownErrors">
+                <li n:foreach="$form->ownErrors as $error">{$error}</li>
+            </ul>
+            <div n:foreach="$form->controls as $name => $input"
+                    n:if="!$input->getOption(rendered) && $input->getOption(type) !== hidden"
+                    n:class="form-row, $input->getOption(itemClass), $input->required ? required, $input->error ? error">
+
+                {label $input}
+
+                {if $input->getOption(type) in [text, select, textarea]}
+                    {input $input class => form-control}
+                {elseif $input->getOption(type) === button}
+                    {input $input class => "btn btn-action btn-section text-upper"}
+                {elseif $input->getOption(type) === checkbox}
+                    <div class="checkbox">{input $input:} {label $input:}</div>
+                {elseif $input->getOption(type) === radio}
+                    {foreach $input->items as $key => $label}
+                        <div class="radiobutton">
+                            <input n:name="$input->getName():$key">
+                            <label n:name="$input->getName():$key"><span></span>{$label}</label>
+                        </div>
+                    {/foreach}
+                {else}
+                    {input $input}
+                {/if}
+                <span class="error-text" n:ifcontent>{$input->error}</span>
+                <span class="help-text" n:ifcontent>{$input->getOption(description)}</span>
+            </div>
+            {/form}
+        </div>
+    </div>
+</section>
+

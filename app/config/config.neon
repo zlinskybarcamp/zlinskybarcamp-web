@@ -39,10 +39,12 @@ services:
     - App\Model\FaqManager
     - App\Model\NewsletterSignupManager
     - App\Model\ScheduleManager
+    - App\Model\TalkManager
     - App\Model\UserManager
     - App\Model\WordpressPostReader(%wordpress%)
     - App\Forms\FormFactory
     - App\Forms\RegisterConfereeForm
+    - App\Forms\RegisterTalkForm
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
     - App\Components\Faq\FaqFactory

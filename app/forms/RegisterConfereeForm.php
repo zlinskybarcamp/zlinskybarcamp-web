@@ -44,14 +44,14 @@ class RegisterConfereeForm
         $form->addText('email', 'E-mail:')
             ->setRequired('Prosíme, vyplňte svůj e-mail');
 
-        $form->addTextArea('bio', 'Řekni nám něco o sobě');
+        $form->addTextArea('bio', 'Řekni nám něco o sobě:');
 
         $form->addGroup('Dotační dotazník');
 
-        $form->addText('extendedOrganization', 'Firma/organizace/škola/instituce')
+        $form->addText('extendedOrganization', 'Firma/organizace/škola/instituce:')
             ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte');
 
-        $form->addTextArea('extendedAddress', 'Celá adresa bydlíště, nebo sídla firmy')
+        $form->addTextArea('extendedAddress', 'Celá adresa bydlíště, nebo sídla firmy:')
             ->setOption('description', 'Děkujeme za pochopení')
             ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte (nebo adresu bydliště)');
 

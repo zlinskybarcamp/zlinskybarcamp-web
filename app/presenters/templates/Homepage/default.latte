@@ -39,8 +39,12 @@
             </div>
 
             <div class="hero-buttons">
-                <a href="{link Sign:registerConferee}" class="btn btn-lg btn-brand btn-section {if !$features->conferee}disabled{/if}">Registrace</a>
-                <a href="#" class="btn disabled btn-lg btn-default-bordered btn-section">Vypsat přednášku</a>
+                <a n:tag-if="$features->conferee" href="{link Sign:conferee}">
+                    <span class="btn btn-lg btn-brand btn-section {if !$features->conferee}disabled{/if}">Registrace</span>
+                </a>
+                <a n:tag-if="$features->talks" href="{link Sign:talk}">
+                    <span class="btn btn-lg btn-default-bordered btn-section {if !$features->talks}disabled{/if}">Vypsat přednášku</span>
+                </a>
             </div>
 
             <span class="hero-note">Přihlašování a registrace přednášek už od <span>{$dates->talks|date:'j. n. Y'}</span> </span>

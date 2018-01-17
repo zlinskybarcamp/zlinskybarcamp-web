@@ -18,6 +18,10 @@ class SignPresenter extends BasePresenter
 
     /** @var Forms\RegisterConfereeForm */
     private $registerConfereeForm;
+    /**
+     * @var Forms\RegisterTalkForm
+     */
+    private $registerTalkForm;
 
 
     /**
@@ -25,16 +29,19 @@ class SignPresenter extends BasePresenter
      * @param Forms\SignInFormFactory $signInFactory
      * @param Forms\SignUpFormFactory $signUpFactory
      * @param Forms\RegisterConfereeForm $registerConfereeForm
+     * @param Forms\RegisterTalkForm $registerTalkForm
      */
     public function __construct(
         Forms\SignInFormFactory $signInFactory,
         Forms\SignUpFormFactory $signUpFactory,
-        Forms\RegisterConfereeForm $registerConfereeForm
+        Forms\RegisterConfereeForm $registerConfereeForm,
+        Forms\RegisterTalkForm $registerTalkForm
     ) {
         parent::__construct();
         $this->signInFactory = $signInFactory;
         $this->signUpFactory = $signUpFactory;
         $this->registerConfereeForm = $registerConfereeForm;
+        $this->registerTalkForm = $registerTalkForm;
     }
 
 
@@ -73,6 +80,15 @@ class SignPresenter extends BasePresenter
     {
         return $this->registerConfereeForm->create(function () {
             $this->flashMessage('Právě jste se zaregistrovali na Barcamp!');
+            $this->redirect('Homepage:');
+        });
+    }
+
+
+    protected function createComponentRegisterTalkForm()
+    {
+        return $this->registerTalkForm->create(function () {
+            $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
             $this->redirect('Homepage:');
         });
     }

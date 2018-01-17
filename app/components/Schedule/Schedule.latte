@@ -12,7 +12,7 @@
                 <span class="item-title">Vypsání přednášek</span>
                 Přednášky lze vypsat od {$dates->talks|date:'j. n. Y'}
                 <div>
-                    <span class="btn btn-action btn-sm">Chci vypsat přednášku</span>
+                    <a n:tag-if="$features->talks" href="{plink Sign:talk}"><span class="btn btn-action btn-sm">Chci vypsat přednášku</span></a>
                 </div>
             </div>
             <div class="progress" style="width: 0;height: 0"></div>

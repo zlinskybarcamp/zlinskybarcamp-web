@@ -12,7 +12,9 @@
             Přihlášení bude možné od {$dates->talks|date:'j. n. Y'}
         </div>
 
-        <a href="{plink Sign:registerConferee}" class="btn btn-sm btn-action {if !$features->conferee}disabled{/if}">CHCI PŘIJÍT NA BARCAMP</a>
+        <a n:tag-if="$features->conferee" href="{plink Sign:conferee}">
+            <span class="btn btn-sm btn-action {if !$features->conferee}disabled{/if}">CHCI PŘIJÍT NA BARCAMP</span>
+        </a>
     </div>
 
     <div class="signup-button">
@@ -28,6 +30,8 @@
             Přihlášení bude možné od {$dates->talks|date:'j. n. Y'}
         </div>
 
-        <a href="#" class="btn btn-sm btn-action disabled">CHCI VYPSAT PŘEDNÁŠKU</a>
+        <a n:tag-if="$features->talks" href="{plink Sign:talk}">
+            <span class="btn btn-sm btn-action {if !$features->talks}disabled{/if}">CHCI VYPSAT PŘEDNÁŠKU</span>
+        </a>
     </div>
 </div>
