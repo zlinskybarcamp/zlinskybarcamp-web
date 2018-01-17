@@ -1,0 +1,19 @@
+{
+  "name": "zlinskybarcamp-web",
+  "description": "Web Zlínského barcampu",
+  "authors": [
+    "Redbit s.r.o."
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/zlinskybarcamp/zlinskybarcamp-web",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ublaboo-datagrid": "^5.5.3"
+  }
+}
