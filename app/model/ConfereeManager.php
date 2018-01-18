@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Nette\Database;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 
@@ -17,12 +18,20 @@ class ConfereeManager
     private $database;
 
 
+    /**
+     * ConfereeManager constructor.
+     * @param Database\Context $database
+     */
     public function __construct(Database\Context $database)
     {
         $this->database = $database;
     }
 
 
+    /**
+     * @param ArrayHash $values
+     * @throws \Nette\Utils\JsonException
+     */
     public function fromForm($values)
     {
         $data = [
@@ -32,7 +41,7 @@ class ConfereeManager
             'allow_mail' => $values->allow_mail,
             'consens' => $values->consens ? new DateTime() : null,
             'extended' => Json::encode([
-                'organization' => $values->extendedOrganization,
+                'company' => $values->extendedCompany,
                 'address' => $values->extendedAddress,
             ]),
         ];
@@ -41,6 +50,9 @@ class ConfereeManager
     }
 
 
+    /**
+     * @param array $data
+     */
     public function save($data)
     {
 

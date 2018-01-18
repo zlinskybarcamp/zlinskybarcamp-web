@@ -18,10 +18,12 @@
 
                 {label $input}
 
-                {if $input->getOption(type) in [text, select, textarea]}
+                {if $input->getOption(type) in [text, textarea]}
                     {input $input class => form-control}
                 {elseif $input->getOption(type) === button}
                     {input $input class => "btn btn-action btn-section text-upper"}
+                {elseif $input->getOption(type) === select}
+                    <div class="select">{input $input class => form-control}</div>
                 {elseif $input->getOption(type) === checkbox}
                     <div class="checkbox">{input $input:} {label $input:}</div>
                 {elseif $input->getOption(type) === radio}
