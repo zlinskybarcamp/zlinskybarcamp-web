@@ -32,14 +32,14 @@ class SignInFormFactory
     {
         $form = $this->factory->create();
         $form->addText('email', 'E-mail:')
-            ->setRequired('Please enter your e-mail.');
+            ->setRequired('Prosím, vyplňte e-mail');
 
-        $form->addPassword('password', 'Password:')
-            ->setRequired('Please enter your password.');
+        $form->addPassword('password', 'Heslo:')
+            ->setRequired('Prosím, zadejte heslo');
 
-        $form->addCheckbox('remember', 'Keep me signed in');
-
-        $form->addSubmit('send', 'Sign in');
+        $form->addSubmit('send', 'Přihlásit')
+            ->setOption('itemClass', 'text-center')
+            ->getControlPrototype()->setName('button')->setText('Přihlásit');
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
@@ -55,3 +55,4 @@ class SignInFormFactory
         return $form;
     }
 }
+

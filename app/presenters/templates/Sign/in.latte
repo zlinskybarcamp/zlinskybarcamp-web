@@ -1,15 +1,39 @@
 {block content}
 
 <section>
-    <div class="wrapper bg-gray">
-        <div class="container">
-            <h1><span class="dot-end" n:block=title>Přihlášení</span></h1>
+    <div class="wrapper">
+        <div class="container-wide">
+            <div class="form-newsletter">
+                <div class="text-center">
+                    <span class="item-title">Přihlášení</span>
+                    <span class="text-md">Nejste ještě registrováni? <a n:href="up">Registrujte se</a></span>
+                </div>
 
-            {control signInForm}
+                <form n:name="signInForm" class="mt-md">
+                    <ul class=error n:if="$form->ownErrors">
+                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                    </ul>
+                    <div n:foreach="$form->controls as $name => $input"
+                            n:if="!$input->getOption(rendered) && $input->getOption(type) !== hidden"
+                            n:class="form-row, $input->getOption(itemClass), $input->required ? required, $input->error ? error">
 
-            <p>Jste tu poprvé? <a n:href="up">Registrujte se</a>.</p>
+                        {label $input}
+
+                        {if $input->getOption(type) in [text, select, textarea]}
+                            {input $input class => form-control}
+                        {elseif $input->getOption(type) === button}
+                            {input $input class => "btn btn-action btn-section text-upper"}
+                        {elseif $input->getOption(type) === checkbox}
+                            <div class="checkbox">{input $input:} {label $input:}</div>
+                        {else}
+                            {input $input}
+                        {/if}
+                        <span class="error-text" n:ifcontent>{$input->error}</span>
+                        <span class="help-text" n:ifcontent>{$input->getOption(description)}</span>
+                    </div>
+                </form>
+
+            </div>
         </div>
     </div>
 </section>
-
-

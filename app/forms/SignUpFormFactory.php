@@ -10,7 +10,7 @@ class SignUpFormFactory
 {
     use Nette\SmartObject;
 
-    const PASSWORD_MIN_LENGTH = 7;
+    const PASSWORD_MIN_LENGTH = 5;
 
     /** @var FormFactory */
     private $factory;
@@ -33,15 +33,17 @@ class SignUpFormFactory
     public function create(callable $onSuccess)
     {
         $form = $this->factory->create();
-        $form->addEmail('email', 'Your e-mail:')
-            ->setRequired('Please enter your e-mail.');
+        $form->addEmail('email', 'Váš e-mail:')
+            ->setRequired('Prosím zadejte svůj e-mail');
 
-        $form->addPassword('password', 'Create a password:')
-            ->setOption('description', sprintf('at least %d characters', self::PASSWORD_MIN_LENGTH))
-            ->setRequired('Please create a password.')
+        $form->addPassword('password', 'Vytvořte si heslo:')
+            ->setOption('description', sprintf('alespoň %d znaků', self::PASSWORD_MIN_LENGTH))
+            ->setRequired('Vytvořte si prosím heslo')
             ->addRule($form::MIN_LENGTH, null, self::PASSWORD_MIN_LENGTH);
 
-        $form->addSubmit('send', 'Sign up');
+        $form->addSubmit('send', 'Registrovat')
+            ->setOption('itemClass', 'text-center')
+            ->getControlPrototype()->setName('button')->setText('Registrovat');
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
