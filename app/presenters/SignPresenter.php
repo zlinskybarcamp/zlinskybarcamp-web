@@ -239,15 +239,25 @@ class SignPresenter extends BasePresenter
                 $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
             }
 
+            $this->userManager->save($user);
+            $this->identityManager->save($identity);
+            $this->confereeManager->save($conferee);
+
             $user->name = $conferee->name;
             $user->email = $conferee->email;
 
+            //Currently not working on weird ORM bug
             $identity->user = $user;
 
             $conferee->pictureUrl = $user->pictureUrl;
             $conferee->user = $user;
 
             $this->userManager->save($user);
+
+            //dirty hack to weird ORM bug
+            $identity->setRawValue('user', $user->id);
+            $this->identityManager->save($identity, false);
+            //hack end
 
             $this->login($user);
             $this->removePartialLoginSession();
