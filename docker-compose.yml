@@ -9,7 +9,8 @@ services:
             - ".:/var/www/html"
         restart: always
         environment:
-            - NETTE_DEBUG=1
+            NETTE_DEBUG: 1
+            XDEBUG_CONFIG: "remote_host=docker.for.mac.localhost"
         depends_on:
             - mysqldb
     mysqldb:

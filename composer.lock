@@ -4,8 +4,66 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1c68d49f008e35ba47e4683da0a6b72",
+    "content-hash": "282800d355ef468c4a9c5fd37c846cb4",
     "packages": [
+        {
+            "name": "facebook/graph-sdk",
+            "version": "5.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/php-graph-sdk.git",
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "reference": "2f9639c15ae043911f40ffe44080b32bac2c5280",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "~5.0",
+                "mockery/mockery": "~0.8",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
+                "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\": "src/Facebook/"
+                },
+                "files": [
+                    "src/Facebook/polyfills.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Facebook Platform"
+            ],
+            "authors": [
+                {
+                    "name": "Facebook",
+                    "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
+                }
+            ],
+            "description": "Facebook SDK for PHP",
+            "homepage": "https://github.com/facebook/php-graph-sdk",
+            "keywords": [
+                "facebook",
+                "sdk"
+            ],
+            "time": "2017-08-16T17:28:07+00:00"
+        },
         {
             "name": "kdyby/forms-replicator",
             "version": "dev-master",
@@ -1201,6 +1259,61 @@
             "time": "2017-07-11T09:41:59+00:00"
         },
         {
+            "name": "nette/tokenizer",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/tokenizer.git",
+                "reference": "88373e9f79007245af0ccd8132fde117421723b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/tokenizer/zipball/88373e9f79007245af0ccd8132fde117421723b2",
+                "reference": "88373e9f79007245af0ccd8132fde117421723b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "conflict": {
+                "nette/nette": "<2.2"
+            },
+            "require-dev": {
+                "nette/tester": "~1.7",
+                "tracy/tracy": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                },
+                {
+                    "name": "Nette Community",
+                    "homepage": "https://nette.org/contributors"
+                }
+            ],
+            "description": "Nette Tokenizer",
+            "homepage": "https://nette.org",
+            "time": "2017-09-08T14:16:06+00:00"
+        },
+        {
             "name": "nette/utils",
             "version": "v2.4.8",
             "source": {
@@ -1278,6 +1391,124 @@
                 "validation"
             ],
             "time": "2017-08-20T17:32:29+00:00"
+        },
+        {
+            "name": "nextras/dbal",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nextras/dbal.git",
+                "reference": "ffd312da8adf941376adf045567c9c021622cc11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nextras/dbal/zipball/ffd312da8adf941376adf045567c9c021622cc11",
+                "reference": "ffd312da8adf941376adf045567c9c021622cc11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "nette/caching": "~2.2",
+                "nette/di": "~2.3",
+                "nette/tester": "~1.4 != 1.6.1",
+                "tracy/tracy": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nextras\\Dbal\\": "src/"
+                },
+                "classmap": [
+                    "src/exceptions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nextras Project",
+                    "homepage": "https://github.com/nextras/dbal/graphs/contributors"
+                }
+            ],
+            "description": "Nextras database abstraction layer",
+            "homepage": "https://github.com/nextras/dbal",
+            "keywords": [
+                "database",
+                "dbal",
+                "nextras"
+            ],
+            "time": "2016-12-09T13:10:17+00:00"
+        },
+        {
+            "name": "nextras/orm",
+            "version": "v2.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nextras/orm.git",
+                "reference": "5ac3ab77bbc8710338ec9e273224269a297ef6b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nextras/orm/zipball/5ac3ab77bbc8710338ec9e273224269a297ef6b1",
+                "reference": "5ac3ab77bbc8710338ec9e273224269a297ef6b1",
+                "shasum": ""
+            },
+            "require": {
+                "nette/caching": "~2.2",
+                "nette/reflection": "~2.2",
+                "nette/tokenizer": "~2.2",
+                "nette/utils": "~2.2",
+                "nextras/dbal": "~2.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "nette/bootstrap": "~2.3",
+                "nette/tester": "~1.4",
+                "tracy/tracy": "~2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nextras\\Orm\\": "src/"
+                },
+                "classmap": [
+                    "src/exceptions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nextras Project",
+                    "homepage": "https://github.com/nextras/orm/graphs/contributors"
+                }
+            ],
+            "description": "Nextras Orm framework",
+            "homepage": "https://github.com/nextras/orm",
+            "keywords": [
+                "database",
+                "nextras",
+                "orm"
+            ],
+            "time": "2017-02-19T22:29:06+00:00"
         },
         {
             "name": "nextras/secured-links",
@@ -1688,16 +1919,16 @@
         },
         {
             "name": "ublaboo/datagrid",
-            "version": "v5.5.3",
+            "version": "v5.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ublaboo/datagrid.git",
-                "reference": "99d44dffeb4eadd35d849ac2bec846eac5e3c106"
+                "reference": "1205cfe64469a0ae476a226bd671281952273baa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ublaboo/datagrid/zipball/99d44dffeb4eadd35d849ac2bec846eac5e3c106",
-                "reference": "99d44dffeb4eadd35d849ac2bec846eac5e3c106",
+                "url": "https://api.github.com/repos/ublaboo/datagrid/zipball/1205cfe64469a0ae476a226bd671281952273baa",
+                "reference": "1205cfe64469a0ae476a226bd671281952273baa",
                 "shasum": ""
             },
             "require": {
@@ -1741,7 +1972,7 @@
                 "grid",
                 "nette"
             ],
-            "time": "2018-01-14T11:23:06+00:00"
+            "time": "2018-01-20T16:08:00+00:00"
         },
         {
             "name": "ublaboo/responses",
