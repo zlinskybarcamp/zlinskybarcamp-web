@@ -6,7 +6,6 @@ use App\Orm\Conferee;
 use App\Orm\ConfereeRepository;
 use App\Orm\Orm;
 
-
 class ConfereeManager
 {
     /**

@@ -148,5 +148,4 @@ class Facebook implements IAuthenticator
             throw new AuthenticationException('Facebook vrátil neznámou chybu', 0, $e);
         }
     }
-
 }

@@ -4,7 +4,7 @@ namespace App\Model;
 
 use App\Orm\Orm;
 use App\Orm\Identity;
-use App\Orm\User;
+
 
 class IdentityManager
 {
