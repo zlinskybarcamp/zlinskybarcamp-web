@@ -17,9 +17,9 @@
     <script src="https://www.googletagmanager.com/gtm.js?id=GTM-TWSPHGQ" async></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700,800,900|Roboto:300,300i,400,400i,700,900&amp;subset=latin-ext"
           rel="stylesheet">
-    <link rel="stylesheet" href="{$basePath}/css/main.css">
-    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
-    <script src="{$basePath}/js/main.js" async></script>
+    <link rel="stylesheet" href="{$basePath}/css/main.css?{=filemtime($wwwDir . '/css/main.css')}">
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico{=filemtime($wwwDir . '/favicon.ico')}">
+    <script src="{$basePath}/js/main.js{=filemtime($wwwDir . '/js/main.js')}" async></script>
     <meta name="google-site-verification" content="GFEt0ZfmjMebcNwHAGLHD7Mg6JL5WEbmwnrcGgetftQ">
 </head>
 
