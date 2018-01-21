@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Authenticator;
 
-use App\Orm\User;
 use App\Orm\Identity;
+use App\Orm\User;
 use Nette\Http\IRequest;
 
 /**
  * Interface IIdentityAuthenticator
  * @package App\Model
  */
-interface IIdentityAuthenticator
+interface IAuthenticator
 {
     /**
      * @param string $callbackUrl

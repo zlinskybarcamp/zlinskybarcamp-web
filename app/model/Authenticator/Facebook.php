@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Authenticator;
 
 use App\Orm\Identity;
 use App\Orm\User;
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\Facebook;
+use Facebook\Facebook as FacebookSDK ;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Nette\Http\IRequest;
 use Nette\Security\AuthenticationException;
@@ -17,13 +17,13 @@ use Tracy\ILogger;
  * Class FacebookIdentityAuthenticator
  * @package App\Model
  */
-class FacebookIdentityAuthenticator implements IIdentityAuthenticator
+class Facebook implements IAuthenticator
 {
 
     const PLATFORM_ID = 'facebook';
 
     /**
-     * @var Facebook
+     * @var FacebookSDK
      */
     private $facebook;
 
@@ -34,7 +34,7 @@ class FacebookIdentityAuthenticator implements IIdentityAuthenticator
      */
     public function __construct($config)
     {
-        $this->facebook = new Facebook($config);
+        $this->facebook = new FacebookSDK($config);
     }
 
 

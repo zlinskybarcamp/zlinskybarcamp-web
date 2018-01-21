@@ -3,8 +3,8 @@
 namespace App\Presenters;
 
 use App\Forms;
+use App\Model\Authenticator\AuthenticatorProvider;
 use App\Model\ConfereeManager;
-use App\Model\IdentityAuthenticatorProvider;
 use App\Model\IdentityManager;
 use App\Model\IdentityNotFoundException;
 use App\Model\UserManager;
@@ -28,20 +28,20 @@ class SignPresenter extends BasePresenter
     public $token = '';
 
     /** @var Forms\SignInFormFactory */
-    private $signInFactory;
+    private $signInFormFactory;
 
     /** @var Forms\SignUpFormFactory */
-    private $signUpFactory;
+    private $signUpFormFactory;
 
     /** @var Forms\ConfereeForm */
-    private $registerConfereeForm;
+    private $confereeForm;
     /** @var Forms\TalkForm */
-    private $registerTalkForm;
+    private $talkForm;
 
     /**
-     * @var IdentityAuthenticatorProvider
+     * @var AuthenticatorProvider
      */
-    private $identityAuthenticatorProvider;
+    private $authenticatorProvider;
     /**
      * @var IdentityManager
      */
@@ -58,32 +58,32 @@ class SignPresenter extends BasePresenter
 
     /**
      * SignPresenter constructor.
-     * @param IdentityAuthenticatorProvider $identityAuthenticatorProvider
+     * @param AuthenticatorProvider $authenticatorProvider
      * @param Forms\SignInFormFactory $signInFactory
-     * @param Forms\SignUpFormFactory $signUpFactory
-     * @param Forms\ConfereeForm $registerConfereeForm
-     * @param Forms\TalkForm $registerTalkForm
+     * @param Forms\SignUpFormFactory $signUpFormFactory
+     * @param Forms\ConfereeForm $confereeForm
+     * @param Forms\TalkForm $talkForm
      * @param IdentityManager $identityManager
      * @param ConfereeManager $confereeManager
      * @param UserManager $userManager
      */
     public function __construct(
-        IdentityAuthenticatorProvider $identityAuthenticatorProvider,
+        AuthenticatorProvider $authenticatorProvider,
         Forms\SignInFormFactory $signInFactory,
-        Forms\SignUpFormFactory $signUpFactory,
-        Forms\ConfereeForm $registerConfereeForm,
-        Forms\TalkForm $registerTalkForm,
+        Forms\SignUpFormFactory $signUpFormFactory,
+        Forms\ConfereeForm $confereeForm,
+        Forms\TalkForm $talkForm,
         IdentityManager $identityManager,
         ConfereeManager $confereeManager,
         UserManager $userManager
 
     ) {
         parent::__construct();
-        $this->signInFactory = $signInFactory;
-        $this->signUpFactory = $signUpFactory;
-        $this->registerConfereeForm = $registerConfereeForm;
-        $this->registerTalkForm = $registerTalkForm;
-        $this->identityAuthenticatorProvider = $identityAuthenticatorProvider;
+        $this->signInFormFactory = $signInFactory;
+        $this->signUpFormFactory = $signUpFormFactory;
+        $this->confereeForm = $confereeForm;
+        $this->talkForm = $talkForm;
+        $this->authenticatorProvider = $authenticatorProvider;
         $this->identityManager = $identityManager;
         $this->confereeManager = $confereeManager;
         $this->userManager = $userManager;
@@ -187,7 +187,7 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        return $this->signInFactory->create(function () {
+        return $this->signInFormFactory->create(function () {
             $this->restoreRequest($this->backlink);
             $this->redirect('Homepage:');
         });
@@ -200,7 +200,7 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignUpForm()
     {
-        return $this->signUpFactory->create(function () {
+        return $this->signUpFormFactory->create(function () {
             $this->redirect('Homepage:');
         });
     }
@@ -267,7 +267,7 @@ class SignPresenter extends BasePresenter
             $this->redirect('Homepage:');
         };
 
-        return $this->registerConfereeForm->create($onSubmitCallback);
+        return $this->confereeForm->create($onSubmitCallback);
     }
 
 
@@ -276,7 +276,7 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentRegisterTalkForm()
     {
-        return $this->registerTalkForm->create(function () {
+        return $this->talkForm->create(function () {
             $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
             $this->redirect('Homepage:');
         });
@@ -306,11 +306,11 @@ class SignPresenter extends BasePresenter
 
     /**
      * @param string $platform
-     * @return \App\Model\IIdentityAuthenticator
+     * @return \App\Model\Authenticator\IAuthenticator
      */
     private function getAuthenticator($platform)
     {
-        return $this->identityAuthenticatorProvider->provide($platform);
+        return $this->authenticatorProvider->provide($platform);
     }
 
 

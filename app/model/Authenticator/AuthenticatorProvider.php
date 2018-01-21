@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Authenticator;
 
 use Nette\ArgumentOutOfRangeException;
 
@@ -8,18 +8,18 @@ use Nette\ArgumentOutOfRangeException;
  * Class IdentityAuthenticatorProvider
  * @package App\Model
  */
-class IdentityAuthenticatorProvider
+class AuthenticatorProvider
 {
-    /** @var IIdentityAuthenticator[] */
+    /** @var IAuthenticator[] */
     private $authenticators;
 
 
     /**
      * IdentityAuthenticatorProvider constructor.
-     * @param FacebookIdentityAuthenticator $facebook
+     * @param Facebook $facebook
      */
     public function __construct(
-        FacebookIdentityAuthenticator $facebook
+        Facebook $facebook
     ) {
         $this->authenticators['facebook'] = $facebook;
     }
@@ -27,7 +27,7 @@ class IdentityAuthenticatorProvider
 
     /**
      * @param string $platform
-     * @return IIdentityAuthenticator
+     * @return IAuthenticator
      * @throws ArgumentOutOfRangeException
      */
     public function provide($platform)

@@ -59,9 +59,9 @@ services:
     - App\Model\ConfigManager
     - App\Model\ConfereeManager
     - App\Model\EventInfoProvider
-    - App\Model\FacebookIdentityAuthenticator(%facebook%)
+    - App\Model\Authenticator\FacebookIdentityAuthenticator(%facebook%)
     - App\Model\FaqManager
-    - App\Model\IdentityAuthenticatorProvider
+    - App\Model\Authenticator\IdentityAuthenticatorProvider
     - App\Model\IdentityManager
     - App\Model\NewsletterSignupManager
     - App\Model\ScheduleManager

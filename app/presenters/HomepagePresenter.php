@@ -43,21 +43,21 @@ class HomepagePresenter extends BasePresenter
      * HomepagePresenter constructor.
      * @param ScheduleFactory $scheduleFactory
      * @param SignupButtonsFactory $buttonsFactory
-     * @param NewsletterSignupFactory $newsletterFactory
+     * @param NewsletterSignupFactory $newsletterFormFactory
      * @param FaqFactory $faqFactory
      * @param FeedFactory $feedFactory
      */
     public function __construct(
         ScheduleFactory $scheduleFactory,
         SignupButtonsFactory $buttonsFactory,
-        NewsletterSignupFactory $newsletterFactory,
+        NewsletterSignupFactory $newsletterFormFactory,
         FaqFactory $faqFactory,
         FeedFactory $feedFactory
     ) {
         parent::__construct();
         $this->scheduleFactory = $scheduleFactory;
         $this->buttonsFactory = $buttonsFactory;
-        $this->newsletterFactory = $newsletterFactory;
+        $this->newsletterFactory = $newsletterFormFactory;
         $this->faqFactory = $faqFactory;
         $this->feedFactory = $feedFactory;
     }
