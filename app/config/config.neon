@@ -3,48 +3,74 @@
 # https://nette.org/security-warning
 #
 parameters:
+    database:
+        driver: mysqli
+        host: zlinskybarcampweb_mysqldb_1
+        dbname: zlinskybarcamp
+        user: root
+        password: redbitmasters
+        port: 3306
     wordpress:
         url: https://blog.zlinskybarcamp.cz/
         maxItems: 4
-
+    facebook:
+        app_id: '332760430570010'
+        app_secret: {app-secret}
+        default_graph_version: v2.2
 
 application:
     errorPresenter: Error
     mapping:
         *: App\*Module\Presenters\*Presenter
 
-
 extensions:
     replicator: Kdyby\Replicator\DI\ReplicatorExtension
+    nextras.dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
+    nextras.orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
 
+nextras.dbal:
+    driver: %database.driver%
+    host: %database.host%
+    database: %database.dbname%
+    username: %database.user%
+    password: %database.password%
+    connectionTz: '+2:00'
+    port: %database.port%
+
+nextras.orm:
+    model: App\Orm\Orm
+
+tracy:
+    maxDepth: 4
 
 session:
     expiration: 14 days
     cookie_secure: %productionMode%
     debugger: true
 
-
 database:
-    dsn: 'mysql:host=zlinskybarcampweb_mysqldb_1;dbname=zlinskybarcamp'
-    user: root
-    password: redbitmasters
+    dsn: 'mysql:host=%database.host%;dbname=%database.dbname%'
+    user: %database.user%
+    password: %database.password%
     options:
         lazy: yes
-
 
 services:
     - App\Model\ConfigManager
     - App\Model\ConfereeManager
     - App\Model\EventInfoProvider
+    - App\Model\FacebookIdentityAuthenticator(%facebook%)
     - App\Model\FaqManager
+    - App\Model\IdentityAuthenticatorProvider
+    - App\Model\IdentityManager
     - App\Model\NewsletterSignupManager
     - App\Model\ScheduleManager
     - App\Model\TalkManager
     - App\Model\UserManager
     - App\Model\WordpressPostReader(%wordpress%)
     - App\Forms\FormFactory
-    - App\Forms\RegisterConfereeForm
-    - App\Forms\RegisterTalkForm
+    - App\Forms\ConfereeForm
+    - App\Forms\TalkForm
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
     - App\Components\Faq\FaqFactory

@@ -2,39 +2,35 @@
 
 namespace App\Forms;
 
-use App\Model\ConfereeManager;
-use Nette;
+use App\Orm\Conferee;
 use Nette\Application\UI\Form;
+use Nette\SmartObject;
+use Nette\Utils\Json;
 
-class RegisterConfereeForm
+class ConfereeForm
 {
-    use Nette\SmartObject;
+    use SmartObject;
 
     /** @var FormFactory */
     private $factory;
-    /**
-     * @var ConfereeManager
-     */
-    private $confereeManager;
 
 
     /**
      * RegisterConfereeForm constructor.
      * @param FormFactory $factory
-     * @param ConfereeManager $confereeManager
      */
-    public function __construct(FormFactory $factory, ConfereeManager $confereeManager)
+    public function __construct(FormFactory $factory)
     {
         $this->factory = $factory;
-        $this->confereeManager = $confereeManager;
     }
 
 
     /**
      * @param callable $onSuccess
+     * @param Conferee|null $conferee
      * @return Form
      */
-    public function create(callable $onSuccess)
+    public function create(callable $onSuccess, Conferee $conferee = null)
     {
         $form = $this->factory->create();
         $form->addText('name', 'Jméno a příjmení:')
@@ -61,7 +57,7 @@ class RegisterConfereeForm
 
         $form->addGroup();
 
-        $form->addCheckbox('allow_mail', 'Souhlasím se zasíláním informací o akci e-mailem')
+        $form->addCheckbox('allowMail', 'Souhlasím se zasíláním informací o akci e-mailem')
             ->setDefaultValue(true);
 
         $form->addCheckbox('consens', 'Souhlasím se zpracováním osobních údajů de zákona č. 101/2000 Sb.')
@@ -72,11 +68,22 @@ class RegisterConfereeForm
             ->setOption('itemClass', 'text-center')
             ->getControlPrototype()->setName('button')->setText('Odeslat');
 
-        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
+        $form->onSuccess[] = function (Form $form, $values) use ($conferee, $onSuccess) {
+            if ($conferee === null) {
+                $conferee = new Conferee();
+            }
 
-            $this->confereeManager->fromForm($values);
+            $conferee->name = $values->name;
+            $conferee->email = $values->email;
+            $conferee->bio = $values->bio;
+            $conferee->extended = Json::encode([
+                'company' => $values->extendedCompany,
+                'address' => $values->extendedAddress,
+            ]);
+            $conferee->allowMail = $values->allowMail;
+            $conferee->consens = $values->consens ? new \DateTimeImmutable() : null;
 
-            $onSuccess();
+            $onSuccess($conferee);
         };
 
         return $form;

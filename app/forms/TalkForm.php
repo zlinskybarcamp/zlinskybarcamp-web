@@ -6,7 +6,7 @@ use App\Model\TalkManager;
 use Nette;
 use Nette\Application\UI\Form;
 
-class RegisterTalkForm
+class TalkForm
 {
     use Nette\SmartObject;
 
