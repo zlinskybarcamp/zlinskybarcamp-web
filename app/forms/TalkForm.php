@@ -2,9 +2,10 @@
 
 namespace App\Forms;
 
-use App\Model\TalkManager;
+use App\Orm\Talk;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Utils\Json;
 
 class TalkForm
 {
@@ -12,28 +13,25 @@ class TalkForm
 
     /** @var FormFactory */
     private $factory;
-    /** @var TalkManager */
-    private $talkManager;
 
 
     /**
      * RegisterConfereeForm constructor.
      * @param FormFactory $factory
-     * @param TalkManager $talkManager
      */
-    public function __construct(FormFactory $factory, TalkManager $talkManager)
+    public function __construct(FormFactory $factory)
     {
         $this->factory = $factory;
-
-        $this->talkManager = $talkManager;
     }
 
 
     /**
      * @param callable $onSuccess
+     * @param array|null $categories
+     * @param Talk $talk
      * @return Form
      */
-    public function create(callable $onSuccess)
+    public function create(callable $onSuccess, array $categories = null, Talk $talk = null)
     {
         $form = $this->factory->create();
         $form->addText('title', 'Název přednášky:')
@@ -48,8 +46,10 @@ class TalkForm
         $form->addTextArea('purpose', 'Pro koho je přednáška určena:')
             ->setRequired('Prosíme, vyplňte pro koho je přednáška určena');
 
-        $form->addSelect('category', 'Kategorie', $this->talkManager->getCategories())
-            ->setRequired('Prosím, zvolte jednu kategorii, do které byste přednášku zařadili');
+        if ($categories) {
+            $form->addSelect('category', 'Kategorie', $categories)
+                ->setRequired('Prosím, zvolte jednu kategorii, do které byste přednášku zařadili');
+        }
 
         $form->addRadioList('duration', 'Délka přednášky:', [
             '' => 'Je mi to jedno',
@@ -91,11 +91,31 @@ class TalkForm
             ->setOption('itemClass', 'text-center')
             ->getControlPrototype()->setName('button')->setText('Odeslat');
 
-        $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
+        $form->onSuccess[] = function (Form $form, $values) use ($talk, $onSuccess) {
+            if ($talk === null) {
+                $talk = new Talk();
+            }
 
-            $this->talkManager->fromForm($values);
+            $talk->title = $values->title;
+            $talk->description = $values->description;
+            $talk->purpose = $values->purpose;
+            $talk->company = $values->company;
+            if (isset($values->category)) {
+                $talk->category = $values->category;
+            }
+            $talk->extended = Json::encode([
+                'requested_duration' => $values->duration,
+                'url' => [
+                    'www' => $values->url_www,
+                    'facebook' => $values->url_facebook,
+                    'twitter' => $values->url_twitter,
+                    'google' => $values->url_google,
+                    'linkedin' => $values->url_linkedin,
+                ],
+            ]);
 
-            $onSuccess();
+
+            $onSuccess($talk);
         };
 
         return $form;

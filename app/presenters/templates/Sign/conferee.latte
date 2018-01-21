@@ -8,7 +8,8 @@
         </div>
 
         <div class="container-condensed form-lecture">
-            {form registerConfereeForm}
+
+            {form confereeForm}
             <ul class=error n:if="$form->ownErrors">
                 <li n:foreach="$form->ownErrors as $error">{$error}</li>
             </ul>
@@ -38,6 +39,7 @@
                 <span class="help-text" n:ifcontent>{$input->getOption(description)}</span>
             </div>
             {/form}
+
         </div>
     </div>
 </section>

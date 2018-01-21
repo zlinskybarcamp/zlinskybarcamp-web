@@ -7,9 +7,13 @@ use App\Model\Authenticator\AuthenticatorProvider;
 use App\Model\ConfereeManager;
 use App\Model\IdentityManager;
 use App\Model\IdentityNotFoundException;
+use App\Model\NoUserLoggedIn;
+use App\Model\TalkManager;
 use App\Model\UserManager;
+use App\Model\UserNotFound;
 use App\Orm\Conferee;
 use App\Orm\Identity;
+use App\Orm\Talk;
 use App\Orm\User;
 use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
@@ -54,6 +58,10 @@ class SignPresenter extends BasePresenter
      * @var UserManager
      */
     private $userManager;
+    /**
+     * @var TalkManager
+     */
+    private $talkManager;
 
 
     /**
@@ -66,6 +74,7 @@ class SignPresenter extends BasePresenter
      * @param IdentityManager $identityManager
      * @param ConfereeManager $confereeManager
      * @param UserManager $userManager
+     * @param TalkManager $talkManager
      */
     public function __construct(
         AuthenticatorProvider $authenticatorProvider,
@@ -75,8 +84,8 @@ class SignPresenter extends BasePresenter
         Forms\TalkForm $talkForm,
         IdentityManager $identityManager,
         ConfereeManager $confereeManager,
-        UserManager $userManager
-
+        UserManager $userManager,
+        TalkManager $talkManager
     ) {
         parent::__construct();
         $this->signInFormFactory = $signInFactory;
@@ -87,6 +96,7 @@ class SignPresenter extends BasePresenter
         $this->identityManager = $identityManager;
         $this->confereeManager = $confereeManager;
         $this->userManager = $userManager;
+        $this->talkManager = $talkManager;
     }
 
 
@@ -163,12 +173,35 @@ class SignPresenter extends BasePresenter
             $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
         }
 
+        //TODO: Check if user is already conferee, or is logged in -> go to profile
+
         /** @var Form $form */
-        $form = $this['registerConfereeForm'];
+        $form = $this['confereeForm'];
         $form->setDefaults([
             'name' => $user->name,
             'email' => $user->email,
         ]);
+    }
+
+
+    /**
+     * @throws UserNotFound
+     * @throws \Nette\Application\AbortException
+     */
+    public function renderTalk()
+    {
+        try {
+            $user = $this->userManager->getByLoginUser($this->user);
+        } catch (NoUserLoggedIn $e) {
+            $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím nejdříve přihlaste nebo registrujte');
+            $this->backlink = $this->storeRequest();
+            $this->redirect(Response::S303_SEE_OTHER, 'conferee');
+        }
+
+        //TODO: check if user has already talk, redirect to edit it
+
+        /** @var Form $form */
+        $form = $this['talkForm'];
     }
 
 
@@ -209,7 +242,7 @@ class SignPresenter extends BasePresenter
     /**
      * @return Form
      */
-    protected function createComponentRegisterConfereeForm()
+    protected function createComponentConfereeForm()
     {
         /**
          * @param Conferee $conferee
@@ -274,12 +307,28 @@ class SignPresenter extends BasePresenter
     /**
      * @return Form
      */
-    protected function createComponentRegisterTalkForm()
+    protected function createComponentTalkForm()
     {
-        return $this->talkForm->create(function () {
+        /**
+         * @param Talk $talk
+         * @throws NoUserLoggedIn
+         * @throws UserNotFound
+         * @throws \Nette\Application\AbortException
+         */
+        $onSubmitCallback = function (Talk $talk) {
+            $user = $this->userManager->getByLoginUser($this->user);
+
+            $user->talk->add($talk);
+
+            $this->userManager->save($user);
+
             $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
             $this->redirect('Homepage:');
-        });
+        };
+
+        $categories = $this->talkManager->getCategories();
+
+        return $this->talkForm->create($onSubmitCallback, $categories);
     }
 
 
@@ -378,5 +427,4 @@ class SignPresenter extends BasePresenter
             $this->token = '';
         }
     }
-
 }

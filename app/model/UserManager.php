@@ -42,4 +42,26 @@ class UserManager
     {
         $this->userRepository->persistAndFlush($user);
     }
+
+
+    /**
+     * @param \Nette\Security\User $currentUser
+     * @return User
+     * @throws NoUserLoggedIn
+     * @throws UserNotFound
+     */
+    public function getByLoginUser(\Nette\Security\User $currentUser)
+    {
+        if ($currentUser->isLoggedIn() === false) {
+            throw new NoUserLoggedIn();
+        }
+
+        $user = $this->getById($currentUser->id);
+
+        if ($user === null) {
+            throw new UserNotFound();
+        }
+
+        return $user;
+    }
 }

@@ -12,6 +12,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string|null            $pictureUrl
  * @property OneHasMany|Identity[]  $identity       {1:m Identity::$user}
  * @property OneHasMany|Conferee[]  $conferee       {1:m Conferee::$user}
+ * @property OneHasMany|Talk[]      $talk           {1:m Talk::$user}
  */
 class User extends Entity
 {

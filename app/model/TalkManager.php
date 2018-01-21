@@ -2,71 +2,32 @@
 
 namespace App\Model;
 
-use Nette\Database;
-use Nette\Utils\ArrayHash;
+use App\Orm\Orm;
+use App\Orm\TalkRepository;
 use Nette\Utils\DateTime;
-use Nette\Utils\Json;
 
 class TalkManager
 {
-
-    const TABLE_NAME = 'talk';
-
-    /**
-     * @var Database\Context
-     */
-    private $database;
+    /** @var TalkRepository $talkRepository */
+    private $talkRepository;
 
 
     /**
      * TalkManager constructor.
-     * @param Database\Context $database
+     * @param Orm $orm
      */
-    public function __construct(Database\Context $database)
+    public function __construct(Orm $orm)
     {
-        $this->database = $database;
+        $this->talkRepository = $orm->talk;
     }
 
 
     /**
-     * @param ArrayHash $values
-     * @throws \Nette\Utils\JsonException
+     * @param Talk $talk
      */
-    public function fromForm($values)
+    public function save(Talk $talk)
     {
-        $data = [
-            'title' => $values->title,
-            'description' => $values->description,
-            'purpose' => $values->purpose,
-            'category' => $values->category,
-            'company' => $values->company,
-            'extended' => Json::encode([
-                'requested_duration' => $values->duration,
-                'url' => [
-                    'www' => $values->url_www,
-                    'facebook' => $values->url_facebook,
-                    'twitter' => $values->url_twitter,
-                    'google' => $values->url_google,
-                    'linkedin' => $values->url_linkedin,
-                ],
-            ]),
-        ];
-
-        $this->save($data);
-    }
-
-
-    /**
-     * @param array $data
-     */
-    public function save($data)
-    {
-        $data += [
-            'created' => new DateTime()
-        ];
-
-        $this->database->table(self::TABLE_NAME)
-            ->insert($data);
+        $this->talkRepository->persistAndFlush($talk);
     }
 
 
