@@ -87,6 +87,9 @@ class TalkForm
 
         $form->addGroup('');
 
+        $form->addTextArea('notes', 'Poznámky / požadavky pro organizátory:')
+            ->setOption('description', 'Volitelné. Chcete nám něco sdělit? Např. speciální požadavky, ap.');
+
         $form->addSubmit('send')
             ->setOption('itemClass', 'text-center')
             ->getControlPrototype()->setName('button')->setText('Odeslat');
@@ -100,6 +103,7 @@ class TalkForm
             $talk->description = $values->description;
             $talk->purpose = $values->purpose;
             $talk->company = $values->company;
+            $talk->notes = $values->notes;
             if (isset($values->category)) {
                 $talk->category = $values->category;
             }

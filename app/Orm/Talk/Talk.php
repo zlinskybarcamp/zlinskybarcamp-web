@@ -12,6 +12,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string|null                $purpose
  * @property string|null                $category
  * @property string|null                $company
+ * @property string|null                $notes
  * @property string|null                $extended
  * @property \DateTimeImmutable         $created        {default now}
  */
