@@ -26,6 +26,7 @@ class DashboardPresenter extends BasePresenter
     private $simpleConfigs = [
         Event::FEATURE_CONFEREE => ['bool', 'Povolit registraci účastníků'],
         Event::FEATURE_TALK => ['bool', 'Povolit zapisování přednášek'],
+        Event::FEATURE_TALK_EDIT => ['bool', 'Povolit editace zapsaných přednášek'],
         Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
         Event::FEATURE_SHOW_VOTE => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
         Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
