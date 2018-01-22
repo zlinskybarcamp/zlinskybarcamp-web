@@ -3,8 +3,8 @@
 namespace App\Model;
 
 use App\Orm\Orm;
+use App\Orm\Talk;
 use App\Orm\TalkRepository;
-use Nette\Utils\DateTime;
 
 class TalkManager
 {

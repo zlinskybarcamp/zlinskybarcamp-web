@@ -29,3 +29,9 @@ class EntityNotFound extends \Exception
 class UserNotFound extends EntityNotFound
 {
 }
+
+
+
+class ConfereeNotFound extends EntityNotFound
+{
+}

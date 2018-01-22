@@ -2,6 +2,7 @@
 
 namespace App\Orm;
 
+use App\Model\ConfereeNotFound;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
@@ -11,10 +12,22 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string|null            $name
  * @property string|null            $pictureUrl
  * @property OneHasMany|Identity[]  $identity       {1:m Identity::$user}
- * @property OneHasMany|Conferee[]  $conferee       {1:m Conferee::$user}
- * @property OneHasMany|Talk[]      $talk           {1:m Talk::$user}
+ * @property Conferee|null          $conferee       {1:1 Conferee::$user}
  */
 class User extends Entity
 {
+    /**
+     * @return Conferee
+     * @throws ConfereeNotFound
+     */
+    public function getObligatoryConferee()
+    {
+        $conferee = $this->conferee;
 
+        if ($conferee === null) {
+            throw new ConfereeNotFound();
+        }
+
+        return $conferee;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Presenters;
 use App\Forms;
 use App\Model\Authenticator\AuthenticatorProvider;
 use App\Model\ConfereeManager;
+use App\Model\ConfereeNotFound;
 use App\Model\IdentityManager;
 use App\Model\IdentityNotFoundException;
 use App\Model\NoUserLoggedIn;
@@ -191,9 +192,13 @@ class SignPresenter extends BasePresenter
     public function renderTalk()
     {
         try {
-            $user = $this->userManager->getByLoginUser($this->user);
+            $conferee = $this->userManager->getByLoginUser($this->user)->getObligatoryConferee();
         } catch (NoUserLoggedIn $e) {
-            $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím nejdříve přihlaste nebo registrujte');
+            $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím přihlaste nebo registrujte');
+            $this->backlink = $this->storeRequest();
+            $this->redirect(Response::S303_SEE_OTHER, 'in');
+        } catch (ConfereeNotFound $e) {
+            $this->flashMessage('Pro vypsání přednášky se nejdříve registrujte jako účastník');
             $this->backlink = $this->storeRequest();
             $this->redirect(Response::S303_SEE_OTHER, 'conferee');
         }
@@ -311,16 +316,17 @@ class SignPresenter extends BasePresenter
     {
         /**
          * @param Talk $talk
+         * @throws ConfereeNotFound
          * @throws NoUserLoggedIn
          * @throws UserNotFound
          * @throws \Nette\Application\AbortException
          */
         $onSubmitCallback = function (Talk $talk) {
-            $user = $this->userManager->getByLoginUser($this->user);
+            $conferee = $this->userManager->getByLoginUser($this->user)->getObligatoryConferee();
 
-            $user->talk->add($talk);
+            $talk->conferee = $conferee;
 
-            $this->userManager->save($user);
+            $this->talkManager->save($talk);
 
             $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
             $this->redirect('Homepage:');
