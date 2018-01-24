@@ -136,7 +136,7 @@ class SignPresenter extends BasePresenter
         if ($user) {
             $this->login($user);
             $this->restoreRequest($this->backlink);
-            $this->redirect(IResponse::S303_POST_GET, 'Homepage:');
+            $this->redirect(IResponse::S303_POST_GET, 'User:profil');
         } else {
             $user = new User();
             $authenticator->fillUserWithIdentity($user, $identity);
@@ -149,11 +149,55 @@ class SignPresenter extends BasePresenter
 
 
     /**
+     * @throws UserNotFound
+     * @throws \Nette\Application\AbortException
+     */
+    public function renderIn()
+    {
+        try {
+            $this->userManager->getByLoginUser($this->user);
+
+            //When user loaded - already loggedIn
+            $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+        } catch (NoUserLoggedIn $e) {
+            //Expected state - user must not be logged
+        }
+    }
+
+
+    /**
+     * @throws UserNotFound
+     * @throws \Nette\Application\AbortException
+     */
+    public function renderUp()
+    {
+        try {
+            $this->userManager->getByLoginUser($this->user);
+
+            //When user loaded - already loggedIn
+            $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+        } catch (NoUserLoggedIn $e) {
+            //Expected state - user must not be logged
+        }
+    }
+
+
+    /**
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Application\BadRequestException
+     * @throws UserNotFound
      */
     public function renderConferee()
     {
+        try {
+            $user = $this->userManager->getByLoginUser($this->user);
+            if ($user->conferee) {
+                $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+            }
+        } catch (NoUserLoggedIn $e) {
+            // Reuired exception, no action
+        }
+
         /** @var Identity|null $identity */
         $identity = $this->restoreEntity(Identity::class);
 
@@ -173,8 +217,6 @@ class SignPresenter extends BasePresenter
             Debugger::log('Při obnovení profilu pro dokončení registraci se nezachoval User', Logger::ERROR);
             $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
         }
-
-        //TODO: Check if user is already conferee, or is logged in -> go to profile
 
         /** @var Form $form */
         $form = $this['confereeForm'];
@@ -203,10 +245,10 @@ class SignPresenter extends BasePresenter
             $this->redirect(Response::S303_SEE_OTHER, 'conferee');
         }
 
-        //TODO: check if user has already talk, redirect to edit it
-
-        /** @var Form $form */
-        $form = $this['talkForm'];
+        if ($conferee->talk->count() > 0) {
+            $this->flashMessage('Momentíček, Vy už přece máte přednášku vypsanou :)');
+            $this->redirect(IResponse::S303_SEE_OTHER, 'User:talk');
+        }
     }
 
 
@@ -305,7 +347,7 @@ class SignPresenter extends BasePresenter
 
             $this->flashMessage('Právě jste se zaregistrovali na Barcamp!');
             $this->restoreRequest($this->backlink);
-            $this->redirect('Homepage:');
+            $this->redirect('User:profil');
         };
 
         return $this->confereeForm->create($onSubmitCallback);
@@ -332,7 +374,7 @@ class SignPresenter extends BasePresenter
             $this->talkManager->save($talk);
 
             $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
-            $this->redirect('Homepage:');
+            $this->redirect('User:profil');
         };
 
         $categories = $this->talkManager->getCategories();
