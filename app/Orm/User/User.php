@@ -13,6 +13,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string|null            $pictureUrl
  * @property OneHasMany|Identity[]  $identity       {1:m Identity::$user}
  * @property Conferee|null          $conferee       {1:1 Conferee::$user}
+ * @property OneHasMany|UserRole[]  $role           {1:m UserRole::$user}
  */
 class User extends Entity
 {
@@ -29,5 +30,16 @@ class User extends Entity
         }
 
         return $conferee;
+    }
+
+
+    /**
+     * @param $roleName
+     */
+    public function addRole($roleName)
+    {
+        $role = new UserRole();
+        $role->role = $roleName;
+        $role->user = $this;
     }
 }

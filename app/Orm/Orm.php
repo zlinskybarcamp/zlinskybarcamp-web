@@ -9,6 +9,7 @@ use Nextras\Orm\Model\Model;
  * @property-read IdentityRepository $identity
  * @property-read TalkRepository $talk
  * @property-read UserRepository $user
+ * @property-read UserRoleRepository $role
  */
 class Orm extends Model
 {

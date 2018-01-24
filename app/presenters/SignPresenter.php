@@ -16,6 +16,7 @@ use App\Orm\Conferee;
 use App\Orm\Identity;
 use App\Orm\Talk;
 use App\Orm\User;
+use App\Orm\UserRole;
 use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
 use Nette\Http\Response;
@@ -239,10 +240,12 @@ class SignPresenter extends BasePresenter
             $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím přihlaste nebo registrujte');
             $this->backlink = $this->storeRequest();
             $this->redirect(Response::S303_SEE_OTHER, 'in');
+            return;
         } catch (ConfereeNotFound $e) {
             $this->flashMessage('Pro vypsání přednášky se nejdříve registrujte jako účastník');
             $this->backlink = $this->storeRequest();
             $this->redirect(Response::S303_SEE_OTHER, 'conferee');
+            return;
         }
 
         if ($conferee->talk->count() > 0) {
@@ -254,6 +257,7 @@ class SignPresenter extends BasePresenter
 
     /**
      *
+     * @throws \Nette\Application\AbortException
      */
     public function actionOut()
     {
@@ -342,6 +346,9 @@ class SignPresenter extends BasePresenter
             $this->identityManager->save($identity, false);
             //hack end
 
+            $user->addRole('conferee');
+            $this->userManager->save($user);
+
             $this->login($user);
             $this->removePartialLoginSession();
 
@@ -356,6 +363,7 @@ class SignPresenter extends BasePresenter
 
     /**
      * @return Form
+     * @throws \Nette\Utils\JsonException
      */
     protected function createComponentTalkForm()
     {
@@ -365,13 +373,18 @@ class SignPresenter extends BasePresenter
          * @throws NoUserLoggedIn
          * @throws UserNotFound
          * @throws \Nette\Application\AbortException
+         * @throws \Nette\Security\AuthenticationException
          */
         $onSubmitCallback = function (Talk $talk) {
             $conferee = $this->userManager->getByLoginUser($this->user)->getObligatoryConferee();
 
             $talk->conferee = $conferee;
+            $conferee->user->addRole('speaker');
 
             $this->talkManager->save($talk);
+
+            //Reset app login - to reload roles
+            $this->login($conferee->user);
 
             $this->flashMessage('Hurá! Mate zapasanou přednášku, díky!');
             $this->redirect('User:profil');
@@ -389,9 +402,16 @@ class SignPresenter extends BasePresenter
      */
     private function login(User $user)
     {
+        $roles = [];
+        /** @var UserRole $role */
+        foreach ($user->role as $role) {
+            $roles[] = $role->role;
+        }
+
+
         $appIdentity = new \Nette\Security\Identity(
             $user->id,
-            [],
+            $roles,
             [
                 'id' => $user->id,
                 'name' => $user->name,
