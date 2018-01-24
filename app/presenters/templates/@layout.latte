@@ -46,6 +46,12 @@
                     <li><a href="https://blog.zlinskybarcamp.cz/kulate-stoly/"><span class="nav-link">Kulaté stoly</span></a></li>
                     <li><a href="https://blog.zlinskybarcamp.cz/"><span class="nav-link">Blog</span></a></li>
                     <li {ifCurrent Homepage:contact}class="active"{/ifCurrent}><a href="{link :Homepage:contact}"><span class="nav-link">Kontakt</span></a></li>
+                    {if $user->isLoggedIn()}
+                        <li {ifCurrent User:*}class="active"{/ifCurrent}><a href="{link User:profil}"><span class="nav-link">{$user->identity->name}</span></a></li>
+                    {else}
+                        <li {ifCurrent Sign:*}class="active"{/ifCurrent}><a href="{link Sign:in}"><span class="nav-link">Přihlásit</span></a></li>
+                    {/if}
+
                 </ul>
             </div>
 

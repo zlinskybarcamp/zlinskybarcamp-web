@@ -1,0 +1,31 @@
+{block content}
+<section>
+    <div class="wrapper bg-gray">
+        <div class="container">
+            <h1><span class="dot-end">Profil</span></h1>
+
+            <ul class="row people-list flexible mt-xs">
+                <li>
+                    <div class="item">
+                        <div class="item-image" style="background-image: url('{$user->identity->pictureUrl|noescape}')"></div>
+                        <div class="item-content">
+                            <h2 class="item-title">{$user->identity->name}</h2>
+                            <span n:if="$conferee" class="item-meta">{$conferee->bio|striptags|truncate:50}</span>
+                            <div class="item-text">
+                                <a href="{link conferee}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit profil</a>
+
+                                {if $talks->count()}
+                                    <a href="{link talk}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit přednášku</a>
+                                {else}
+                                    <a href="{link Sign:talk}" class="btn btn-secondary btn-tiny btn-block mt-xs">Vypsat přednášku</a>
+                                {/if}
+
+                                <a href="{link Sign:out}" class="btn btn-action btn-tiny btn-block mt-sm">Odhlásit</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>

@@ -30,6 +30,7 @@ class TalkForm
      * @param array|null $categories
      * @param Talk $talk
      * @return Form
+     * @throws Nette\Utils\JsonException
      */
     public function create(callable $onSuccess, array $categories = null, Talk $talk = null)
     {
@@ -94,6 +95,8 @@ class TalkForm
             ->setOption('itemClass', 'text-center')
             ->getControlPrototype()->setName('button')->setText('Odeslat');
 
+        $form->addProtection('Prosím, odešlete formulář ještě jednou');
+
         $form->onSuccess[] = function (Form $form, $values) use ($talk, $onSuccess) {
             if ($talk === null) {
                 $talk = new Talk();
@@ -107,21 +110,94 @@ class TalkForm
             if (isset($values->category)) {
                 $talk->category = $values->category;
             }
-            $talk->extended = Json::encode([
-                'requested_duration' => $values->duration,
-                'url' => [
-                    'www' => $values->url_www,
-                    'facebook' => $values->url_facebook,
-                    'twitter' => $values->url_twitter,
-                    'google' => $values->url_google,
-                    'linkedin' => $values->url_linkedin,
-                ],
-            ]);
+            $talk->extended = Json::encode($this->reverseMapFields($values, $this->extendedFieldsMap()));
 
-
-            $onSuccess($talk);
+            $onSuccess($talk, $values);
         };
 
+        if ($talk) {
+            $values = $talk->toArray();
+            try {
+                $extended = Json::decode($talk->extended, Json::FORCE_ARRAY);
+                $values += $this->mapFields($extended, $this->extendedFieldsMap());
+            } catch (JsonException $e) {
+                // void
+            }
+            $form->setDefaults($values);
+        }
+
         return $form;
+    }
+
+
+    /**
+     * Map values from structured fields to flat (Json to form fields)
+     *
+     * @param $inputValues
+     * @param $map
+     * @return array
+     */
+    private function mapFields($inputValues, $map)
+    {
+        $outputValues = [];
+
+        foreach ($map as $inputKey => $outputKey) {
+            if (isset($inputValues[$inputKey])) {
+                $value = $inputValues[$inputKey];
+            } else {
+                continue;
+            }
+
+            if (is_array($outputKey)) {
+                $outputValues += $this->mapFields($value, $outputKey);
+            } else {
+                $outputValues[$outputKey] = $value;
+            }
+        }
+
+        return $outputValues;
+    }
+
+
+    /**
+     * Map values from flat fields to structured (form fields to Json)
+     *
+     * @param $inputValues
+     * @param $map
+     * @return array
+     */
+    private function reverseMapFields($inputValues, $map)
+    {
+        $outputValues = [];
+
+        foreach ($map as $outputKey => $inputKey) {
+            if (is_array($inputKey)) {
+                $outputValues[$outputKey] = $this->reverseMapFields($inputValues, $inputKey);
+            } elseif (isset($inputValues[$inputKey])) {
+                $outputValues[$outputKey] = $inputValues[$inputKey];
+            } else {
+                continue;
+            }
+        }
+
+        return $outputValues;
+    }
+
+
+    /**
+     * @return array
+     */
+    private function extendedFieldsMap()
+    {
+        return [
+            'requested_duration' => 'duration',
+            'url' => [
+                'www' => 'url_www',
+                'facebook' => 'url_facebook',
+                'twitter' => 'url_twitter',
+                'google' => 'url_google',
+                'linkedin' => 'url_linkedin',
+            ]
+        ];
     }
 }

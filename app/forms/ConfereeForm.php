@@ -6,6 +6,7 @@ use App\Orm\Conferee;
 use Nette\Application\UI\Form;
 use Nette\SmartObject;
 use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 
 class ConfereeForm
 {
@@ -68,6 +69,8 @@ class ConfereeForm
             ->setOption('itemClass', 'text-center')
             ->getControlPrototype()->setName('button')->setText('Odeslat');
 
+        $form->addProtection('Prosím, odešlete formulář ještě jednou');
+
         $form->onSuccess[] = function (Form $form, $values) use ($conferee, $onSuccess) {
             if ($conferee === null) {
                 $conferee = new Conferee();
@@ -80,11 +83,28 @@ class ConfereeForm
                 'company' => $values->extendedCompany,
                 'address' => $values->extendedAddress,
             ]);
-            $conferee->allowMail = $values->allowMail;
-            $conferee->consens = $values->consens ? new \DateTimeImmutable() : null;
+            if (isset($values->allowMail)) {
+                $conferee->allowMail = $values->allowMail;
+            }
+            if (isset($values->consens)) {
+                $conferee->consens = $values->consens ? new \DateTimeImmutable() : null;
+            }
 
-            $onSuccess($conferee);
+            $onSuccess($conferee, $values);
         };
+
+        if ($conferee) {
+            $values = $conferee->toArray();
+            $values['consens'] = (bool)$conferee->consens;
+            try {
+                $extended = Json::decode($conferee->extended, Json::FORCE_ARRAY);
+                $values['extendedCompany'] = isset($extended['company']) ? $extended['company'] : null;
+                $values['extendedAddress'] = isset($extended['address']) ? $extended['address'] : null;
+            } catch (JsonException $e) {
+                // void
+            }
+            $form->setDefaults($values);
+        }
 
         return $form;
     }
