@@ -5,6 +5,7 @@ namespace App\Model\Authenticator;
 use App\Orm\Identity;
 use App\Orm\User;
 use Nette\Http\IRequest;
+use Nette\Security\AuthenticationException;
 
 /**
  * Interface IIdentityAuthenticator
@@ -22,6 +23,7 @@ interface IAuthenticator
     /**
      * @param IRequest $request
      * @return Identity
+     * @throws AuthenticationException
      */
     public function authenticate(IRequest $request);
 

@@ -97,4 +97,19 @@ class ConferencePresenter extends BasePresenter
         $this->talkManager->removeVote($userId, $talkId);
         $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
+
+
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleSignToVote()
+    {
+        if ($this->user->isLoggedIn()) {
+            $this->redirect(IResponse::S303_SEE_OTHER, 'this');
+        } else {
+            $this->redirect(IResponse::S303_SEE_OTHER, 'Sign:in', [
+                'backlink' => $this->storeRequest()
+            ]);
+        }
+    }
 }

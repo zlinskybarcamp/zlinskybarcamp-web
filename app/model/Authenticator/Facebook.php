@@ -31,6 +31,7 @@ class Facebook implements IAuthenticator
     /**
      * FacebookIdentityAuthenticator constructor.
      * @param string $config
+     * @throws FacebookSDKException
      */
     public function __construct($config)
     {

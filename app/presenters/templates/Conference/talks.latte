@@ -18,9 +18,9 @@
                 {if !$features->talks}
                     {* nothing *}
                 {elseif $user->isInRole('speaker')}
-                    <a href="{link User:talk}" class="btn btn-sm btn-secondary">Upravit svou přednášku</a>
+                    <a href="{link User:talk}" class="btn btn-sm btn-secondary">Upravit mojí přednášku</a>
                 {else}
-                    <a href="{link Sign:talk}" class="btn btn-sm btn-action">Vypsat svou přednášku</a>
+                    <a href="{link Sign:talk}" class="btn btn-sm btn-action">Vypiš si svou přednášku</a>
                 {/if}
             </div>
         </div>
@@ -83,7 +83,7 @@
 
                     <div class="item-buttons">
                         {if !$user->isLoggedIn()}
-                            <a href="{link Sign:in}" class="btn btn-sm btn-secondary">Přihlas se a hlasuj</a>
+                            <a href="{link signToVote!}" class="btn btn-sm btn-secondary">Přihlas se a hlasuj</a>
                         {elseif isset($votes[$talk->id])}
                             <a href="{link unvote!, talkId => $talk->id}" class="btn btn-sm btn-action-bordered">Má můj hlas</a>
                         {else}

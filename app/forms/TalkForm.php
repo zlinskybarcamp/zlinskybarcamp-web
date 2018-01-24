@@ -5,6 +5,7 @@ namespace App\Forms;
 use App\Orm\Talk;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Utils\Html;
 use Nette\Utils\Json;
 
 class TalkForm
@@ -35,11 +36,11 @@ class TalkForm
     public function create(callable $onSuccess, array $categories = null, Talk $talk = null)
     {
         $form = $this->factory->create();
-        $form->addText('title', 'Název přednášky:')
+        $form->addText('title', 'Název tvojí přednášky:')
             ->setOption('description', 'Zvolte název, který zaujme; nepoužívejte však emotikony a jiné zvláštnosti')
             ->setRequired('Prosíme, vyplňte název přednášky');
 
-        $form->addTextArea('description', 'Popis přednášky:')
+        $form->addTextArea('description', 'Popis tvé přednášky:')
             ->setOption('description', 'V několika větách shrňte záměr přednášky. Nepodporujeme formátování, '
                 . 'pouze odřádkování')
             ->setRequired('Popis přednášky je důležitý, prosíme vyplňte jej.');
@@ -48,7 +49,7 @@ class TalkForm
             ->setRequired('Prosíme, vyplňte pro koho je přednáška určena');
 
         if ($categories) {
-            $form->addSelect('category', 'Kategorie', $categories)
+            $form->addSelect('category', 'Kategorie', [null => Html::el()->setHtml('&rarr; Vyberte')] + $categories)
                 ->setRequired('Prosím, zvolte jednu kategorii, do které byste přednášku zařadili');
         }
 

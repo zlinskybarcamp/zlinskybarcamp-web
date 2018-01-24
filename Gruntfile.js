@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                         'www/css/fonts.css',
                         'www/plugins/slick/slick.css',
                         'assets/less/main.less',
-                        'assets/css/flash.css'
+                        'assets/less/flash.less'
                     ],
                     'www/css/admin.css': [
                         'assets/bower_components/bootstrap/dist/css/bootstrap.css',
