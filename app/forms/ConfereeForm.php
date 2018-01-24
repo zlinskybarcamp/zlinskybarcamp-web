@@ -58,9 +58,6 @@ class ConfereeForm
 
         $form->addGroup();
 
-        $form->addCheckbox('allowMail', 'Souhlasím se zasíláním informací o akci e-mailem')
-            ->setDefaultValue(true);
-
         $form->addCheckbox('consens', 'Souhlasím se zpracováním osobních údajů de zákona č. 101/2000 Sb.')
             ->setRequired('Pro dokončení registrace potřebujeme Váš souhlas se zopracováním osobních údajů. '
                 . 'Bez něho nemůžeme registraci dokončit.');
@@ -83,9 +80,6 @@ class ConfereeForm
                 'company' => $values->extendedCompany,
                 'address' => $values->extendedAddress,
             ]);
-            if (isset($values->allowMail)) {
-                $conferee->allowMail = $values->allowMail;
-            }
             if (isset($values->consens)) {
                 $conferee->consens = $values->consens ? new \DateTimeImmutable() : null;
             }

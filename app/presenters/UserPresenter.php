@@ -136,7 +136,6 @@ class UserPresenter extends BasePresenter
 
         //Additional form modification
         $form->addHidden('id', $conferee->id);
-        $form->removeComponent($form['allowMail']);
         $form->removeComponent($form['consens']);
 
         return $form;
