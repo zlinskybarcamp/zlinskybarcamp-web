@@ -7,11 +7,14 @@
                 <div class="text-center">
                     <span class="item-title">Přihlášení</span>
                     <span class="text-md">Nejste ještě registrováni? <a n:href="up">Registrujte se</a></span>
-                    <p>Přihlásit <a n:href="federated!, 'platform'=>'facebook'">Facebookem</a></p>
-                    <span class="text-md">---------------- Nebo ----------------</span>
+                    <div class="item-social mt-md mb-md">
+                        <a n:href="federated!, 'platform'=>'facebook'" class="btn btn-section btn-lg btn-action">
+                            <span class="icon icon-facebook-1"><span class="path1"></span><span class="path2"></span></span> Facebook
+                        </a>
+                    </div>
                 </div>
 
-                <form n:name="signInForm" class="mt-md">
+                {*<form n:name="signInForm" class="mt-md">
                     <ul class=error n:if="$form->ownErrors">
                         <li n:foreach="$form->ownErrors as $error">{$error}</li>
                     </ul>
@@ -33,7 +36,7 @@
                         <span class="error-text" n:ifcontent>{$input->error}</span>
                         <span class="help-text" n:ifcontent>{$input->getOption(description)}</span>
                     </div>
-                </form>
+                </form>*}
 
             </div>
         </div>
