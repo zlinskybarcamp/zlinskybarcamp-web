@@ -265,7 +265,7 @@ barcamp.disabledLinks = function() {
         e.preventDefault();
         console.log('Clicked to disabled link');
     });
-    $('a[href="#"], a[href^="https://example.com"]').click(function(e){
+    $('a[href^="https://example.com"]').click(function(e){
         e.preventDefault();
         console.log('Clicked to placeholder link');
         alert('Omlouváme se, tato funkce ještě není dostupná');
