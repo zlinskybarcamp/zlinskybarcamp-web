@@ -15,7 +15,11 @@
                 Registrovaných přednášek: <span class="item-count">{$count}</span>
             </div>
             <div class="right">
-                {if $features->talks}
+                {if !$features->talks}
+                    {* nothing *}
+                {elseif $user->isInRole('speaker')}
+                    <a href="{link User:talk}" class="btn btn-sm btn-secondary">Upravit svou přednášku</a>
+                {else}
                     <a href="{link Sign:talk}" class="btn btn-sm btn-action">Vypsat svou přednášku</a>
                 {/if}
             </div>
