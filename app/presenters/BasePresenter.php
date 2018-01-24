@@ -4,12 +4,15 @@ namespace App\Presenters;
 
 use App\Model\EventInfoProvider;
 use Nette;
+use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 /**
  * Base presenter for all application presenters.
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
+    use SecuredLinksPresenterTrait;
+
     /**
      * @var EventInfoProvider $eventInfo
      */
@@ -27,6 +30,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     /**
      *
+     * @throws Nette\Utils\JsonException
      */
     protected function beforeRender()
     {

@@ -6,6 +6,7 @@ use App\Model\TalkManager;
 use App\Orm\Orm;
 use App\Orm\Talk;
 use App\Orm\TalkRepository;
+use Nette\Http\IResponse;
 use Nette\Utils\Json;
 use Nextras\Orm\Collection\ICollection;
 
@@ -28,9 +29,13 @@ class ConferencePresenter extends BasePresenter
     {
         $this->talkRepository = $orm->talk;
         $this->talkManager = $talkManager;
+
     }
 
 
+    /**
+     * @throws \Nette\Utils\JsonException
+     */
     public function renderTalks()
     {
         /** @var ICollection|Talk[] $talks */
@@ -57,5 +62,39 @@ class ConferencePresenter extends BasePresenter
         }
         $this->template->talksInfo = $filtered;
         $this->template->count = count($filtered);
+
+        $votes = [];
+
+        if ($this->user->isLoggedIn()) {
+            $votes = $this->talkManager->getUserVotes($this->user->id);
+        }
+
+        $this->template->votes = $votes;
+    }
+
+
+    /**
+     * @secured
+     * @param int $talkId
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleVote($talkId)
+    {
+        $userId = $this->user->id;
+        $this->talkManager->addVote($userId, $talkId);
+        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
+    }
+
+
+    /**
+     * @secured
+     * @param int $talkId
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleUnvote($talkId)
+    {
+        $userId = $this->user->id;
+        $this->talkManager->removeVote($userId, $talkId);
+        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
 }

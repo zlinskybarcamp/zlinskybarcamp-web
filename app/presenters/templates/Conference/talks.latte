@@ -78,7 +78,13 @@
                     {*<span class="item-count">187</span> hlasů*}
 
                     <div class="item-buttons">
-                        {*<a href="#" class="btn btn-sm btn-secondary">Přihlas se a hlasuj</a>*}
+                        {if !$user->isLoggedIn()}
+                            <a href="{link Sign:in}" class="btn btn-sm btn-secondary">Přihlas se a hlasuj</a>
+                        {elseif isset($votes[$talk->id])}
+                            <a href="{link unvote!, talkId => $talk->id}" class="btn btn-sm btn-action-bordered">Má můj hlas</a>
+                        {else}
+                            <a href="{link vote!, talkId => $talk->id}" class="btn btn-sm btn-secondary">Dej mi svůj hlas!</a>
+                        {/if}
 
                         {*<div class="show-full">*}
                             {*<a href="#" class="btn btn-sm btn-action-bordered">Chci přijít</a>*}
