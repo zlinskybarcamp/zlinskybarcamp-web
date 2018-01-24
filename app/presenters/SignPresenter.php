@@ -216,6 +216,9 @@ class SignPresenter extends BasePresenter
     public function actionOut()
     {
         $this->getUser()->logout();
+
+        $this->flashMessage('Jste odhlášeni');
+        $this->redirect(IResponse::S303_SEE_OTHER, 'Homepage:');
     }
 
 
