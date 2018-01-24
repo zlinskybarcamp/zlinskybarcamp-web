@@ -20,6 +20,7 @@ use App\Orm\UserRole;
 use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
 use Nette\Http\Response;
+use Nette\Security\AuthenticationException;
 use Nette\Utils\Random;
 use Nextras\Orm\Entity\Entity;
 use Tracy\Debugger;
@@ -105,7 +106,6 @@ class SignPresenter extends BasePresenter
     /**
      * @param string $platform
      * @throws \Nette\Application\AbortException
-     * @throws \Nette\Application\UI\InvalidLinkException
      */
     public function handleFederated($platform)
     {
@@ -117,14 +117,21 @@ class SignPresenter extends BasePresenter
 
     /**
      * @param string $platform
+     * @throws AuthenticationException
      * @throws \Nette\Application\AbortException
-     * @throws \Nette\Security\AuthenticationException
      * @throws \Nette\Utils\JsonException
      */
     public function handleCallback($platform)
     {
-        $authenticator = $this->getAuthenticator($platform);
-        $identity = $authenticator->authenticate($this->getHttpRequest());
+
+        try {
+            $authenticator = $this->getAuthenticator($platform);
+            $identity = $authenticator->authenticate($this->getHttpRequest());
+        } catch (AuthenticationException $e) {
+            $this->flashMessage('Omlouváme, přihlášení se nepovedlo. Zkuste to prosím znovu.');
+            $this->redirect(IResponse::S303_SEE_OTHER, 'in');
+            return;
+        }
 
         try {
             $identity = $this->identityManager->getIdentityByIdentity($identity);
