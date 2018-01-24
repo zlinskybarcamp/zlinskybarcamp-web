@@ -90,7 +90,11 @@ class WordpressPostReader
             $this->getMaxItems()
         );
 
-        $json = file_get_contents($apiQueryUrl);
+
+        $json = @file_get_contents($apiQueryUrl);
+        if (!$json) {
+            return [];
+        }
 
         return Json::decode($json, Json::FORCE_ARRAY);
     }
