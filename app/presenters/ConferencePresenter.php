@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use App\Model\EventInfoProvider;
 use App\Model\TalkManager;
 use App\Orm\Orm;
 use App\Orm\Talk;
@@ -18,18 +19,23 @@ class ConferencePresenter extends BasePresenter
      * @var TalkManager
      */
     private $talkManager;
+    /**
+     * @var EventInfoProvider
+     */
+    private $eventInfoProvider;
 
 
     /**
      * ConferencePresenter constructor.
      * @param Orm $orm
      * @param TalkManager $talkManager
+     * @param EventInfoProvider $eventInfoProvider
      */
-    public function __construct(Orm $orm, TalkManager $talkManager)
+    public function __construct(Orm $orm, TalkManager $talkManager, EventInfoProvider $eventInfoProvider)
     {
         $this->talkRepository = $orm->talk;
         $this->talkManager = $talkManager;
-
+        $this->eventInfoProvider = $eventInfoProvider;
     }
 
 
@@ -70,6 +76,7 @@ class ConferencePresenter extends BasePresenter
         }
 
         $this->template->votes = $votes;
+        $this->template->allowVote = $this->eventInfoProvider->getFeatures()['vote'];
     }
 
 

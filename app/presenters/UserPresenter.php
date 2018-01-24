@@ -5,6 +5,7 @@ namespace App\Presenters;
 use App\Forms;
 use App\Model\ConfereeManager;
 use App\Model\ConfereeNotFound;
+use App\Model\EventInfoProvider;
 use App\Model\NoUserLoggedIn;
 use App\Model\TalkManager;
 use App\Model\TalkNotFound;
@@ -39,6 +40,10 @@ class UserPresenter extends BasePresenter
      * @var TalkManager
      */
     private $talkManager;
+    /**
+     * @var EventInfoProvider
+     */
+    private $eventInfoProvider;
 
 
     /**
@@ -48,19 +53,22 @@ class UserPresenter extends BasePresenter
      * @param TalkManager $talkManager
      * @param Forms\ConfereeForm $confereeForm
      * @param Forms\TalkForm $talkForm
+     * @param EventInfoProvider $eventInfoProvider
      */
     public function __construct(
         UserManager $userManager,
         ConfereeManager $confereeManager,
         TalkManager $talkManager,
         Forms\ConfereeForm $confereeForm,
-        Forms\TalkForm $talkForm
+        Forms\TalkForm $talkForm,
+        EventInfoProvider $eventInfoProvider
     ) {
         $this->userManager = $userManager;
         $this->confereeManager = $confereeManager;
         $this->confereeForm = $confereeForm;
         $this->talkForm = $talkForm;
         $this->talkManager = $talkManager;
+        $this->eventInfoProvider = $eventInfoProvider;
     }
 
 
@@ -86,6 +94,7 @@ class UserPresenter extends BasePresenter
     /**
      * @throws NoUserLoggedIn
      * @throws UserNotFound
+     * @throws \Nette\Utils\JsonException
      */
     public function renderProfil()
     {
@@ -95,6 +104,23 @@ class UserPresenter extends BasePresenter
 
         $this->template->conferee = $conferee;
         $this->template->talks = $talks;
+
+        $features = $this->eventInfoProvider->getFeatures();
+        $this->template->allowRegisterTalk = $features['talks'];
+        $this->template->allowEditTalk = $features['talks_edit'];
+    }
+
+
+    /**
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function renderTalk()
+    {
+        if (!$this->eventInfoProvider->getFeatures()[EventInfoProvider::FEATURE_TALK_EDIT]) {
+            $this->flashMessage('Upravování přednášek není v tuto chvíli povoleno, omlouváme se');
+            $this->redirect(Response::S303_SEE_OTHER, 'profil');
+        }
     }
 
 

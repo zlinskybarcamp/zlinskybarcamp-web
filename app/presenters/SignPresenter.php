@@ -6,6 +6,7 @@ use App\Forms;
 use App\Model\Authenticator\AuthenticatorProvider;
 use App\Model\ConfereeManager;
 use App\Model\ConfereeNotFound;
+use App\Model\EventInfoProvider;
 use App\Model\IdentityManager;
 use App\Model\IdentityNotFoundException;
 use App\Model\NoUserLoggedIn;
@@ -65,6 +66,10 @@ class SignPresenter extends BasePresenter
      * @var TalkManager
      */
     private $talkManager;
+    /**
+     * @var EventInfoProvider
+     */
+    private $eventInfoProvider;
 
 
     /**
@@ -78,6 +83,7 @@ class SignPresenter extends BasePresenter
      * @param ConfereeManager $confereeManager
      * @param UserManager $userManager
      * @param TalkManager $talkManager
+     * @param EventInfoProvider $eventInfoProvider
      */
     public function __construct(
         AuthenticatorProvider $authenticatorProvider,
@@ -88,7 +94,8 @@ class SignPresenter extends BasePresenter
         IdentityManager $identityManager,
         ConfereeManager $confereeManager,
         UserManager $userManager,
-        TalkManager $talkManager
+        TalkManager $talkManager,
+        EventInfoProvider $eventInfoProvider
     ) {
         parent::__construct();
         $this->signInFormFactory = $signInFactory;
@@ -100,6 +107,7 @@ class SignPresenter extends BasePresenter
         $this->confereeManager = $confereeManager;
         $this->userManager = $userManager;
         $this->talkManager = $talkManager;
+        $this->eventInfoProvider = $eventInfoProvider;
     }
 
 
@@ -194,6 +202,7 @@ class SignPresenter extends BasePresenter
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Application\BadRequestException
      * @throws UserNotFound
+     * @throws \Nette\Utils\JsonException
      */
     public function renderConferee()
     {
@@ -204,6 +213,11 @@ class SignPresenter extends BasePresenter
             }
         } catch (NoUserLoggedIn $e) {
             // Reuired exception, no action
+        }
+
+        if (!$this->eventInfoProvider->getFeatures()['conferee']) {
+            $this->flashMessage('Registrace ještě nejsou otevřeny, omlouváme se');
+            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
         }
 
         /** @var Identity|null $identity */
@@ -238,6 +252,7 @@ class SignPresenter extends BasePresenter
     /**
      * @throws UserNotFound
      * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
      */
     public function renderTalk()
     {
@@ -258,6 +273,11 @@ class SignPresenter extends BasePresenter
         if ($conferee->talk->count() > 0) {
             $this->flashMessage('Momentíček, Vy už přece máte přednášku vypsanou :)');
             $this->redirect(IResponse::S303_SEE_OTHER, 'User:talk');
+        }
+
+        if (!$this->eventInfoProvider->getFeatures()['talks']) {
+            $this->flashMessage('Vypisování přednášek není v tuto chvíli povoleno, omlouváme se');
+            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
         }
     }
 
