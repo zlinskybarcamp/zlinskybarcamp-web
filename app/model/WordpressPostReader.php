@@ -123,13 +123,15 @@ class WordpressPostReader
 
     /**
      * @param array $item
-     * @return null
+     * @return string
      * @throws \Nette\Utils\JsonException
      */
     private function getThumbnailForItem($item)
     {
+        $thumbnailUrl = $this->config['defaultThumbnail'];
+
         if (!isset($item['_links']['wp:featuredmedia'])) {
-            return null;
+            return $thumbnailUrl;
         }
 
         $featuredmedia = $item['_links']['wp:featuredmedia'];
@@ -141,10 +143,10 @@ class WordpressPostReader
         }
 
         if (isset($mediaInfo['media_details']['sizes']['thumbnail']['source_url'])) {
-            return $mediaInfo['media_details']['sizes']['thumbnail']['source_url'];
+            $thumbnailUrl = $mediaInfo['media_details']['sizes']['thumbnail']['source_url'];
         }
 
-        return null;
+        return $thumbnailUrl;
     }
 
 

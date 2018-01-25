@@ -13,6 +13,7 @@ parameters:
     wordpress:
         url: https://blog.zlinskybarcamp.cz/
         maxItems: 4
+        defaultThumbnail: https://www.zlinskybarcamp.cz/img/logo-icon-192.png
     facebook:
         app_id: '332760430570010'
         app_secret: {app-secret}
