@@ -152,12 +152,15 @@ class WordpressPostReader
 
     /**
      * @param string $mediaUrl
-     * @return mixed
+     * @return array|null
      * @throws \Nette\Utils\JsonException
      */
     private function loadMediaInfo($mediaUrl)
     {
-        $json = file_get_contents($mediaUrl);
+        $json = @file_get_contents($mediaUrl);
+        if (!$json) {
+            return null;
+        }
 
         return Json::decode($json, Json::FORCE_ARRAY);
     }
