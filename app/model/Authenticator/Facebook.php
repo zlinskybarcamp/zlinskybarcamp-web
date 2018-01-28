@@ -5,7 +5,7 @@ namespace App\Model\Authenticator;
 use App\Orm\Identity;
 use App\Orm\User;
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\Facebook as FacebookSDK ;
+use Facebook\Facebook as FacebookSDK;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Nette\Http\IRequest;
 use Nette\Security\AuthenticationException;
@@ -106,7 +106,7 @@ class Facebook implements IAuthenticator
             $accessToken = $helper->getAccessToken();
         } catch (FacebookSDKException $e) {
             Debugger::log($e, ILogger::EXCEPTION);
-            throw new AuthenticationException('Facebook vrátil neznámou chybu', 0, $e);
+            throw new AuthenticationException('Autorizace na API selhalo', 0, $e);
         }
 
         if (!isset($accessToken)) {
@@ -146,7 +146,7 @@ class Facebook implements IAuthenticator
             return $user;
         } catch (FacebookSDKException $e) {
             Debugger::log($e, ILogger::EXCEPTION);
-            throw new AuthenticationException('Facebook vrátil neznámou chybu', 0, $e);
+            throw new AuthenticationException('Nepovedlo se z API získat informace o užiateli', 0, $e);
         }
     }
 }
