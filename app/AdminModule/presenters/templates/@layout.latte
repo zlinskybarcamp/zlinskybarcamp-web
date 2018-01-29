@@ -1,3 +1,5 @@
+{import 'components/form.latte'}
+
 <!DOCTYPE html>
 <html lang="cs" dir="ltr">
 <head>
@@ -28,7 +30,7 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li {ifCurrent Dashboard:default}class="active"{/ifCurrent}><a href="{link Dashboard:}">Nastavení</a></li>
-                <li {ifCurrent Dashboard:faq}class="active"{/ifCurrent}><a href="{link Dashboard:faq}">FAQ</a></li>
+                <li {ifCurrent Dashboard:enums}class="active"{/ifCurrent}><a href="{link Dashboard:enums}">Seznamy</a></li>
                 <li {ifCurrent Dashboard:schedule}class="active"{/ifCurrent}><a href="{link Dashboard:schedule}">Harmonogram</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

@@ -2,7 +2,9 @@
 
 namespace App\Presenters;
 
-use App\Components\Faq\FaqFactory;
+use App\Components\Faq\FaqControl;
+use App\Components\Faq\IFaqControlFactory;
+use App\Components\Feed\FeedControl;
 use App\Components\Feed\FeedFactory;
 use App\Components\Newsletter\NewsletterSignupControl;
 use App\Components\Newsletter\NewsletterSignupFactory;
@@ -30,7 +32,7 @@ class HomepagePresenter extends BasePresenter
      */
     private $newsletterFactory;
     /**
-     * @var FaqFactory
+     * @var IFaqControlFactory
      */
     private $faqFactory;
     /**
@@ -44,14 +46,14 @@ class HomepagePresenter extends BasePresenter
      * @param ScheduleFactory $scheduleFactory
      * @param SignupButtonsFactory $buttonsFactory
      * @param NewsletterSignupFactory $newsletterFormFactory
-     * @param FaqFactory $faqFactory
+     * @param IFaqControlFactory $faqFactory
      * @param FeedFactory $feedFactory
      */
     public function __construct(
         ScheduleFactory $scheduleFactory,
         SignupButtonsFactory $buttonsFactory,
         NewsletterSignupFactory $newsletterFormFactory,
-        FaqFactory $faqFactory,
+        IFaqControlFactory $faqFactory,
         FeedFactory $feedFactory
     ) {
         parent::__construct();
@@ -93,7 +95,7 @@ class HomepagePresenter extends BasePresenter
 
 
     /**
-     * @return mixed
+     * @return FeedControl
      */
     protected function createComponentFeed()
     {
@@ -111,7 +113,7 @@ class HomepagePresenter extends BasePresenter
 
 
     /**
-     * @return \App\Components\Faq\FaqControl
+     * @return FaqControl
      */
     protected function createComponentFaq()
     {

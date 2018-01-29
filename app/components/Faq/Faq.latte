@@ -6,10 +6,10 @@
             <li>
                 <h3 class="accordion-heading">
                     <span class="item-icon"></span>
-                    <span class="item-text">{$faq['question']}</span>
+                    <span class="item-text">{$faq['key']}</span>
                 </h3>
                 <div class="accordion-content">
-                    {$faq['answer']}
+                    {$faq['value']}
                 </div>
             </li>
 {if $iterator->getCounter() == $half && !$iterator->isLast()}

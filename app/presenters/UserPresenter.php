@@ -211,7 +211,9 @@ class UserPresenter extends BasePresenter
             throw new TalkNotFound();
         }
 
-        $form = $this->talkForm->create($onSubmitCallback, $this->talkManager->getCategories(), $talk);
+        $categories = $this->talkManager->getCategories();
+        $durations = $this->talkManager->getDurations();
+        $form = $this->talkForm->create($onSubmitCallback, $categories, $durations, $talk);
 
         //Additional form modification
         $form->addHidden('id', $talk->id);

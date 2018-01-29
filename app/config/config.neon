@@ -61,7 +61,7 @@ services:
     - App\Model\ConfereeManager
     - App\Model\EventInfoProvider
     - App\Model\Authenticator\Facebook(%facebook%)
-    - App\Model\FaqManager
+    - App\Model\EnumeratorManager
     - App\Model\Authenticator\AuthenticatorProvider
     - App\Model\IdentityManager
     - App\Model\NewsletterSignupManager
@@ -69,14 +69,18 @@ services:
     - App\Model\TalkManager
     - App\Model\UserManager
     - App\Model\WordpressPostReader(%wordpress%)
+
     - App\Forms\FormFactory
     - App\Forms\ConfereeForm
     - App\Forms\TalkForm
     - App\Forms\SignInFormFactory
     - App\Forms\SignUpFormFactory
-    - App\Components\Faq\FaqFactory
+
+    - App\Components\Enumerator\IEnumeratorFormControlFactory
+    - App\Components\Faq\IFaqControlFactory
     - App\Components\Feed\FeedFactory
     - App\Components\Newsletter\NewsletterSignupFactory
     - App\Components\Schedule\ScheduleFactory
     - App\Components\SignupButtons\SignupButtonsFactory
+
     router: App\RouterFactory::createRouter

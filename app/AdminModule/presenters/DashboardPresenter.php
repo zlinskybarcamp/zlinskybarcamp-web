@@ -2,15 +2,14 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Components\Enumerator\IEnumeratorFormControlFactory;
 use App\Model\ConfigManager;
 use App\Model\DebugEnabler;
+use App\Model\EnumeratorManager;
 use App\Model\EventInfoProvider as Event;
-use App\Model\FaqManager;
 use App\Model\ScheduleManager;
 use Nette\Application\Request;
 use Nette\Application\UI\Form;
-use Nette\Forms\Container;
-use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 
@@ -34,10 +33,18 @@ class DashboardPresenter extends BasePresenter
         Event::COUNTS_CONFEREE => ['int', 'Počet účastníků', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_TALKS => ['int', 'Počet přednášek', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_WORKSHOPS => ['int', 'Počet workshopů', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
-        Event::COUNTS_WARMUPPARTY => ['int', 'Počet warm-up párty', self::REQUIRED,
-            'Pozor, zobrazuje se na úvodní stránce'],
-        Event::COUNTS_AFTERPARTY => ['int', 'Počet afterpárty', self::REQUIRED,
-            'Pozor, zobrazuje se na úvodní stránce'],
+        Event::COUNTS_WARMUPPARTY => [
+            'int',
+            'Počet warm-up párty',
+            self::REQUIRED,
+            'Pozor, zobrazuje se na úvodní stránce'
+        ],
+        Event::COUNTS_AFTERPARTY => [
+            'int',
+            'Počet afterpárty',
+            self::REQUIRED,
+            'Pozor, zobrazuje se na úvodní stránce'
+        ],
         Event::URL_FACEBOOK => ['url', 'URL profilu na Facebook'],
         Event::URL_TWITTER => ['url', 'URL profilu na Twitter'],
         Event::URL_YOUTUBE => ['url', 'URL profilu na YouTube'],
@@ -50,42 +57,38 @@ class DashboardPresenter extends BasePresenter
      */
     private $configManager;
     /**
-     * @var FaqManager
-     */
-    private $faqManager;
-    /**
      * @var ScheduleManager
      */
     private $scheduleManager;
+    /**
+     * @var IEnumeratorFormControlFactory
+     */
+    private $enumeratorFormControlFactory;
 
 
     /**
      * DashboardPresenter constructor.
      * @param ConfigManager $configManager
-     * @param FaqManager $faqManager
      * @param ScheduleManager $scheduleManager
+     * @param IEnumeratorFormControlFactory $enumeratorFormControlFactory
      */
-    public function __construct(ConfigManager $configManager, FaqManager $faqManager, ScheduleManager $scheduleManager)
-    {
+    public function __construct(
+        ConfigManager $configManager,
+        ScheduleManager $scheduleManager,
+        IEnumeratorFormControlFactory $enumeratorFormControlFactory
+    ) {
         parent::__construct();
         $this->configManager = $configManager;
-        $this->faqManager = $faqManager;
         $this->scheduleManager = $scheduleManager;
+        $this->enumeratorFormControlFactory = $enumeratorFormControlFactory;
     }
 
 
-    /**
-     * @throws \Nette\Utils\JsonException
-     */
-    public function actionFaq()
+    public function actionEnums()
     {
-        $form = $this['faqForm'];
-        if (!$form->isSubmitted()) {
-            $faqs = $this->faqManager->get();
-            foreach ($faqs as $i => $faq) {
-                $form['faqs'][$i]->setDefaults($faq);
-            }
-        }
+        $this['faq'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_FAQS);
+        $this['categories'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_CATEGORIES);
+        $this['durations'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_DURATIONS);
     }
 
 
@@ -122,6 +125,7 @@ class DashboardPresenter extends BasePresenter
         $this->flashMessage('Ladící režim zapnut', 'success');
         $this->redirect('this');
     }
+
 
     /**
      * @return Form
@@ -220,85 +224,6 @@ class DashboardPresenter extends BasePresenter
 
     /**
      * @return Form
-     */
-    public function createComponentFaqForm()
-    {
-        $form = new Form();
-
-        $removeEvent = [$this, 'faqRemoveClicked'];
-
-        /** @var \Kdyby\Replicator\Container $faq */
-        $faq = $form->addDynamic('faqs', function (Container $faq) use ($removeEvent) {
-            $faq->addText('question', 'Otázka', 30);
-            $faq->addText('answer', 'Odpověď', 50);
-            $faq->addSubmit('remove', 'Odstranit')
-                ->setValidationScope(false)
-                ->onClick[] = $removeEvent;
-        }, 1);
-
-        $faq->addSubmit('add', 'Přidat další otázku')
-            ->setValidationScope(false)
-            ->onClick[] = [$this, 'faqAddClicked'];
-
-        $form->addSubmit('submit', 'Uložit');
-        $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
-        $form->onSuccess[] = [$this, 'onFaqFormSuccess'];
-        return $form;
-    }
-
-
-    /**
-     * @param Form $form
-     * @param ArrayHash $values
-     * @throws \Nette\Application\AbortException
-     * @throws \Nette\Utils\JsonException
-     */
-    public function onFaqFormSuccess(Form $form, $values)
-    {
-        if ($form['submit']->isSubmittedBy() === false) {
-            return;
-        }
-
-        $faqs = [];
-        foreach ($form['faqs']->values as $faq) {
-            if (empty($faq['question']) || empty($faq['answer'])) {
-                continue;
-            }
-            $faqs[] = $faq;
-        }
-        $this->faqManager->set($faqs);
-
-        $this->flashMessage('Nastavení uloženo', 'success');
-        $this->redirect('this');
-    }
-
-
-    /**
-     * @param SubmitButton $button
-     */
-    public function faqAddClicked(SubmitButton $button)
-    {
-        /** @var \Kdyby\Replicator\Container $faqs */
-        $faqs = $button->parent;
-        $faqs->createOne();
-    }
-
-
-    /**
-     * @param SubmitButton $button
-     */
-    public function faqRemoveClicked(SubmitButton $button)
-    {
-        /** @var Container $container */
-        $container = $button->parent;
-        /** @var \Kdyby\Replicator\Container $faqs */
-        $faqs = $container->parent;
-        $faqs->remove($container, true);
-    }
-
-
-    /**
-     * @return Form
      * @throws \Nette\Utils\JsonException
      */
     public function createComponentScheduleLevelForm()
@@ -351,7 +276,7 @@ class DashboardPresenter extends BasePresenter
         $form = new Form();
 
         foreach ($steps as $stepNum => $step) {
-            $form->addGroup(sprintf('Kroč č. %d: %s', $stepNum + 1, $step['name']));
+            $form->addGroup(sprintf('Krok č. %d: %s', $stepNum + 1, $step['name']));
             foreach ($step['config'] as $config) {
                 $fomId = $this->ideable($config['id']);
                 switch ($config['type']) {

@@ -33,7 +33,7 @@ class TalkForm
      * @return Form
      * @throws Nette\Utils\JsonException
      */
-    public function create(callable $onSuccess, array $categories = null, Talk $talk = null)
+    public function create(callable $onSuccess, array $categories = null, array $durations = null, Talk $talk = null)
     {
         $form = $this->factory->create();
         $form->addText('title', 'Název tvojí přednášky:')
@@ -53,12 +53,10 @@ class TalkForm
                 ->setRequired('Prosím, zvolte jednu kategorii, do které byste přednášku zařadili');
         }
 
-        $form->addRadioList('duration', 'Délka přednášky:', [
-            '' => 'Je mi to jedno',
-            '40' => '40 minut',
-            '60' => '60 minut',
-        ])
-            ->setDefaultValue('');
+        if ($durations) {
+            $form->addRadioList('duration', 'Délka přednášky:', $durations)
+                ->setDefaultValue(key($durations));
+        }
 
         $form->addGroup('Něco o vás');
 

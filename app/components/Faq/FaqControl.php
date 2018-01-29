@@ -2,36 +2,36 @@
 
 namespace App\Components\Faq;
 
-use App\Model\FaqManager;
+use App\Model\EnumeratorManager;
 use Nette\Application\UI\Control;
-use Tracy\Debugger;
 
 class FaqControl extends Control
 {
     /**
-     * @var FaqManager
+     * @var EnumeratorManager
      */
-    private $faqManager;
+    private $enumeratorManager;
 
 
     /**
      * FaqControl constructor.
-     * @param FaqManager $faqManager
+     * @param EnumeratorManager $enumeratorManager
      */
-    public function __construct(FaqManager $faqManager)
+    public function __construct(EnumeratorManager $enumeratorManager)
     {
         parent::__construct();
-        $this->faqManager = $faqManager;
+        $this->enumeratorManager = $enumeratorManager;
     }
 
 
     /**
+     * @throws \App\Model\InvalidEnumeratorSetException
      * @throws \Nette\Utils\JsonException
      */
     public function render()
     {
         $this->template->setFile(__DIR__ . '/Faq.latte');
-        $this->template->faqs = $this->faqManager->get();
+        $this->template->faqs = $this->enumeratorManager->get(EnumeratorManager::SET_FAQS);
         $this->template->render();
     }
 }

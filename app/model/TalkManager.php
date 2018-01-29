@@ -19,18 +19,24 @@ class TalkManager
     private $talkRepository;
     /** @var Context */
     private $database;
+    /**
+     * @var EnumeratorManager
+     */
+    private $enumerator;
 
 
     /**
      * TalkManager constructor.
      * @param Orm $orm
      * @param Context $database
+     * @param EnumeratorManager $enumerator
      */
-    public function __construct(Orm $orm, Context $database)
+    public function __construct(Orm $orm, Context $database, EnumeratorManager $enumerator)
     {
         $this->talkRepository = $orm->talk;
 
         $this->database = $database;
+        $this->enumerator = $enumerator;
     }
 
 
@@ -45,15 +51,23 @@ class TalkManager
 
     /**
      * @return array
+     * @throws InvalidEnumeratorSetException
+     * @throws \Nette\Utils\JsonException
      */
     public function getCategories()
     {
-        return [
-            'teambuilding' => 'Teambuilding',
-            'seo' => 'SEO',
-            'media' => 'Marketing a média',
-            'leadership' => 'Leadership'
-        ];
+        return $this->enumerator->getPairs(EnumeratorManager::SET_TALK_CATEGORIES);
+    }
+
+
+    /**
+     * @return array
+     * @throws InvalidEnumeratorSetException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function getDurations()
+    {
+        return $this->enumerator->getPairs(EnumeratorManager::SET_TALK_DURATIONS);
     }
 
 

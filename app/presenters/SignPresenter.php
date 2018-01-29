@@ -390,6 +390,7 @@ class SignPresenter extends BasePresenter
 
     /**
      * @return Form
+     * @throws \App\Model\InvalidEnumeratorSetException
      * @throws \Nette\Utils\JsonException
      */
     protected function createComponentTalkForm()
@@ -418,8 +419,9 @@ class SignPresenter extends BasePresenter
         };
 
         $categories = $this->talkManager->getCategories();
+        $durations = $this->talkManager->getDurations();
 
-        return $this->talkForm->create($onSubmitCallback, $categories);
+        return $this->talkForm->create($onSubmitCallback, $categories, $durations);
     }
 
 

@@ -1,0 +1,46 @@
+{block title}{block h1}Seznamy{/block} - Zlínský barcamp{/block}
+{block content}
+
+<table class="table  table-hover">
+    <tr>
+        <td>
+            <a href="#faq" class="btn btn-primary" role="button">FAQ →</a>
+        </td>
+        <td>
+            <p><strong>Seznam otázek a odpovědí, zobrazuje se na hlavní stránce.</strong></p>
+
+            <span class="label label-info">Klíč</span> = otázka<br>
+            <span class="label label-info">Hodnota</span> = odpověď
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#categories" class="btn btn-primary" role="button">Kategorie →</a>
+        </td>
+        <td>
+            <p><strong>Kategorie přednášek, do kterých mohou speakeři vypisovat svoje přednášky.</strong></p>
+
+            <span class="label label-info">Klíč</span> = technický klíč pro uložení do databáze. Nepoužívejte diakritiku, mezery (příklad: <code>marketing-a-obchod</code>)<br>
+            <span class="label label-info">Hodnota</span> = název, který se zobrazí uživateli na stránce a přednášejícícmu ve formuláři<br>
+            <span class="label label-danger">POZOR!</span> Kategorie, které jsou již použity u přednášek, neodstraňujte, ani jim neměňte Klíč!
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#durations" class="btn btn-primary" role="button">Délky přednášek →</a>
+        </td>
+        <td>
+            <p><strong>Délky přednášek, které jsou nabízeny přednášejícímu v registračním formuláři.</strong> Nezbrazuje se veřejnosti.</p>
+
+            <span class="label label-info">Klíč</span> = technický klíč pro uložení do databáze. Tip: nepoužívejte diakritiku, mezery (příklad: <code>20</code> nikoliv <code>20 minut</code>)<br>
+            <span class="label label-info">Hodnota</span> = název, který se zobrazí přednášejícícmu ve formuláři
+        </td>
+    </tr>
+</table>
+
+<h2 id="faq">FAQ</h2>
+{control faq}
+<h2 id="categories">Kategorie</h2>
+{control categories}
+<h2 id="durations">Délky přednášek</h2>
+{control durations}
