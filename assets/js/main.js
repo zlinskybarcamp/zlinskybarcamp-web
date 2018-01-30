@@ -149,31 +149,6 @@ barcamp.lectures = function() {
 
 };
 
-barcamp.forms = function() {
-
-    if($('#textarea').length) {
-        var text_max = 220;
-        var text_max2 = 560;
-
-        $('#textarea1_count').html('zbývá '+ text_max + ' znaků');
-        $('#textarea2_count').html('zbývá '+ text_max2 + ' znaků');
-
-        $('#textarea').keyup(function() {
-            var text_length = $('#textarea').val().length;
-            var text_remaining = text_max - text_length;
-
-            $('#textarea1_count').html('zbývá '+ text_remaining + ' znaků');
-        });
-        $('#textarea2').keyup(function() {
-            var text_length = $('#textarea2').val().length;
-            var text_remaining = text_max2 - text_length;
-
-            $('#textarea2_count').html('zbývá '+ text_remaining  + ' znaků');
-        });
-    }
-
-};
-
 barcamp.tabs = function() {
     $('#program').tabs();
 };
@@ -280,7 +255,6 @@ barcamp.init = function () {
     barcamp.smoothScroll();
     barcamp.schedule();
     barcamp.lectures();
-    barcamp.forms();
     barcamp.tabs();
     barcamp.program();
     barcamp.disabledLinks();
