@@ -14,7 +14,7 @@
                             <div class="item-text">
                                 <a href="{link conferee}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit profil</a>
 
-                                {if $talks->count()}
+                                {if count($talks)}
                                     <a n:if="$allowEditTalk" href="{link talk}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit přednášku</a>
                                 {else}
                                     <a n:if="$allowRegisterTalk" href="{link Sign:talk}" class="btn btn-secondary btn-tiny btn-block mt-xs">Vypsat přednášku</a>
