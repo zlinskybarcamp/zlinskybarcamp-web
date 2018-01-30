@@ -6,8 +6,50 @@
     podle času.
 </p>
 
-<h2>Aktuální krok</h2>
-{include bootstrap-form scheduleLevelForm}
+<div class="container">
+    <div class="col-md-6">
+        <h3>Aktuální krok</h3>
+        <table class="table">
+            <tr>
+                <th>Krok</th>
+                <th>Aktivace</th>
+            </tr>
+            <tr>
+                {var $isActive = is_null($currentStepIndex)}
+                <td>
+                    <em>0. (neutrální stav)</em>
+                    <span n:if="$isActive" class="label label-success">Aktivní</span>
+                </td>
+                <td>
+                    <a href="{link scheduleStepActivate!, step => null}" n:class="btn, btn-default, btn-xs, $isActive ? disabled">« Vrátit se</a>
+                </td>
+            </tr>
+            <tr n:foreach="$steps as $step">
+                {var $isActive = $step[isCurrent]}
+                {var $counter = $iterator->getCounter()}
+                <td>
+                    <strong n:tag-if="$step[isCurrent]">{$counter}. {$step[name]}</strong>
+                    <span n:if="$step[isCurrent]" class="label label-success">Aktivní</span>
+                </td>
+                <td>
+                    <a href="{link scheduleStepActivate!, step => $step[key]}" n:class="btn, btn-default, btn-xs, $isActive ? disabled, $step[isNext] ? btn-primary">
+                        {if $step[isNext]}
+                            Pokračovat »
+                        {elseif $step[isDone]}
+                            « Vrátit se
+                        {else}
+                            Aktivovat
+                        {/if}
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>Aktuální nastavení</h3>
+        {include bootstrap-form scheduleConfigForm}
+    </div>
+</div>
 
 <h2>Nastavení jednotlivých kroků</h2>
 <p>Níže jsou vypsány detaily jenotlivých kroků. </p>

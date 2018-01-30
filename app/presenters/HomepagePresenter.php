@@ -9,7 +9,7 @@ use App\Components\Feed\FeedFactory;
 use App\Components\Newsletter\NewsletterSignupControl;
 use App\Components\Newsletter\NewsletterSignupFactory;
 use App\Components\Schedule\ScheduleControl;
-use App\Components\Schedule\ScheduleFactory;
+use App\Components\Schedule\IScheduleControlFactory;
 use App\Components\SignupButtons\SignupButtonsControl;
 use App\Components\SignupButtons\SignupButtonsFactory;
 
@@ -20,7 +20,7 @@ use App\Components\SignupButtons\SignupButtonsFactory;
 class HomepagePresenter extends BasePresenter
 {
     /**
-     * @var ScheduleFactory
+     * @var IScheduleControlFactory
      */
     private $scheduleFactory;
     /**
@@ -43,14 +43,14 @@ class HomepagePresenter extends BasePresenter
 
     /**
      * HomepagePresenter constructor.
-     * @param ScheduleFactory $scheduleFactory
+     * @param IScheduleControlFactory $scheduleFactory
      * @param SignupButtonsFactory $buttonsFactory
      * @param NewsletterSignupFactory $newsletterFormFactory
      * @param IFaqControlFactory $faqFactory
      * @param FeedFactory $feedFactory
      */
     public function __construct(
-        ScheduleFactory $scheduleFactory,
+        IScheduleControlFactory $scheduleFactory,
         SignupButtonsFactory $buttonsFactory,
         NewsletterSignupFactory $newsletterFormFactory,
         IFaqControlFactory $faqFactory,

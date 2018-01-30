@@ -14,7 +14,6 @@ barcamp.openNav = function () {
             return text === "Menu" ? "Zavřít" : "Menu";
         })
     });
-
 };
 
 barcamp.slider = function () {
@@ -89,20 +88,26 @@ barcamp.smoothScroll = function () {
     });
 };
 
-barcamp.schedule = function() {
+barcamp.schedule = function () {
     var $schedule = $('#schedule');
     var $scheduleScrollPoint = $('#schedule-scroll-point');
 
-    if(!$schedule.length) {
+    if (!$schedule.length) {
         return;
     }
 
-    var drawWhenScrollpoint = function () {
+    var config = barcamp.scheduleConfig;
+    if (!config) {
+        console.warn && console.warn("Unable to config Schedule, no config available");
+        return;
+    }
+
+    var renderWhenScrollpoint = function () {
         var hT = $scheduleScrollPoint.offset().top,
             hH = $scheduleScrollPoint.outerHeight(),
             wH = $(window).height(),
             wS = $(this).scrollTop();
-        if (wS > (hT+hH-wH) && !$schedule.hasClass('animate')){
+        if (wS > (hT + hH - wH) && !$schedule.hasClass('animate')) {
             $schedule.addClass('animate');
             $('.schedule', $schedule).addClass('animate');
             return true;
@@ -110,46 +115,138 @@ barcamp.schedule = function() {
         return false;
     };
 
-    var onScrollHandler = function() {
-        if(drawWhenScrollpoint()) {
-            $(window).off('scroll', "", onScrollHandler);
+    var onScrollHandler = function () {
+        if (renderWhenScrollpoint()) {
+            $(window).off('scroll', '', onScrollHandler);
         }
     };
 
-    $(document).ready(function () {
-        //try to draw on load
-        if(drawWhenScrollpoint()) {
-            return;
+    var resetConfig = function () {
+        $('li', $schedule).removeClass('item-active item-done');
+        $('div.progress', $schedule).each(function () {
+            var $slider = $(this);
+            setSliderEmpty($slider);
+            $slider.removeClass('active');
+        });
+    };
+
+    var setConfig = function () {
+        config.steps.forEach(function (item) {
+            var key = item.key;
+            var $step = $('li[data-step-name="' + key + '"]', $schedule);
+            var $sliderBefore = $('div.progress-before', $step);
+            var $sliderAfter = $('div.progress-after', $step);
+            if (item.isCurrent) {
+                $step.addClass('item-active');
+                setSliderFull($sliderBefore);
+
+                $sliderAfter.addClass('active');
+                setSliderPercentagle($sliderAfter);
+            }
+            if (item.isDone) {
+                $step.addClass('item-done');
+                setSliderFull($sliderBefore);
+                setSliderFull($sliderAfter);
+            }
+            if(item.isNext) {
+                $sliderBefore.addClass('active');
+                setSliderPercentagle($sliderBefore);
+            }
+        });
+    };
+
+    var getIntervalRatio = function () {
+        var start = new Date(config.dates.scheduleBegin).getTime();
+        var end = new Date(config.dates.scheduleEnd).getTime();
+        var current = new Date().getTime();
+
+        var isInvalid = false;
+        [start, end, current].forEach(function (val) {
+            if (isNaN(val)) {
+                isInvalid = true;
+            }
+        });
+        if (isInvalid || start >= end || start > current) {
+            return 0;
+        }
+        if (current > end) {
+            return 1;
         }
 
-        //else draw it on scroll
-        $(window).on('scroll', "", onScrollHandler);
-    });
+        return (current-start) / (end-start);
+    };
+    var setSliderSizes = function ($slider, size) {
+        $slider.css({
+            'width': size[0] + '%',
+            'height': size[1] + '%',
+        });
+    };
+    var setSliderPercentagle = function ($slider) {
+        if ($slider.length === 0) return;
+
+        var percent = getIntervalRatio();
+        var limits = parseSliderLimits($slider);
+
+        var sizes = [
+            limits.min[0] + (limits.max[0] - limits.min[0]) * percent,
+            limits.min[1] + (limits.max[1] - limits.min[1]) * percent,
+        ];
+        setSliderSizes($slider, sizes);
+    };
+    var setSliderEmpty = function ($slider) {
+        if ($slider.length === 0) return;
+        var limits = parseSliderLimits($slider);
+        setSliderSizes($slider, limits.empty);
+    };
+    var setSliderFull = function ($slider) {
+        if ($slider.length === 0) return;
+        var limits = parseSliderLimits($slider);
+        setSliderSizes($slider, limits.full);
+    };
+    var parseSliderLimits = function ($slider) {
+        var seg = $slider.data('visualLimits').split(';').map(parseFloat);
+        return {
+            'empty': [seg[0], seg[1]],
+            'min': [seg[2], seg[3]],
+            'max': [seg[4], seg[5]],
+            'full': [seg[6], seg[7]],
+        };
+    };
+
+    //try to render on load
+    if (!renderWhenScrollpoint()) {
+        //else render it on scroll
+        $(window).on('scroll', '', onScrollHandler);
+    }
+
+
+    resetConfig();
+    setConfig();
 
 };
 
-barcamp.lectures = function() {
+barcamp.lectures = function () {
     var height = 0;
     var element;
     var scroll_over = 0;
 
-    $('.js-lecture-control').click(function() {
+    $('.js-lecture-control').click(function () {
 
-        if($(this).closest('li').hasClass('open')) {
-            $(this).parent().parent().parent().find('.show-full, .item-content-full').fadeOut(200, function() {
+        if ($(this).closest('li').hasClass('open')) {
+            $(this).parent().parent().parent().find('.show-full, .item-content-full').fadeOut(200, function () {
                 $(this).parent().parent().find('.item-content-perex').fadeIn(200);
             });
-            $(this).parent().parent().parent().removeClass('open').animate({height:110},200);
+            $(this).parent().parent().parent().removeClass('open').animate({height: 110}, 200);
         } else {
 
-            $(this).parent().parent().parent().find('.open').each(function() {
-                $(this).find('.item-content-full, .show-full').fadeOut(200, function() {
+            $(this).parent().parent().parent().find('.open').each(function () {
+                $(this).find('.item-content-full, .show-full').fadeOut(200, function () {
                     $(this).parent().find('.item-content-perex').fadeIn(200);
                 });
-                $(this).removeClass('open').animate({height:110},200);
+                $(this).removeClass('open').animate({height: 110}, 200);
             });
 
-            $(this).fadeOut(200, function() {
+            $(this).fadeOut(200, function () {
                 $(this).parent().parent().find('.item-content-full, .show-full').fadeIn(200);
             });
 
@@ -159,61 +256,66 @@ barcamp.lectures = function() {
 
             element = $(this).parent().parent();
 
-            if(viewportWidth > 568) {
+            if (viewportWidth > 568) {
                 scroll_over = 200;
             } else {
                 scroll_over = 0;
             }
 
-            $(this).parent().parent().animate( {height: height + 51 }, 100,  function() { setTimeout(function(){ element.addClass('open'); }, 200); });
-            setTimeout(function(){ $('body, html').animate({scrollTop: element.offset().top - scroll_over}, 800); }, 500);
+            $(this).parent().parent().animate({height: height + 51}, 100, function () {
+                setTimeout(function () {
+                    element.addClass('open');
+                }, 200);
+            });
+            setTimeout(function () {
+                $('body, html').animate({scrollTop: element.offset().top - scroll_over}, 800);
+            }, 500);
 
         }
     });
 
 };
 
-barcamp.tabs = function() {
+barcamp.tabs = function () {
     $('#program').tabs();
 };
 
-barcamp.program = function() {
-    var val,vals = "";
+barcamp.program = function () {
+    var val, vals = "";
 
-    $('.js-program-filter input').change(function() {
+    $('.js-program-filter input').change(function () {
         vals = "";
 
-        if($(this).val() == '*' && $(this).is(":checked")) {
-            $('.js-program-filter input:not(.check-all)').each(function() {
+        if ($(this).val() == '*' && $(this).is(":checked")) {
+            $('.js-program-filter input:not(.check-all)').each(function () {
                 $(this).prop('checked', false);
             });
-        } else
-        if($(this).val() != '*') {
+        } else if ($(this).val() != '*') {
             $('.js-program-filter input.check-all').prop('checked', false);
         }
 
-        $('.js-program-filter input:checked').each(function() {
+        $('.js-program-filter input:checked').each(function () {
             val = $(this).val();
-            vals += "."+val+",";
+            vals += "." + val + ",";
         });
 
-        if(val == '*' || vals == '') {
+        if (val == '*' || vals == '') {
             $('.js-program-filter input.check-all').prop('checked', true);
             vals = "";
             $(this).parent().parent().parent().find('.program-item').removeClass('active inactive');
         } else {
             $(this).parent().parent().parent().find('.program-item').removeClass('active').addClass('inactive');
-            $(this).parent().parent().parent().find(vals.slice(0,-1)).removeClass('inactive').addClass('active');
+            $(this).parent().parent().parent().find(vals.slice(0, -1)).removeClass('inactive').addClass('active');
         }
     });
 
     function fixedHeader() {
-        if(viewportWidth <= 768) {
+        if (viewportWidth <= 768) {
 
             var header = $('.program-header');
             var program = $('.program');
 
-            if(header.length == 0 || program.length == 0) {
+            if (header.length == 0 || program.length == 0) {
                 return;
             }
 
@@ -221,17 +323,17 @@ barcamp.program = function() {
             var topofParent = program.offset().top;
             var scroll = 0;
 
-            $(window).scroll(function(){
+            $(window).scroll(function () {
                 scroll = $(window).scrollTop() - topofParent;
 
-                if($(window).scrollTop() >= topofDiv){
-                    if(!header.hasClass('fixed')) {
+                if ($(window).scrollTop() >= topofDiv) {
+                    if (!header.hasClass('fixed')) {
                         header.addClass('fixed');
                     }
-                    header.css( "top", scroll+"px" );
+                    header.css("top", scroll + "px");
                 }
-                else{
-                    if(header.hasClass('fixed')) {
+                else {
+                    if (header.hasClass('fixed')) {
                         header.removeClass('fixed');
                     }
                 }
@@ -240,7 +342,7 @@ barcamp.program = function() {
     }
 
     function scrollLeftMobile() {
-        if(viewportWidth <= 768) {
+        if (viewportWidth <= 768) {
             $('.program-container').scrollLeft(100);
         }
     }
@@ -259,12 +361,12 @@ barcamp.program = function() {
 };
 
 // TODO: Remove placeholders
-barcamp.disabledLinks = function() {
-    $('a.disabled').click(function(e){
+barcamp.disabledLinks = function () {
+    $('a.disabled').click(function (e) {
         e.preventDefault();
         console.log('Clicked to disabled link');
     });
-    $('a[href^="https://example.com"]').click(function(e){
+    $('a[href^="https://example.com"]').click(function (e) {
         e.preventDefault();
         console.log('Clicked to placeholder link');
         alert('Omlouváme se, tato funkce ještě není dostupná');

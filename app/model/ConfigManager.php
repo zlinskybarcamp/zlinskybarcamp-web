@@ -85,7 +85,7 @@ class ConfigManager
     {
         $configs = $this->load();
 
-        $configs[$key] = $value;
+        $this->configs[$key] = $value;
 
         $this->saveOne($key, $value);
     }

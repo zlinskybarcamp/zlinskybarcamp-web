@@ -32,6 +32,10 @@ class EventInfoProvider
     const URL_YOUTUBE = 'url.social.youtube';
     const URL_INSTAGRAM = 'url.social.instagram';
 
+    const SCHEDULE_VISUAL_DATE_BEGIN = 'schedule.visualDate.begin';
+    const SCHEDULE_VISUAL_DATE_END = 'schedule.visualDate.end';
+
+
 
     /**
      * @var ConfigManager
@@ -61,6 +65,8 @@ class EventInfoProvider
             'program' => DateTime::from($this->config->get(self::DATE_PROGRAM)),
             'event' => DateTime::from($this->config->get(self::DATE_EVENT)),
             'report' => DateTime::from($this->config->get(self::DATE_REPORT)),
+            'scheduleBegin' => DateTime::from($this->config->get(self::SCHEDULE_VISUAL_DATE_BEGIN)),
+            'scheduleEnd' => DateTime::from($this->config->get(self::SCHEDULE_VISUAL_DATE_END)),
         ]);
     }
 

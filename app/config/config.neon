@@ -80,7 +80,7 @@ services:
     - App\Components\Faq\IFaqControlFactory
     - App\Components\Feed\FeedFactory
     - App\Components\Newsletter\NewsletterSignupFactory
-    - App\Components\Schedule\ScheduleFactory
+    - App\Components\Schedule\IScheduleControlFactory
     - App\Components\SignupButtons\SignupButtonsFactory
 
     router: App\RouterFactory::createRouter

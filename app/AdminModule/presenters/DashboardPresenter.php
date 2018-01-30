@@ -10,6 +10,7 @@ use App\Model\EventInfoProvider as Event;
 use App\Model\ScheduleManager;
 use Nette\Application\Request;
 use Nette\Application\UI\Form;
+use Nette\Http\IResponse;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 
@@ -23,13 +24,6 @@ class DashboardPresenter extends BasePresenter
      * @var array
      */
     private $simpleConfigs = [
-        Event::FEATURE_CONFEREE => ['bool', 'Povolit registraci účastníků'],
-        Event::FEATURE_TALK => ['bool', 'Povolit zapisování přednášek'],
-        Event::FEATURE_TALK_EDIT => ['bool', 'Povolit editace zapsaných přednášek'],
-        Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
-        Event::FEATURE_SHOW_VOTE => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
-        Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
-        Event::FEATURE_REPORT => ['bool', 'Zobrazit výstupy (YouTube/Reporty)'],
         Event::COUNTS_CONFEREE => ['int', 'Počet účastníků', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_TALKS => ['int', 'Počet přednášek', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
         Event::COUNTS_WORKSHOPS => ['int', 'Počet workshopů', self::REQUIRED, 'Pozor, zobrazuje se na úvodní stránce'],
@@ -51,6 +45,23 @@ class DashboardPresenter extends BasePresenter
         Event::URL_INSTAGRAM => ['url', 'URL profilu na Instagram'],
     ];
 
+    /**
+     * @var array
+     */
+    private $featureConfigs = [
+        Event::FEATURE_CONFEREE => ['bool', 'Povolit registraci účastníků'],
+        Event::FEATURE_TALK => ['bool', 'Povolit zapisování přednášek'],
+        Event::FEATURE_TALK_EDIT => ['bool', 'Povolit editace zapsaných přednášek'],
+        Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
+        Event::FEATURE_SHOW_VOTE => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
+        Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
+        Event::FEATURE_REPORT => ['bool', 'Zobrazit výstupy (YouTube/Reporty)'],
+    ];
+
+    private $visualDates = [
+        Event::SCHEDULE_VISUAL_DATE_BEGIN => 'Začátek',
+        Event::SCHEDULE_VISUAL_DATE_END => 'Konec'
+    ];
 
     /**
      * @var ConfigManager
@@ -84,11 +95,43 @@ class DashboardPresenter extends BasePresenter
     }
 
 
+    /**
+     *
+     */
     public function actionEnums()
     {
         $this['faq'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_FAQS);
         $this['categories'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_CATEGORIES);
         $this['durations'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_DURATIONS);
+    }
+
+
+    /**
+     * @throws \Nette\Utils\JsonException
+     */
+    public function renderSchedule()
+    {
+        $steps = $this->scheduleManager->getSteps();
+        $currentStepIndex = $this->scheduleManager->getCurrentStepIndex();
+
+        $this->template->currentStepIndex = $currentStepIndex;
+        $this->template->steps = $steps;
+    }
+
+
+    /**
+     * @param $step
+     * @secured
+     * @throws \Nette\Utils\JsonException
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleScheduleStepActivate($step)
+    {
+        $this->scheduleManager->changeCurrentStep($step);
+
+        $messageAppend = $step ? 'Web byl nastaven podle nastavení kroku.' : 'Natavení webu se nijak nezměnilo.';
+        $this->flashMessage('Harmonogram byl úspěšně převeden do zvoleného kroku. ' . $messageAppend, 'success');
+        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
 
 
@@ -222,46 +265,68 @@ class DashboardPresenter extends BasePresenter
     }
 
 
-    /**
-     * @return Form
-     * @throws \Nette\Utils\JsonException
-     */
-    public function createComponentScheduleLevelForm()
+    public function createComponentScheduleConfigForm()
     {
-        $steps = $this->scheduleManager->getSteps(true);
-        $currentStep = $this->scheduleManager->getCurrentStep();
-
         $form = new Form();
 
-        $items = [
-            '' => '(žádný)',
-        ];
-        foreach ($steps as $step) {
-            $items[$step['key']] = $step['name'];
+        $form->addGroup();
+        foreach ($this->featureConfigs as $key => $data) {
+            $formId = $this->ideable($key);
+            $item = null;
+            $isRequired = isset($data[2]) && ($data[2] | self::REQUIRED);
+            switch ($data[0]) {
+                case 'bool':
+                    $item = $form->addCheckbox($formId, $data[1])
+                        ->setDefaultValue($this->configManager->get($key, ''));
+                    break;
+                default:
+                    throw new \LogicException('Unknown form item type reqested');
+            }
+            if ($isRequired) {
+                $item->setRequired("Pole '$data[1]' musí být vyplněno.'");
+            }
+            if (isset($data[3])) {
+                $item->setOption('description', $data[3]);
+            }
         }
-        $form->addRadioList('currentStep', 'Aktuální krok harmonoramu', $items)
-            ->setDefaultValue($currentStep);
 
-        $form->addSubmit('submit', 'Nastavit');
+        $form->addGroup('Vizuální zobrazení pokroku (pohyb kuličky)');
+
+        foreach ($this->visualDates as $key => $name) {
+            $form->addText($this->ideable($key), $name)
+                ->setType('datetime-local')
+                ->setDefaultValue($this->dateToHtml5($this->configManager->get($key)));
+        }
+
+        $form->addGroup();
+
+        $form->addSubmit('submit', 'Uložit');
         $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
-        $form->onSuccess[] = [$this, 'onScheduleLevelFormSuccess'];
+
+        $form->onSuccess[] = [$this, 'onScheduleConfigFormSuccess'];
+
         return $form;
     }
 
 
     /**
      * @param Form $form
-     * @param ArrayHash $values
-     * @throws \Nette\Application\AbortException
+     * @param $values
      * @throws \Nette\Utils\JsonException
      */
-    public function onScheduleLevelFormSuccess(Form $form, $values)
+    public function onScheduleConfigFormSuccess(Form $form, $values)
     {
-        $value = $values['currentStep'];
-        $this->scheduleManager->setCurrentStep($value);
+        $bothConfigs = array_merge($this->featureConfigs, $this->visualDates);
 
-        $this->flashMessage('Nastavení uloženo', 'success');
-        $this->redirect('this');
+        foreach ($bothConfigs as $key => $data) {
+            $id = $this->ideable($key);
+            if (isset($values[$id])) {
+                $this->configManager->set($key, $values[$id]);
+            }
+        }
+
+        $this->flashMessage('Nastavení bylo upraveno a změny se hned projevily na webu', 'success');
+        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
 
 
@@ -299,7 +364,7 @@ class DashboardPresenter extends BasePresenter
         }
 
         $form->addGroup();
-        $form->addSubmit('submit', 'Uožit');
+        $form->addSubmit('submit', 'Uložit');
         $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
         $form->onSuccess[] = [$this, 'onScheduleFormSuccess'];
         return $form;

@@ -553,7 +553,7 @@
 
   }
 
-  .progress-start {
+  .progress-before {
     left: -2.5rem;
   }
 
@@ -790,7 +790,7 @@
       }
     }
 
-    &.item-done {
+    &.item-active, &.item-done {
 
       .item-circle {
         background-color: @color-brand-logo;
@@ -799,6 +799,13 @@
         border-color: @color-brand-logo;
         font-weight: 700;
         font-size: 2.1rem;
+      }
+    }
+
+
+    &.item-done {
+
+      .item-circle {
 
         &:before {
           font-family: 'icomoon' !important;

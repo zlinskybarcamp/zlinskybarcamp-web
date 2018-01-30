@@ -1,10 +1,13 @@
 <div class="schedule-container" id="schedule">
-
+    <script>
+        var barcamp = barcamp || {};
+        barcamp.scheduleConfig = {$config};
+    </script>
     <div class="overlay"></div>
 
     <ul class="schedule">
-        <li>
-            <div class="progress progress-start active" style="width: 10%;height: 10%"></div>
+        <li data-step-name="talks">
+            <div class="progress progress-before" data-visual-limits="0;0;5;7;50;37;60;60" ></div>
             <span class="item-circle">
                 <span>01</span>
             </span>
@@ -15,48 +18,48 @@
                     <a n:tag-if="$features->talks" href="{plink Sign:talk}"><span class="btn btn-action btn-sm">Chci vypsat přednášku</span></a>
                 </div>
             </div>
-            <div class="progress" style="width: 0;height: 0"></div>
+            <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
         </li>
-        <li>
+        <li data-step-name="vote">
             <span class="item-circle">
                 <span>02</span>
             </span>
             <div class="item-content {if !$features->vote}disabled{/if}">
                 <span class="item-title">Hlasování o přednáškách</span>
-                Hlasování bude možné od {$dates->vote|date:'j. n. Y'}
+                Hlasování je možné od {$dates->vote|date:'j. n. Y'}
                 <div>
-                    <span class="btn btn-action btn-sm">Chci hlasovat</span>
+                    <a n:tag-if="$features->vote" href="{plink Conference:talks}"><span class="btn btn-action btn-sm">Chci hlasovat</span></a>
                 </div>
             </div>
-            <div class="progress" style="width: 0;height: 0"></div>
+            <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
         </li>
-        <li>
+        <li data-step-name="program">
             <span class="item-circle">
                 <span>03</span>
             </span>
             <div class="item-content {if !$features->program}disabled{/if}">
                 <span class="item-title">Zveřejnění programu</span>
-                Jaký bude program, bude jasné od {$dates->program|date:'j. n. Y'}
+                Program je vyhlášen od {$dates->program|date:'j. n. Y'}
                 <div>
-                    <a href="#" class="btn btn-action btn-sm">Chci kouknout na program</a>
+                    <a n:tag-if="$features->program" href="#"><span class="btn btn-action btn-sm">Chci kouknout na program</span></a>
                 </div>
             </div>
-            <div class="progress" style="width: 0;height: 0"></div>
+            <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
         </li>
-        <li class="item-primary">
+        <li class="item-primary" data-step-name="event">
             <span class="item-circle">
                 <span>04</span>
             </span>
-            <div class="item-content disabled">
+            <div class="item-content">
                 <span class="item-title">Barcamp</span>
                 Barcamp bude {$dates->event|date:'j. n. Y \o\d G:i'}
                 <div>
-                    <span class="btn btn-action btn-sm">Jak se tam dostanu?</span>
+                    <a href="https://blog.zlinskybarcamp.cz/2018/01/15/jak-se-k-nam-odstanete/"><span class="btn btn-action btn-sm">Jak se tam dostanu?</span></a>
                 </div>
             </div>
-            <div class="progress" style="width: 0;height: 0;"></div>
+            <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
         </li>
-        <li>
+        <li data-step-name="report">
             <span class="item-circle">
                 <span>05</span>
             </span>
@@ -64,9 +67,10 @@
                 <span class="item-title">Vydání výstupu</span>
                 Výstupy barcampu vydáme online do {$dates->report|date:'j. n. Y'}
                 <div>
-                    <span class="btn btn-action btn-sm">Prohlédnout výstupy</span>
+                    <a n:tag-if="$features->report" href="#"><span class="btn btn-action btn-sm">Prohlédnout výstupy</span></a>
                 </div>
             </div>
         </li>
     </ul>
+
 </div>
