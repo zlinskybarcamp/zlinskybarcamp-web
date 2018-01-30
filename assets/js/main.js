@@ -90,18 +90,42 @@ barcamp.smoothScroll = function () {
 };
 
 barcamp.schedule = function() {
-    if($('#schedule').length) {
-        $(window).scroll(function() {
-            var hT = $('#schedule-scroll-point').offset().top,
-                hH = $('#schedule-scroll-point').outerHeight(),
-                wH = $(window).height(),
-                wS = $(this).scrollTop();
-            if (wS > (hT+hH-wH) && !$('#schedule').hasClass('animate')){
-                $('#schedule').addClass('animate');
-                $('#schedule .schedule').addClass('animate');
-            }
-        });
+    var $schedule = $('#schedule');
+    var $scheduleScrollPoint = $('#schedule-scroll-point');
+
+    if(!$schedule.length) {
+        return;
     }
+
+    var drawWhenScrollpoint = function () {
+        var hT = $scheduleScrollPoint.offset().top,
+            hH = $scheduleScrollPoint.outerHeight(),
+            wH = $(window).height(),
+            wS = $(this).scrollTop();
+        if (wS > (hT+hH-wH) && !$schedule.hasClass('animate')){
+            $schedule.addClass('animate');
+            $('.schedule', $schedule).addClass('animate');
+            return true;
+        }
+        return false;
+    };
+
+    var onScrollHandler = function() {
+        if(drawWhenScrollpoint()) {
+            $(window).off('scroll', "", onScrollHandler);
+        }
+    };
+
+    $(document).ready(function () {
+        //try to draw on load
+        if(drawWhenScrollpoint()) {
+            return;
+        }
+
+        //else draw it on scroll
+        $(window).on('scroll', "", onScrollHandler);
+    });
+
 };
 
 barcamp.lectures = function() {
