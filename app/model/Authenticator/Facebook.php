@@ -144,7 +144,7 @@ class Facebook implements IAuthenticator
     {
         try {
             $response = $this->facebook->get(
-                'me?fields=id,name,email,picture.width(200).height(200),verified',
+                'me?fields=id,name,about,email,picture.width(200).height(200),verified',
                 $accesToken
             );
             $user = $response->getGraphUser();
