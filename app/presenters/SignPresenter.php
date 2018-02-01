@@ -22,6 +22,8 @@ use Nette\Application\UI\Form;
 use Nette\Http\IResponse;
 use Nette\Http\Response;
 use Nette\Security\AuthenticationException;
+use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Nette\Utils\Random;
 use Nextras\Orm\Entity\Entity;
 use Tracy\Debugger;
@@ -240,11 +242,22 @@ class SignPresenter extends BasePresenter
             $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
         }
 
+        $bio = '';
+        try {
+            $identityDetail = Json::decode($identity->identity, Json::FORCE_ARRAY);
+            if (isset($identityDetail['bio'])) {
+                $bio = $identityDetail['bio'];
+            }
+        } catch (JsonException $e) {
+            //identity may not valid
+        }
+
         /** @var Form $form */
         $form = $this['confereeForm'];
         $form->setDefaults([
             'name' => $user->name,
             'email' => $user->email,
+            'bio' => $bio,
         ]);
     }
 
