@@ -47,7 +47,7 @@ class Facebook implements IAuthenticator
     {
         $helper = $this->facebook->getRedirectLoginHelper();
 
-        $permissions = ['email'];
+        $permissions = ['email', 'user_about_me'];
         $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
         return $loginUrl;
     }
@@ -66,11 +66,16 @@ class Facebook implements IAuthenticator
         $accessToken = $this->getAccessToken($helper);
         $user = $this->getUserProfile($accessToken);
 
+        $userDetails = $user->asArray();
+        if (isset($userDetails['about'])) {
+            $userDetails['bio'] = $userDetails['about'];
+        }
+
         $identity = new Identity();
 
         $identity->key = $user['id'];
         $identity->platform = self::PLATFORM_ID;
-        $identity->identity = Json::encode($user->asArray());
+        $identity->identity = Json::encode($userDetails);
         $identity->token = $accessToken;
 
         return $identity;
@@ -139,7 +144,7 @@ class Facebook implements IAuthenticator
     {
         try {
             $response = $this->facebook->get(
-                'me?fields=id,name,email,picture.width(200).height(200),verified',
+                'me?fields=id,name,about,email,picture.width(200).height(200),verified',
                 $accesToken
             );
             $user = $response->getGraphUser();
