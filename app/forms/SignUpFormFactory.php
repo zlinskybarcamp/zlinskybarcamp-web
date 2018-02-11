@@ -2,7 +2,8 @@
 
 namespace App\Forms;
 
-use App\Model;
+use App\Model\Authenticator\Email as EmailAuthenticator;
+use App\Model\DuplicateNameException;
 use Nette;
 use Nette\Application\UI\Form;
 
@@ -15,14 +16,19 @@ class SignUpFormFactory
     /** @var FormFactory */
     private $factory;
 
-    /** @var Model\UserManager */
-    private $userManager;
+    /** @var EmailAuthenticator */
+    private $authenticator;
 
 
-    public function __construct(FormFactory $factory, Model\UserManager $userManager)
+    /**
+     * SignUpFormFactory constructor.
+     * @param FormFactory $factory
+     * @param EmailAuthenticator $authenticator
+     */
+    public function __construct(FormFactory $factory, EmailAuthenticator $authenticator)
     {
         $this->factory = $factory;
-        $this->userManager = $userManager;
+        $this->authenticator = $authenticator;
     }
 
 
@@ -47,12 +53,12 @@ class SignUpFormFactory
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
-                $this->userManager->save($values->email, $values->password);
-            } catch (Model\DuplicateNameException $e) {
-                $form['email']->addError('E-mail is already taken.');
+                $identity = $this->authenticator->createNewIdentity($values->email, $values->password);
+                $onSuccess($identity);
+            } catch (DuplicateNameException $e) {
+                $form['email']->addError('Tento e-mail už u nás máte, zkuste se příhlásit');
                 return;
             }
-            $onSuccess();
         };
 
         return $form;

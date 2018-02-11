@@ -301,7 +301,14 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        return $this->signInFormFactory->create(function () {
+        return $this->signInFormFactory->create(function (Identity $identity) {
+            $user = $identity->user;
+            if (!$user instanceof User) {
+                $this->redirect('conferee');
+            }
+
+            $this->login($user);
+
             $this->restoreRequest($this->backlink);
             $this->redirect('Homepage:');
         });
@@ -314,8 +321,13 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignUpForm()
     {
-        return $this->signUpFormFactory->create(function () {
-            $this->redirect('Homepage:');
+        return $this->signUpFormFactory->create(function (Identity $identity) {
+            $user = new User();
+            $user->email = $identity->key;
+
+            $this->storeEntity($identity, Identity::class);
+            $this->storeEntity($user, User::class);
+            $this->redirect(IResponse::S303_POST_GET, 'conferee');
         });
     }
 

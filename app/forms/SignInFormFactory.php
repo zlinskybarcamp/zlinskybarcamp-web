@@ -2,6 +2,10 @@
 
 namespace App\Forms;
 
+use App\Model\AuthenticationException;
+use App\Model\Authenticator\Email as EmailAuthenticator;
+use App\Model\PasswordMismatchException;
+use App\Model\UserNotFoundException;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\User;
@@ -16,11 +20,14 @@ class SignInFormFactory
     /** @var User */
     private $user;
 
+    /** @var EmailAuthenticator */
+    private $authenticator;
 
-    public function __construct(FormFactory $factory, User $user)
+
+    public function __construct(FormFactory $factory, EmailAuthenticator $authenticator)
     {
         $this->factory = $factory;
-        $this->user = $user;
+        $this->authenticator = $authenticator;
     }
 
 
@@ -43,13 +50,17 @@ class SignInFormFactory
 
         $form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
             try {
-                $this->user->setExpiration($values->remember ? '14 days' : '20 minutes');
-                $this->user->login($values->email, $values->password);
-            } catch (Nette\Security\AuthenticationException $e) {
-                $form->addError('The username or password you entered is incorrect.');
-                return;
+                $identity = $this->authenticator->getIdentityByAuth($values->email, $values->password);
+                $onSuccess($identity);
+            } catch (AuthenticationException $e) {
+                $form->addError('Přihlášení se nepovedlo');
+                if ($e instanceof UserNotFoundException) {
+                    $form['email']->addError('Toto jméno jsme u nás nenalezli. Jste již registrováni?');
+                }
+                if ($e instanceof PasswordMismatchException) {
+                    $form['password']->addError('Heslo se neshoduje, zkuste to prosím znovu.');
+                }
             }
-            $onSuccess();
         };
 
         return $form;

@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Orm\IdentityRepository;
 use App\Orm\Orm;
 use App\Orm\User;
 use App\Orm\UserRepository;
@@ -14,6 +15,9 @@ class UserManager
     /** @var UserRepository */
     private $userRepository;
 
+    /** @var IdentityRepository */
+    private $identityRepository;
+
 
     /**
      * UserManager constructor.
@@ -22,6 +26,7 @@ class UserManager
     public function __construct(Orm $orm)
     {
         $this->userRepository = $orm->user;
+        $this->identityRepository = $orm->identity;
     }
 
 
@@ -64,4 +69,6 @@ class UserManager
 
         return $user;
     }
+
+
 }

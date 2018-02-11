@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use App\Orm\Orm;
 use App\Orm\Identity;
+use App\Orm\Orm;
 
 
 class IdentityManager
@@ -46,9 +46,22 @@ class IdentityManager
     public function getIdentityByIdentity(Identity $identityTemplate)
     {
         /** @var Identity $identity */
-        $identity = $this->identityRepository->getBy(
-            ['key' => $identityTemplate->key, 'platform' => $identityTemplate->platform]
-        );
+        return $this->getIdentity($identityTemplate->platform, $identityTemplate->key);
+    }
+
+
+    /**
+     * @param string $platform Platform name for search
+     * @param string $key Identity key for search
+     * @return Identity
+     * @throws IdentityNotFoundException
+     */
+    public function getIdentity($platform, $key)
+    {
+        $identity = $this->identityRepository->getBy([
+            'key' => $key,
+            'platform' => $platform
+        ]);
 
         if ($identity === null) {
             throw new IdentityNotFoundException('Identity not found');

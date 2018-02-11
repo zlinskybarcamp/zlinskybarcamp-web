@@ -61,6 +61,7 @@ services:
     - App\Model\ConfereeManager
     - App\Model\EventInfoProvider
     - App\Model\Authenticator\Facebook(%facebook%)
+    - App\Model\Authenticator\Email
     - App\Model\EnumeratorManager
     - App\Model\Authenticator\AuthenticatorProvider
     - App\Model\IdentityManager

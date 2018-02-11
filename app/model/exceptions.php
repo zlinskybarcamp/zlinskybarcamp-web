@@ -13,6 +13,23 @@ class IdentityNotFoundException extends \Exception
 }
 
 
+class AuthenticationException extends \Exception
+{
+}
+
+
+
+class UserNotFoundException extends AuthenticationException
+{
+}
+
+
+
+class PasswordMismatchException extends AuthenticationException
+{
+}
+
+
 
 class NoUserLoggedIn extends \Exception
 {
