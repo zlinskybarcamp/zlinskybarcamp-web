@@ -23,7 +23,7 @@
 {* for Bootstrap v3 *}
 {define bootstrap-form $formName}
     <form n:name="$formName" class="form-horizontal form-grouped">
-        <ul class="error" n:if="$form->ownErrors">
+        <ul class="error alert alert-danger" n:if="$form->ownErrors">
             <li n:foreach="$form->ownErrors as $error">{$error}</li>
         </ul>
 
@@ -50,7 +50,7 @@
             {if $input->getOption(type) in [text, select, textarea]}
                 {input $input class => form-control}
             {elseif $input->getOption(type) === button}
-                {input $input class => "btn btn-default"}
+                {input $input class => $input->getOption(primary) ? "btn btn-primary" : "btn btn-default"}
             {elseif $input->getOption(type) === checkbox}
                 <div class="checkbox">{input $input}</div>
             {elseif $input->getOption(type) === radio}

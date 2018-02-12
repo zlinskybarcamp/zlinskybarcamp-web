@@ -1,0 +1,246 @@
+<?php
+
+namespace App\AdminModule\Presenters;
+
+use App\Model\ConfereeManager;
+use App\Model\TalkManager;
+use App\Orm\Talk;
+use DateInterval;
+use Nette\Application\UI\Form;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\Html;
+use Nette\Utils\Json;
+use Ublaboo\DataGrid\DataGrid;
+
+class ConferencePresenter extends BasePresenter
+{
+    /**
+     * @var ConfereeManager
+     */
+    private $confereeManager;
+    /**
+     * @var TalkManager
+     */
+    private $talkManager;
+
+
+    /**
+     * ConferencePreseneter constructor.
+     * @param ConfereeManager $confereeManager
+     * @param TalkManager $talkManager
+     */
+    public function __construct(ConfereeManager $confereeManager, TalkManager $talkManager)
+    {
+        $this->confereeManager = $confereeManager;
+        $this->talkManager = $talkManager;
+
+    }
+
+
+    /**
+     * @param $name
+     */
+    public function createComponentConfereeDatagrid($name)
+    {
+        $grid = new DataGrid($this, $name);
+
+        $grid->setDataSource($this->confereeManager->findAll());
+
+        $grid->addColumnText('name', 'Jméno');
+        $grid->addColumnText('email', 'E-mail');
+    }
+
+
+    /**
+     * @param $name
+     * @throws \App\Model\InvalidEnumeratorSetException
+     * @throws \Nette\Utils\JsonException
+     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnStatusException
+     * @throws \Ublaboo\DataGrid\Exception\DataGridException
+     */
+    public function createComponentTalksDatagrid($name)
+    {
+        $categories = $this->talkManager->getCategories();
+        $rooms = $this->talkManager->getRooms();
+
+        $grid = new DataGrid($this, $name);
+        DataGrid::$icon_prefix = 'glyphicon glyphicon-';
+
+        $grid->setDataSource($this->talkManager->findAll());
+
+        $grid->addColumnLink('title', 'Název', ':Conference:talkDetail', 'title', ['id']);
+        $grid->addColumnText('speaker', 'Jméno', 'conferee.name');
+
+
+        $grid->addColumnText('category', 'Kategorie')
+            ->setReplacement($categories);
+
+        $grid->addColumnText('room', 'Místnost')
+            ->setReplacement($rooms);
+
+        $grid->addColumnText('time', 'Čas')->setRenderer(function ($row) {
+            /** @var Talk $row */
+            if (is_null($row->time)) {
+                return null;
+            } else {
+                return $row->time->format('%H:%I:%S');
+            }
+        });
+
+        $grid->addColumnText('duration', 'Délka [minuty]');
+
+        $onStatusCHange = function ($id, $status) use ($grid) {
+            /** @var Talk $talk */
+            $talk = $this->talkManager->getById($id);
+            $talk->setValue('enabled', $status);
+            $this->talkManager->save($talk);
+
+            if ($this->isAjax()) {
+                $grid->redrawItem($id);
+            }
+        };
+
+        $grid->addColumnText('visible', 'V programu')
+            ->setRenderer(function ($row) {
+                /** @var Talk $row */
+                if (is_null($row->room) ||
+                    is_null($row->time) ||
+                    is_null($row->duration) ||
+                    !$row->enabled
+                ) {
+                    return "Ne";
+                }
+
+                return "Ano";
+            });
+
+        $grid->addColumnStatus('enabled', 'Aktivní')
+            ->addOption(1, 'Aktivní')
+            ->endOption()
+            ->addOption(0, 'Zrušená')
+            ->setClass('btn-danger')
+            ->endOption()
+            ->onChange[] = $onStatusCHange;
+
+        $grid->addAction('edit', '', 'talkEdit')
+            ->setIcon('pencil')
+            ->setTitle('Upravit');
+    }
+
+
+    /**
+     * @param $id
+     * @throws \Nette\Application\BadRequestException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function renderTalkEdit($id)
+    {
+        /** @var Talk $talk */
+        $talk = $this->talkManager->getById($id);
+
+        if (!$talk) {
+            $this->error('přednáška nenalezena');
+        }
+
+        $this->template->talk = $talk;
+        $this->template->extended = Json::decode($talk->extended, Json::FORCE_ARRAY);
+
+        /** @var Form $form */
+        $form = $this['talkForm'];
+
+        $values = $talk->toArray();
+        $values['time'] = is_null($values['time']) ? '' : $values['time']->format('%H:%I:%S');
+
+        $form->setDefaults($values);
+    }
+
+
+    /**
+     * @return Form
+     * @throws \App\Model\InvalidEnumeratorSetException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function createComponentTalkForm()
+    {
+        $form = new Form();
+
+        $form->addHidden('id');
+
+        $form->addGroup('Plánování');
+
+        $form->addSelect('room', 'Místnost', ['' => '(žádná)'] + $this->talkManager->getRooms());
+        $form->addText('time', 'Čas konání')->setType('time');
+        $form->addInteger('duration', 'Délka v minutách')->getControlPrototype()->addAttributes([
+            'min' => 10,
+            'max' => 90,
+            'step' => 10,
+        ]);
+
+        $form->addGroup('Ostatní');
+
+        $form->addText('title', 'Název');
+        $form->addTextArea('description', 'Popis');
+        $form->addTextArea('purpose', 'Pro koho je určena');
+        $form->addSelect('category', 'Kategorie', $this->talkManager->getCategories());
+        $form->addText('company', 'Firma');
+
+        $form->addSubmit('submit', 'Odeslat')->setOption('primary', true);
+
+        $form->addProtection();
+
+        $form->onSuccess[] = [$this, 'onTalkFormSuccess'];
+
+        return $form;
+    }
+
+
+    /**
+     * @param Form $form
+     * @param ArrayHash $values
+     * @throws \Nette\Application\BadRequestException
+     * @throws \Nette\Application\AbortException
+     * @throws \Exception
+     */
+    public function onTalkFormSuccess(Form $form, $values)
+    {
+        $id = $values->id;
+
+        /** @var Talk $talk */
+        $talk = $this->talkManager->getById($id);
+
+        if (!$talk) {
+            $this->error('Přednáška nenalezena');
+        }
+
+        foreach ($values as $key => $value) {
+            if (in_array($key, ['id'])) {
+                continue;
+            }
+
+            if ($key === 'time') {
+                if (preg_match('#^(-?)(\d+):(\d+)#', $value, $m)) {
+                    $value = new DateInterval("PT{$m[2]}H{$m[3]}M");
+                } else {
+                    $values = null;
+                }
+            }
+
+            if ($key === 'duration') {
+                if (!(empty($value) || in_array($value, [10, 20, 30, 40, 50, 60, 90]))) {
+                    $form['duration']->addError('Délka přednášky musí být jeden z časů: 10, 20, 30, 40, 50, 60, nebo 90 minut');
+                    return;
+                }
+            }
+
+            if ($value === '') {
+                $value = null;
+            }
+            $talk->setValue($key, $value);
+        }
+
+        $this->talkManager->save($talk);
+
+        $this->flashMessage('Uloženo', 'success');
+        $this->redirect('talks');
+    }
+}

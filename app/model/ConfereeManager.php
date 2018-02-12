@@ -31,4 +31,13 @@ class ConfereeManager
     {
         $this->confereeRepository->persistAndFlush($conferee);
     }
+
+
+    /**
+     * @return \Nextras\Orm\Collection\ICollection
+     */
+    public function findAll()
+    {
+        return $this->confereeRepository->findAll();
+    }
 }
