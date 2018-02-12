@@ -371,9 +371,14 @@ barcamp.disabledLinks = function () {
         console.log('Clicked to placeholder link');
         alert('Omlouváme se, tato funkce ještě není dostupná');
     })
-}
+};
+
+barcamp.netteInit = function () {
+    $.nette.init();
+};
 
 barcamp.init = function () {
+    barcamp.netteInit();
     barcamp.viewportWidth();
     barcamp.openNav();
     barcamp.slider();

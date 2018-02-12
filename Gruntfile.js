@@ -43,12 +43,17 @@ module.exports = function(grunt) {
                 files: {
                     'www/js/main.js': [
                         'assets/js/jquery-3.1.1.js',
+                        'assets/bower_components/raven-js/dist/raven.js',
+                        'assets/js/raven-init.js',
                         'www/plugins/jquery-ui/jquery-ui.js',
                         'www/plugins/slick/slick.js',
-                        'assets/js/main.js',
-                        'vendor/nette/forms/src/assets/netteForms.js'
+                        'vendor/nette/forms/src/assets/netteForms.js',
+                        'assets/bower_components/nette.ajax.js/nette.ajax.js',
+                        'assets/js/main.js'
                     ],
                     'www/js/admin.js': [
+                        'assets/bower_components/raven-js/dist/raven.js',
+                        'assets/js/raven-init.js',
                         'assets/bower_components/jquery/dist/jquery.js',
                         'assets/bower_components/nette-forms/src/assets/netteForms.js',
                         'assets/bower_components/nette.ajax.js/nette.ajax.js',
