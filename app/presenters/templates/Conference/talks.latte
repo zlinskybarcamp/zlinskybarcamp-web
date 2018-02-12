@@ -41,21 +41,21 @@
                     </div>
                     <div class="item-author-contact show-full">
                         <div class="item-social">
-                            <a n:if="$extended['url']['facebook']" href="{$extended['url']['facebook']}">
+                            <a n:ifset="$extended['url']['facebook']" href="{$extended['url']['facebook']}">
                                 <span class="icon icon-facebook-1"><span class="path1"></span><span class="path2"></span></span>
                             </a>
-                            <a n:if="$extended['url']['twitter']" href="{$extended['url']['twitter']}">
+                            <a n:ifset="$extended['url']['twitter']" href="{$extended['url']['twitter']}">
                                 <span class="icon icon-twitter-2"><span class="path1"></span><span class="path2"></span></span>
                             </a>
-                            <a n:if="$extended['url']['google']" href="{$extended['url']['google']}">
+                            <a n:ifset="$extended['url']['google']" href="{$extended['url']['google']}">
                                 <span class="icon icon-google-plus"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
                             </a>
-                            <a n:if="$extended['url']['linkedin']" href="{$extended['url']['linkedin']}">
+                            <a n:ifset="$extended['url']['linkedin']" href="{$extended['url']['linkedin']}">
                                 <span class="icon icon-linkedin"><span class="path1"></span><span class="path2"></span></span>
                             </a>
                         </div>
 
-                        <a n:if="$extended['url']['www']" href="{$extended['url']['www']}">www.redbit.cz</a>
+                        <a n:ifset="$extended['url']['www']" href="{$extended['url']['www']}">www.redbit.cz</a>
                     </div>
                 </div>
                 <div class="item-content">
