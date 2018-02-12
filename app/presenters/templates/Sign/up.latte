@@ -6,9 +6,14 @@
             <div class="form-newsletter">
                 <div class="text-center">
                     <span class="item-title">Registrace</span>
-                    <span class="text-md">Máte už účet? <a n:href="in">Přihlaste se</a></span>
+                    <div class="item-social mt-md mb-md">
+                        <a n:href="federated!, 'platform'=>'facebook'" class="btn btn-section btn-lg btn-action">
+                            <span class="icon icon-facebook-1"><span class="path1"></span><span class="path2"></span></span> Facebook
+                        </a>
+                    </div>
                 </div>
 
+                <span class="text-md">Máte už účet? <a n:href="in">Přihlaste se</a></span>
                 <form n:name="signUpForm" class="mt-md">
                     <ul class=error n:if="$form->ownErrors">
                         <li n:foreach="$form->ownErrors as $error">{$error}</li>

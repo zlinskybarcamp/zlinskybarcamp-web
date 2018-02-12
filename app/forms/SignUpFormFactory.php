@@ -56,7 +56,7 @@ class SignUpFormFactory
                 $identity = $this->authenticator->createNewIdentity($values->email, $values->password);
                 $onSuccess($identity);
             } catch (DuplicateNameException $e) {
-                $form['email']->addError('Tento e-mail už u nás máte, zkuste se příhlásit');
+                $form['email']->addError('Tento e-mail už u nás máte, zkuste se přihlásit');
                 return;
             }
         };
