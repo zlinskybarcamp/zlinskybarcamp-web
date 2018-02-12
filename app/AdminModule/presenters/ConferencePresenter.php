@@ -4,12 +4,13 @@ namespace App\AdminModule\Presenters;
 
 use App\Model\ConfereeManager;
 use App\Model\TalkManager;
+use App\Orm\Conferee;
 use App\Orm\Talk;
 use DateInterval;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
-use Nette\Utils\Html;
 use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Ublaboo\DataGrid\DataGrid;
 
 class ConferencePresenter extends BasePresenter
@@ -33,7 +34,6 @@ class ConferencePresenter extends BasePresenter
     {
         $this->confereeManager = $confereeManager;
         $this->talkManager = $talkManager;
-
     }
 
 
@@ -48,6 +48,58 @@ class ConferencePresenter extends BasePresenter
 
         $grid->addColumnText('name', 'Jméno');
         $grid->addColumnText('email', 'E-mail');
+    }
+
+
+    /**
+     * @throws \Nette\Application\AbortException
+     * @secured
+     */
+    public function handleExportConfereeCsv()
+    {
+        $allConferee = $this->confereeManager->findAll();
+
+        ob_start();
+        $df = fopen("php://output", 'w');
+        fputcsv(
+            $df,
+            ["Jméno", "E-mail", "Registrace", "Newsletter", "Souhlas získán", "Bio", "Firma", "Adresa"],
+            ",",
+            '"'
+        );
+
+        /** @var Conferee $conferee */
+        foreach ($allConferee as $conferee) {
+            try {
+                $extended = Json::decode($conferee->extended, Json::FORCE_ARRAY);
+            } catch (JsonException $e) {
+                $extended = [];
+            }
+            @fputcsv($df, [
+                $conferee->name,
+                $conferee->email,
+                $conferee->created->format(\DateTime::ATOM),
+                $conferee->allowMail ? 'Ano' : 'Ne',
+                $conferee->consens ? $conferee->consens->format(\DateTime::ATOM) : null,
+                $conferee->bio,
+                isset($extended['company']) ? $extended['company'] : null,
+                isset($extended['address']) ? $extended['address'] : null,
+            ], ",", '"');
+        }
+
+        fclose($df);
+        $csv = ob_get_clean();
+
+        $fileDatePostfix = gmdate("Ymd.his");
+        header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+
+        header("Content-Type: application/octet-stream");
+        header("Content-Length: " . strlen($csv));
+
+        header("Content-Disposition: attachment;filename=users-$fileDatePostfix.csv");
+        echo $csv;
+
+        $this->terminate();
     }
 
 
