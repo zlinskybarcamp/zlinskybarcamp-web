@@ -225,7 +225,7 @@ class SignPresenter extends BasePresenter
 
         if ($identity instanceof Identity === false) {
             $this->flashMessage('Pro účast na Barcampu se prosím nejdříve přihlaste nebo registrujte');
-            $this->redirect(Response::S303_SEE_OTHER, 'in');
+            $this->redirect(Response::S303_SEE_OTHER, 'up');
         }
 
         $user = $identity->user;
@@ -261,7 +261,7 @@ class SignPresenter extends BasePresenter
         } catch (NoUserLoggedIn $e) {
             $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím přihlaste nebo registrujte');
             $this->backlink = $this->storeRequest();
-            $this->redirect(Response::S303_SEE_OTHER, 'in');
+            $this->redirect(Response::S303_SEE_OTHER, 'up');
             return;
         } catch (ConfereeNotFound $e) {
             $this->flashMessage('Pro vypsání přednášky se nejdříve registrujte jako účastník');
@@ -310,7 +310,7 @@ class SignPresenter extends BasePresenter
             $this->login($user);
 
             $this->restoreRequest($this->backlink);
-            $this->redirect('Homepage:');
+            $this->redirect('User:profil');
         });
     }
 
