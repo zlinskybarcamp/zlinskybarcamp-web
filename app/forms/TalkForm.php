@@ -45,9 +45,6 @@ class TalkForm
                 . 'pouze odřádkování')
             ->setRequired('Popis přednášky je důležitý, prosíme vyplňte jej.');
 
-        $form->addTextArea('purpose', 'Pro koho je přednáška určena:')
-            ->setRequired('Prosíme, vyplňte pro koho je přednáška určena');
-
         if ($categories) {
             $form->addSelect('category', 'Kategorie', [null => Html::el()->setHtml('&rarr; Vyberte')] + $categories)
                 ->setRequired('Prosím, zvolte jednu kategorii, do které byste přednášku zařadili');
