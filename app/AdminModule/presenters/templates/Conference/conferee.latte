@@ -1,11 +1,13 @@
 {block title}{block h1}Účastníci{/block} - Zlínský barcamp{/block}
 {block content}
 
-<div class="panel">
-    <a  href="{link exportConfereeCsv!}" class="pull-right btn btn-default">
-        <i class="glyphicon glyphicon-cloud-download"></i>
-        Stáhnout jako CSV
-    </a>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a href="{link exportConfereeCsv!}" class="pull-right btn btn-default">
+            <i class="glyphicon glyphicon-cloud-download"></i>
+            Stáhnout jako CSV
+        </a>
+    </div>
 </div>
 
 {control confereeDatagrid}

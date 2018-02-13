@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use App\Components\Program\IProgramControlFactory;
 use App\Model\EventInfoProvider;
 use App\Model\TalkManager;
 use App\Orm\Orm;
@@ -23,6 +24,10 @@ class ConferencePresenter extends BasePresenter
      * @var EventInfoProvider
      */
     private $eventInfoProvider;
+    /**
+     * @var IProgramControlFactory
+     */
+    private $programFactory;
 
 
     /**
@@ -30,12 +35,18 @@ class ConferencePresenter extends BasePresenter
      * @param Orm $orm
      * @param TalkManager $talkManager
      * @param EventInfoProvider $eventInfoProvider
+     * @param IProgramControlFactory $programFactory
      */
-    public function __construct(Orm $orm, TalkManager $talkManager, EventInfoProvider $eventInfoProvider)
-    {
+    public function __construct(
+        Orm $orm,
+        TalkManager $talkManager,
+        EventInfoProvider $eventInfoProvider,
+        IProgramControlFactory $programFactory
+    ) {
         $this->talkRepository = $orm->talk;
         $this->talkManager = $talkManager;
         $this->eventInfoProvider = $eventInfoProvider;
+        $this->programFactory = $programFactory;
     }
 
 
@@ -118,5 +129,34 @@ class ConferencePresenter extends BasePresenter
                 'backlink' => $this->storeRequest()
             ]);
         }
+    }
+
+
+    /**
+     * @param $id
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function renderTalkDetail($id)
+    {
+        if (!intval($id)) {
+            $this->error('Není vyplněno ID přednášky');
+        }
+
+        $talk = $this->talkManager->getById($id);
+
+        if (!$talk) {
+            $this->error('Přednáška nenalezena');
+        }
+
+        $this->template->talk = $talk;
+    }
+
+
+    /**
+     * @return \App\Components\Program\ProgramControl
+     */
+    public function createComponentProgram()
+    {
+        return $this->programFactory->create();
     }
 }

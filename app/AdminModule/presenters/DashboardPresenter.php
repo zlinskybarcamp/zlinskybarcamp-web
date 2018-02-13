@@ -103,6 +103,7 @@ class DashboardPresenter extends BasePresenter
         $this['faq'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_FAQS);
         $this['categories'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_CATEGORIES);
         $this['durations'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_DURATIONS);
+        $this['rooms'] = $this->enumeratorFormControlFactory->create(EnumeratorManager::SET_TALK_ROOMS);
     }
 
 
@@ -312,6 +313,7 @@ class DashboardPresenter extends BasePresenter
     /**
      * @param Form $form
      * @param $values
+     * @throws \Nette\Application\AbortException
      * @throws \Nette\Utils\JsonException
      */
     public function onScheduleConfigFormSuccess(Form $form, $values)

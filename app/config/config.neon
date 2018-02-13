@@ -81,6 +81,7 @@ services:
     - App\Components\Faq\IFaqControlFactory
     - App\Components\Feed\FeedFactory
     - App\Components\Newsletter\NewsletterSignupFactory
+    - App\Components\Program\IProgramControlFactory
     - App\Components\Schedule\IScheduleControlFactory
     - App\Components\SignupButtons\SignupButtonsFactory
 

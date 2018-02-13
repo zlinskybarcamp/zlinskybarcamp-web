@@ -21,7 +21,7 @@
             <p><strong>Kategorie přednášek, do kterých mohou speakeři vypisovat svoje přednášky.</strong></p>
 
             <span class="label label-info">Klíč</span> = technický klíč pro uložení do databáze. Nepoužívejte diakritiku, mezery (příklad: <code>marketing-a-obchod</code>)<br>
-            <span class="label label-info">Hodnota</span> = název, který se zobrazí uživateli na stránce a přednášejícícmu ve formuláři<br>
+            <span class="label label-info">Hodnota</span> = název, který se zobrazí na webu a přednášejícícmu ve formuláři<br>
             <span class="label label-danger">POZOR!</span> Kategorie, které jsou již použity u přednášek, neodstraňujte, ani jim neměňte Klíč!
         </td>
     </tr>
@@ -36,6 +36,18 @@
             <span class="label label-info">Hodnota</span> = název, který se zobrazí přednášejícícmu ve formuláři
         </td>
     </tr>
+    <tr>
+        <td>
+            <a href="#rooms" class="btn btn-primary" role="button">Přednáškové místnosti →</a>
+        </td>
+        <td>
+            <p><strong>Přednáškové místnosti, do kterých lze zařazovat přednášky. Vykreslují se na webu.</strong></p>
+
+            <span class="label label-info">Klíč</span> = technický klíč pro uložení do databáze. Nepoužívejte diakritiku, mezery (příklad: <code>jednadvacitka</code>)<br>
+            <span class="label label-info">Hodnota</span> = název, který se zobrazí na webu<br>
+            <span class="label label-danger">POZOR!</span> Místnosti, které jsou již použity u přednášek, neodstraňujte, ani jim neměňte Klíč!
+        </td>
+    </tr>
 </table>
 
 <h2 id="faq">FAQ</h2>
@@ -44,3 +56,5 @@
 {control categories}
 <h2 id="durations">Délky přednášek</h2>
 {control durations}
+<h2 id="rooms">Přednáškové místnosti</h2>
+{control rooms}

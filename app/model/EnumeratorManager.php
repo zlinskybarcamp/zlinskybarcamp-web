@@ -17,6 +17,7 @@ class EnumeratorManager
     const SET_FAQS = 'faqs';
     const SET_TALK_DURATIONS = 'talk_durations';
     const SET_TALK_CATEGORIES = 'talk_categories';
+    const SET_TALK_ROOMS = 'talk_rooms';
 
     /**
      * @var ConfigManager
@@ -30,6 +31,7 @@ class EnumeratorManager
         self::SET_FAQS,
         self::SET_TALK_DURATIONS,
         self::SET_TALK_CATEGORIES,
+        self::SET_TALK_ROOMS,
     ];
 
 

@@ -1,0 +1,197 @@
+<section>
+    <div class="wrapper">
+        <div class="container text-center">
+            <h1 class="program-heading"><span class="icon icon-calendar"></span><span class="dot-end">Program</span></h1>
+            <p>Konference zlínský Barcampu nabízí 3 přednáškové sály. Přednáškové sály jsou doplněny dvěma workshopovými místnostmi.<br />
+                Všechny přednášky jsou volně přístupné pro účastníky konference. A bude spoustu prostoru pro networking.</p>
+
+
+            <div id="program">
+                <ul class="tabs">
+                    <li>
+                        <a href="#main-program">
+                            <span class="item-heading">Program Barcampu</span>
+                            {$dates->event|date:'j. n. Y'}
+                        </a>
+                    </li>
+                    {*<li>
+                        <a href="#side-program">
+                            <span class="item-heading">Doprovodný program</span>
+                            Kulaté stoly: vzdělávání k podnikání
+                        </a>
+                    </li>*}
+                </ul>
+
+                <div id="main-program">
+
+                    {*<div class="program-filter js-program-filter">
+                        <div class="checkbox">
+                            <input type="checkbox" id="f1" name="filter-main" value="*" checked class="check-all"/>
+                            <label for="f1"><span></span>Všechny kategorie</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="f2" name="filter-main" value="marketing"/>
+                            <label for="f2"><span></span>Marketing a média</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="f3" name="filter-main" value="leadership"/>
+                            <label for="f3"><span></span>Leadership</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="f4" name="filter-main" value="podnikani"/>
+                            <label for="f4"><span></span>Podnikání na volné noze</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="f5" name="filter-main" value="teambuilding"/>
+                            <label for="f5"><span></span>Teambuilding</label>
+                        </div>
+                    </div>*}
+
+                    <div class="program-wrapper">
+                        <ul class="timerows timerows-mobile">
+                            <li>
+                                <span class="time">09:00</span>
+                            </li>
+                            <li>
+                                <span class="time">10:00</span>
+                            </li>
+                            <li>
+                                <span class="time">11:00</span>
+                            </li>
+                            <li>
+                                <span class="time">12:00</span>
+                            </li>
+                            <li>
+                                <span class="time">13:00</span>
+                            </li>
+                            <li>
+                                <span class="time">14:00</span>
+                            </li>
+                            <li>
+                                <span class="time">15:00</span>
+                            </li>
+                            <li>
+                                <span class="time">16:00</span>
+                            </li>
+                            <li>
+                                <span class="time">17:00</span>
+                            </li>
+                        </ul>
+
+                        <div class="program-container">
+
+                            <ul class="timerows">
+                                <li>
+                                    <span class="time">09:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">10:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">11:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">12:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">13:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">14:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">15:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">16:00</span>
+                                </li>
+                                <li>
+                                    <span class="time">17:00</span>
+                                </li>
+                            </ul>
+
+                            <div class="program js-program-filtered">
+
+                                <div class="item-header-container">
+                                    <div class="item-header program-header">
+                                        <div n:foreach="$rooms as $roomName" class="hall">
+                                            <span class="item-heading">Přednáškový sál: {$roomName}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div n:foreach="$rooms as $room => $roomName" class="hall">
+                                    {ifset $items[$room]}
+                                    {var $roomItems = $items[$room]}
+                                    {foreach $roomItems as $program}
+                                        {switch $program->type}
+                                            {case 'space'}
+                                                <div class="program-item t{$program->duration} empty"></div>
+                                            {case 'coffee'}
+                                                <div class="program-item t{$program->duration}">
+                                                    <div class="item-content">
+                                                        <h3 class="item-title">Coffee break</h3>
+
+                                                        <div class="item-footer">
+                                                            <span class="author"><span class="icon icon-coffee-cup"></span></span>
+
+                                                            <div class="hover">
+                                                                <span class="time">{$program->startClock} - {$program->endClock}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {case 'lunch'}
+                                                <div class="program-item t{$program->duration}">
+                                                    <div class="item-content">
+                                                        <h3 class="item-title">Přestávka na oběd</h3>
+
+                                                        <span class="icon icon-cutlery"></span>
+
+                                                        <div class="item-footer">
+                                                            <div class="hover">
+                                                                <span class="time">{$program->startClock} - {$program->endClock}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {default}
+                                                <a  href="#" class="program-item t{$program->duration} style2">
+                                                    <div class="item-content">
+                                                        <h3 class="item-title">{$program->title}</h3>
+
+                                                        <div class="item-footer">
+                                                            <span class="author">{$program->speaker}</span>
+
+                                                            <div class="hover">
+                                                                {*<span class="btn">Chci přijít</span>*}
+                                                                <span class="time">{$program->startClock} - {$program->endClock}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                        {/switch}
+                                    {/foreach}
+                                    {/ifset}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-sm mt-sm">
+
+                    </div>
+
+                </div>
+
+
+                {*<div id="side-program">
+                    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+                </div>*}
+
+            </div>
+
+
+        </div>
+    </div>
+</section>

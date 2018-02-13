@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Orm\Orm;
+use App\Orm\Program;
+use App\Orm\ProgramRepository;
 use App\Orm\Talk;
 use App\Orm\TalkRepository;
 use Nette\Database\Context;
@@ -17,6 +19,8 @@ class TalkManager
 
     /** @var TalkRepository $talkRepository */
     private $talkRepository;
+    /** @var ProgramRepository $talkRepository */
+    private $programRepository;
     /** @var Context */
     private $database;
     /**
@@ -34,6 +38,7 @@ class TalkManager
     public function __construct(Orm $orm, Context $database, EnumeratorManager $enumerator)
     {
         $this->talkRepository = $orm->talk;
+        $this->programRepository = $orm->program;
 
         $this->database = $database;
         $this->enumerator = $enumerator;
@@ -46,6 +51,15 @@ class TalkManager
     public function save(Talk $talk)
     {
         $this->talkRepository->persistAndFlush($talk);
+    }
+
+
+    /**
+     * @param Program $program
+     */
+    public function saveProgram(Program $program)
+    {
+        $this->programRepository->persistAndFlush($program);
     }
 
 
@@ -68,6 +82,17 @@ class TalkManager
     public function getDurations()
     {
         return $this->enumerator->getPairs(EnumeratorManager::SET_TALK_DURATIONS);
+    }
+
+
+    /**
+     * @return array
+     * @throws InvalidEnumeratorSetException
+     * @throws \Nette\Utils\JsonException
+     */
+    public function getRooms()
+    {
+        return $this->enumerator->getPairs(EnumeratorManager::SET_TALK_ROOMS);
     }
 
 
@@ -119,4 +144,37 @@ class TalkManager
             ])->delete();
     }
 
+
+    /**
+     * @param $id
+     * @return Talk|null
+     */
+    public function getById($id)
+    {
+        return $this->talkRepository->getById($id);
+    }
+
+    /**
+     * @param $id
+     * @return Program|null
+     */
+    public function getProgramById($id)
+    {
+        return $this->programRepository->getById($id);
+    }
+
+
+    /**
+     * @return \Nextras\Orm\Collection\ICollection
+     */
+    public function findAll()
+    {
+        return $this->talkRepository->findAll();
+    }
+
+
+    public function findAllProgram()
+    {
+        return $this->programRepository->findAll();
+    }
 }

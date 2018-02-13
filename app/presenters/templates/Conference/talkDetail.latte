@@ -1,0 +1,24 @@
+{block content}
+
+<section>
+    <div class="wrapper bg-gray">
+        <div class="container">
+            <h1><span class="dot-end">Přednáška</span></h1>
+
+            <ul class="row people-list flexible mt-xs">
+                <li>
+                    <div class="item">
+                        <div class="item-image" style="background-image: url('')"></div>
+                        <div class="item-content">
+                            <h2 class="item-title">{$talk->title}</h2>
+                            <span class="item-meta">{$talk->description|striptags|truncate:100}</span>
+                            <div class="item-text">
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
