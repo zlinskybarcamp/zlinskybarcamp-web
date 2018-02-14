@@ -36,8 +36,8 @@
                     <span class="item-number">{$iterator->counter}</span>
                     <img src="{$conferee->pictureUrl}" alt="author" class="item-image" width="65" height="65">
                     <div class="item-author">
-                        <span class="item-meta">{$talk->company}</span>
                         <span class="item-author-name">{$conferee->name}</span>
+                        <span n:ifcontent class="item-meta">{$talk->company}</span>
                     </div>
                     <div class="item-author-contact show-full">
                         <div class="item-social">
@@ -55,7 +55,7 @@
                             </a>
                         </div>
 
-                        <a n:ifset="$extended['url']['www']" href="{$extended['url']['www']}">www.redbit.cz</a>
+                        <a n:ifset="$extended['url']['www']" href="{$extended['url']['www']}">{$extended['url']['www']}</a>
                     </div>
                 </div>
                 <div class="item-content">
@@ -64,7 +64,7 @@
                         <div class="item-text">{$talk->description|truncate:150}</div>
 
                         <div class="item-tags">
-                            <span class="item-tag" n:if="$category"><span>{$category}</span></span>
+                            <span n:ifcontent class="item-tag"><span>{$category}</span></span>
                         </div>
                     </div>
 
