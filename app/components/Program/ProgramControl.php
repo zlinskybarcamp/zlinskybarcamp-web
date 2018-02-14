@@ -116,7 +116,11 @@ class ProgramControl extends Control
                 }
 
                 if ($spaceMinutes > 0) {
-                    $items[] = $this->getSpacer($prevEnd, $spaceMinutes);
+                    while ($spaceMinutes) {
+                        $items[] = $spacer = $this->getSpacer($prevEnd, min($spaceMinutes, 60));
+                        $prevEnd = $spacer->getEndTime();
+                        $spaceMinutes = $program->computePreviousSpaceMinutes($prevEnd);
+                    }
                 }
 
                 $items[] = $program;
