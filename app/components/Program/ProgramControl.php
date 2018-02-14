@@ -50,7 +50,6 @@ class ProgramControl extends Control
         $this->template->dates = $this->infoProvider->getDates();
 
         $this->template->items = $this->getRenderableItems();
-        bdump($this->template->items);
 
         $this->template->categories = $this->talkManager->getCategories();
         $this->template->rooms = $this->talkManager->getRooms();
