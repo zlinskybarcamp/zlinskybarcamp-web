@@ -26,15 +26,30 @@ class InternalProgramEnvelope extends InternalProgram
     }
 
 
+    /**
+     * @return \DateInterval
+     */
     public function getTime()
     {
         return $this->program->time;
     }
 
 
+    /**
+     * @return int
+     */
     public function getDuration()
     {
         return $this->program->duration;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getTalkId()
+    {
+        return $this->program->talk ? $this->program->talk->id : null;
     }
 
 

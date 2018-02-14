@@ -45,6 +45,15 @@ class InternalProgramVirtual extends InternalProgram implements IInternalProgram
 
 
     /**
+     * @return string
+     */
+    public function getTalkId()
+    {
+        return null;
+    }
+
+
+    /**
      * @return \DateInterval
      */
     public function getTime()

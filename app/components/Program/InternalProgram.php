@@ -7,6 +7,7 @@ use Nette\SmartObject;
 /**
  * Class InternalProgram
  * @package App\Components\Program
+ * @property-read string $talkId
  * @property-read string $title
  * @property-read string $speaker
  * @property-read \DateInterval $time
@@ -18,6 +19,13 @@ use Nette\SmartObject;
 abstract class InternalProgram implements IInternalProgram
 {
     use SmartObject;
+
+
+    /**
+     * @return string
+     */
+    abstract public function getTalkId();
+
 
     /**
      * @return string
