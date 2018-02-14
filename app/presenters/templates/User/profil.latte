@@ -20,6 +20,10 @@
                                     <a n:if="$allowRegisterTalk" href="{link Sign:talk}" class="btn btn-secondary btn-tiny btn-block mt-xs">Vypsat přednášku</a>
                                 {/if}
 
+                                {if $user->isInRole('admin')}
+                                    <a href="{link Admin:Dashboard:}" class="btn btn-brand btn-tiny btn-block mt-xs">Admin</a>
+                                {/if}
+
                                 <a href="{link Sign:out}" class="btn btn-action btn-tiny btn-block mt-sm">Odhlásit</a>
                             </div>
                         </div>
