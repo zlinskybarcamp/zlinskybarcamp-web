@@ -290,6 +290,7 @@
     }
   }
 }
+
 .hero-buttons {
   a {
     text-decoration: none;
@@ -298,6 +299,7 @@
     margin: 1rem;
   }
 }
+
 .hero-note {
   display: block;
   font-size: 1.3rem;
@@ -332,7 +334,7 @@
       font-weight: 300;
       top: 50%;
       line-height: 0;
-      .translate(0,-50%);
+      .translate(0, -50%);
     }
     .icon-cutlery {
       font-size: 4.2rem;
@@ -388,7 +390,7 @@
     color: #d0d0d0;
     font-size: 12rem;
     margin-top: 1rem;
-    .translate(0,-50%);
+    .translate(0, -50%);
   }
 
   .item-title {
@@ -466,7 +468,6 @@
 
 .social {
   text-align: center;
-
 
   .item {
     display: inline-block;
@@ -614,19 +615,19 @@
     top: 50%;
     left: 2%;
     width: 20%;
-    .translate(0,-50%);
+    .translate(0, -50%);
     z-index: 6;
 
-    &:nth-of-type(2){
+    &:nth-of-type(2) {
       left: 20%;
     }
-    &:nth-of-type(3){
+    &:nth-of-type(3) {
       left: 40%;
     }
-    &:nth-of-type(4){
+    &:nth-of-type(4) {
       left: 60%;
     }
-    &:nth-of-type(5){
+    &:nth-of-type(5) {
       left: 78%;
     }
 
@@ -663,7 +664,7 @@
         .animation-timing-function(linear);
       }
 
-      &:nth-of-type(2){
+      &:nth-of-type(2) {
         .item-circle {
           .animation-delay(900ms);
         }
@@ -671,7 +672,7 @@
           .animation-delay(1100ms);
         }
       }
-      &:nth-of-type(3){
+      &:nth-of-type(3) {
         .item-circle {
           .animation-delay(1400ms);
         }
@@ -679,7 +680,7 @@
           .animation-delay(1600ms);
         }
       }
-      &:nth-of-type(4){
+      &:nth-of-type(4) {
         .item-circle {
           .animation-delay(1900ms);
         }
@@ -687,7 +688,7 @@
           .animation-delay(2100ms);
         }
       }
-      &:nth-of-type(5){
+      &:nth-of-type(5) {
         .item-circle {
           .animation-delay(2400ms);
         }
@@ -732,7 +733,7 @@
     background-color: @color-default;
     padding: 1.5rem 1.5rem 2rem 1.5rem;
     border-radius: 0.4rem;
-    .box-shadow(0 0 1rem 0 rgba(0,0,0,0.1));
+    .box-shadow(0 0 1rem 0 rgba(0, 0, 0, 0.1));
     font-size: 1.3rem;
     width: 115%;
     left: -7.5%;
@@ -775,7 +776,7 @@
     font-weight: 700;
   }
 
-  li{
+  li {
     &.item-primary {
 
       .item-circle {
@@ -801,7 +802,6 @@
         font-size: 2.1rem;
       }
     }
-
 
     &.item-done {
 
@@ -960,7 +960,7 @@
     display: block;
     font-size: 1.3rem;
     font-weight: 700;
-    color: rgba(0,0,0,0.4);
+    color: rgba(0, 0, 0, 0.4);
     line-height: 1.4;
     margin-top: 0.3rem;
   }
@@ -1369,6 +1369,14 @@
   }
 }
 
+a.program-item {
+  &:hover {
+    .item-title {
+      text-decoration: underline;
+    }
+  }
+}
+
 .program-item {
   display: block;
   text-decoration: none;
@@ -1379,10 +1387,6 @@
   position: relative;
 
   &:hover {
-    .item-title {
-      text-decoration: underline;
-    }
-
     .author {
       display: none;
     }
@@ -1476,15 +1480,19 @@
 .t90 {
   height: 14.25rem;
 }
+
 .t60 {
   height: 9.5rem;
 }
+
 .t50 {
   height: 7.916rem;
 }
+
 .t40 {
   height: 6.333rem;
 }
+
 .t30 {
   height: 4.75rem;
 
@@ -1495,14 +1503,14 @@
     padding-bottom: 0.3rem;
   }
 }
+
 .t20 {
   height: 3.166rem;
 }
+
 .t10 {
   height: 1.583rem;
 }
-
-
 
 .style1 {
   color: #001e9a;
@@ -1518,6 +1526,7 @@
     background-color: #ebeef8;
   }
 }
+
 .style2 {
   color: #ff6600;
 
@@ -1532,6 +1541,7 @@
     background-color: #fff3eb;
   }
 }
+
 .style3 {
   color: #e02f2f;
 
@@ -1546,6 +1556,7 @@
     background-color: #fdefef;
   }
 }
+
 .style4 {
   color: #2588db;
 
@@ -1560,9 +1571,6 @@
     background-color: #eef6fc;
   }
 }
-
-
-
 
 .people-list {
   list-style: none;
@@ -1591,7 +1599,7 @@
     .transition(all 100ms linear);
 
     &:hover {
-      .box-shadow(0 1rem 4rem 0 rgba(0,0,0,0.05));
+      .box-shadow(0 1rem 4rem 0 rgba(0, 0, 0, 0.05));
     }
   }
 
@@ -1667,9 +1675,7 @@
     }
   }
 
-
 }
-
 
 .accordion-list {
   list-style: none;
@@ -1770,8 +1776,8 @@
 
     &:hover {
       .item-icon {
-        background-color: darken(#d9d9d9,5%);
-        border-color: darken(#d9d9d9,5%);
+        background-color: darken(#d9d9d9, 5%);
+        border-color: darken(#d9d9d9, 5%);
       }
     }
   }
@@ -1851,7 +1857,7 @@
     margin: 1.5rem 2rem 0 2rem;
     vertical-align: middle;
     max-width: 100%;
-    
+
     &.right-partner {
       img {
         max-height: 100px;
