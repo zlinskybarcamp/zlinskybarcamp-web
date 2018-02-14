@@ -109,7 +109,10 @@ class ProgramControl extends Control
 
                 if ($spaceMinutes < 0) {
                     Debugger::log(
-                        sprintf('Talk "%s" nelze vykreslit, překrývá se s jiným (nebo je před začátkem)', $program->title),
+                        sprintf(
+                            'Talk "%s" nelze vykreslit, překrývá se s jiným (nebo je před začátkem)',
+                            $program->title
+                        ),
                         ILogger::WARNING
                     );
                     continue;
