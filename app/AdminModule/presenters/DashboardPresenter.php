@@ -221,28 +221,8 @@ class DashboardPresenter extends BasePresenter
         }
         $form->addSubmit('submit', 'Uložit');
         $form->addProtection('Prosím, odešlete tento formulář ještě jednou (bezpečnostní kontrola)');
-        $form->onValidate[] = [$this, 'onConfigFormValidate'];
         $form->onSuccess[] = [$this, 'onConfigFormSuccess'];
         return $form;
-    }
-
-
-    /**
-     * @param Form $form
-     * @param ArrayHash $values
-     */
-    public function onConfigFormValidate(Form $form, $values)
-    {
-        $confereeLimit = $values[$this->ideable(Event::COUNTS_CONFEREE)];
-        $allowedRegisterConferee = $values[$this->ideable('features.registerConferee.enabled')];
-        $allowedRegisterTalk = $values[$this->ideable('features.registerTalk.enabled')];
-
-        if ($allowedRegisterConferee && $confereeLimit <= 0) {
-            $form->addError('Registrace účastníků je povolena, ale současně je Počet účastníků nulový');
-        }
-        if ($allowedRegisterTalk && !$allowedRegisterConferee) {
-            $form->addError('Je-li povoleno zapisování přednášek, potřebujeme povolit registraci účastníků');
-        }
     }
 
 
