@@ -151,7 +151,7 @@ class ProgramControl extends Control
     {
         $hours = intval($dateInterval->h);
 
-        $minutes = intval($dateInterval->m);
+        $minutes = intval($dateInterval->i);
 
         $minutes += max(0, $hours - self::HOUR_START) * 60;
 
