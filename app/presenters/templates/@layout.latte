@@ -40,6 +40,7 @@
                     <li {ifCurrent :Homepage:}class="active"{/ifCurrent}><a href="{link :Homepage:}"><span class="nav-link">Home</span></a></li>
                     {*<li><a href="#"><span class="nav-link">O akci</span></a></li>*}
                     {*<li><a href="#program" class="scrollto"><span class="nav-link">Program</span></a></li>*}
+                    <li n:if="$features->program" {ifCurrent :Conference:program}class="active"{/ifCurrent}><a href="{link :Conference:program}"><span class="nav-link">Program</span></a></li>
                     <li {ifCurrent :Conference:talks}class="active"{/ifCurrent}><a href="{link :Conference:talks}"><span class="nav-link">Přednášky</span></a></li>
                     {*<li><a href="#"><span class="nav-link">Workshopy</span></a></li>*}
                     {*<li><a href="#"><span class="nav-link">Afterpárty</span></a></li>*}
