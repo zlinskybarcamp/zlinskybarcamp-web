@@ -366,24 +366,27 @@ class ConferencePresenter extends BasePresenter
     {
         $form = new Form();
 
+        $form->addGroup();
+
         $form->addHidden('id');
 
-        $form->addSelect('type', 'Type', $this->getMergedTalks())->setRequired(true);
+        $form->addSelect('type', 'Type', [null=>'== Vyberte =='] + $this->getMergedTalks())
+            ->setRequired(true);
         $form->addSelect('room', 'Místnost', $this->talkManager->getRooms())->setRequired(true);
         $form->addText('time', 'Čas konání')->setType('time')->setRequired(true);
-        $form->addInteger('duration', 'Délka v minutách')->setRequired(true)
-            ->getControlPrototype()->addAttributes([
-                'min' => 10,
-                'max' => 90,
-                'step' => 10,
-            ]);
-
-        $form->addText('title', 'Název')
-            ->setOption('description', 'Volitelné. Zadejte jen pro vlastní bloky');
-        $form->addTextArea('speaker', 'Přednášející')
-            ->setOption('description', 'Volitelné. Zadejte jen pro vlastní bloky');
+        $form->addRadioList('duration', 'Délka v minutách', $this->talkManager->getDurationChoice());
 
         $form->addSubmit('submit', 'Odeslat')->setOption('primary', true);
+
+        $form->addGroup('Vlastní název přednášky v programu');
+
+        $form->addText('title', 'Název')
+            ->setOption('description', 'Volitelné. Zadejte jen pokud je potřeba v programu název přednášky přepsat');
+        $form->addTextArea('speaker', 'Přednášející')
+            ->setOption('description', 'Volitelné. Zadejte jen pokud je potřeba v programu název speakera přepsat');
+
+        $form->addGroup();
+
 
         $form->addProtection();
 

@@ -125,8 +125,8 @@ class TalkManager
     {
         $this->database->table(self::TABLE_TALK_VOTES_NAME)
             ->insert([
-                self::COLUMN_USER_ID => (int) $userId,
-                self::COLUMN_TALK_ID => (int) $talkId,
+                self::COLUMN_USER_ID => (int)$userId,
+                self::COLUMN_TALK_ID => (int)$talkId,
             ]);
     }
 
@@ -139,8 +139,8 @@ class TalkManager
     {
         $this->database->table(self::TABLE_TALK_VOTES_NAME)
             ->where([
-                self::COLUMN_USER_ID => (int) $userId,
-                self::COLUMN_TALK_ID => (int) $talkId,
+                self::COLUMN_USER_ID => (int)$userId,
+                self::COLUMN_TALK_ID => (int)$talkId,
             ])->delete();
     }
 
@@ -153,6 +153,7 @@ class TalkManager
     {
         return $this->talkRepository->getById($id);
     }
+
 
     /**
      * @param $id
@@ -176,5 +177,15 @@ class TalkManager
     public function findAllProgram()
     {
         return $this->programRepository->findAll();
+    }
+
+
+    public function getDurationChoice()
+    {
+        $choice = [];
+        foreach (range(5, 120, 5) as $min) {
+            $choice[$min]= "$min minut";
+        }
+        return $choice;
     }
 }
