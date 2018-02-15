@@ -372,7 +372,7 @@ class ConferencePresenter extends BasePresenter
 
         $form->addSelect('type', 'Type', [null=>'== Vyberte =='] + $this->getMergedTalks())
             ->setRequired(true);
-        $form->addSelect('room', 'Místnost', $this->talkManager->getRooms())->setRequired(true);
+        $form->addRadioList('room', 'Místnost', $this->talkManager->getRooms())->setRequired(true);
         $form->addText('time', 'Čas konání')->setType('time')->setRequired(true);
         $form->addRadioList('duration', 'Délka v minutách', $this->talkManager->getDurationChoice());
 
