@@ -41,7 +41,7 @@
                 <span class="item-title">Zveřejnění programu</span>
                 Program je vyhlášen od {$dates->program|date:'j. n. Y'}
                 <div>
-                    <a n:tag-if="$features->program" href="#"><span class="btn btn-action btn-sm">Chci kouknout na program</span></a>
+                    <a n:tag-if="$features->program" href="{plink Conference:program}"><span class="btn btn-action btn-sm">Chci kouknout na program</span></a>
                 </div>
             </div>
             <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
