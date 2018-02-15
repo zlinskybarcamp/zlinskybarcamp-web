@@ -53,7 +53,7 @@ class ConfereeForm
             ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte');
 
         $form->addTextArea('extendedAddress', 'Celá adresa bydlíště, nebo sídla firmy:')
-            ->setOption('description', 'Údaj nikde nezobrazujeme, slouží pouze pro potřeby sponzorování Barcampu')
+            ->setOption('description', 'Údaj nikde nezobrazujeme, ale potřebujeme ho pro vykázání využití dotací z EU.')
             ->setRequired('Prosíme, vyplňte jméno instituce, za kterou přicházíte (nebo adresu bydliště)');
 
         $form->addGroup();
