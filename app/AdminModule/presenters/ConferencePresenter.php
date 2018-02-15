@@ -66,7 +66,7 @@ class ConferencePresenter extends BasePresenter
         fputcsv(
             $df,
             ["Jméno", "E-mail", "Registrace", "Newsletter", "Souhlas získán", "Bio", "Firma", "Adresa"],
-            ",",
+            ";",
             '"'
         );
 
@@ -86,11 +86,13 @@ class ConferencePresenter extends BasePresenter
                 $conferee->bio,
                 isset($extended['company']) ? $extended['company'] : null,
                 isset($extended['address']) ? $extended['address'] : null,
-            ], ",", '"');
+            ], ";", '"');
         }
 
         fclose($df);
         $csv = ob_get_clean();
+
+        $csv = iconv("UTF-8", "WINDOWS-1250", $csv);
 
         $fileDatePostfix = gmdate("Ymd.his");
         header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
