@@ -59,6 +59,14 @@ class ConferencePresenter extends BasePresenter
         $talks = $this->talkRepository->findAll();
         $categories = $this->talkManager->getCategories();
 
+        $sort = $this->eventInfoProvider->getFeatures()['talks_order'];
+        if ($sort === 'random') {
+            $talks = $talks->fetchAll();
+            shuffle($talks);
+        } elseif ($sort === 'vote') {
+            $talks = $talks->orderBy('votes', ICollection::DESC);
+        }
+
         $filtered = [];
         foreach ($talks as $talk) {
             if ($talk->conferee === null) {

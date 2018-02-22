@@ -53,7 +53,12 @@ class DashboardPresenter extends BasePresenter
         Event::FEATURE_TALK => ['bool', 'Povolit zapisování přednášek'],
         Event::FEATURE_TALK_EDIT => ['bool', 'Povolit editace zapsaných přednášek'],
         Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
-        Event::FEATURE_SHOW_VOTE => ['bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
+        Event::FEATURE_SHOW_VOTE => ['bool', 'Povolit zobrazení hlasů'],
+        Event::FEATURE_TALK_ORDER => ['select', 'Přednášky', self::NOFLAG, null, [
+            '' => 'řazené podle přihlášení',
+            'random' => 'řazené náhodně',
+            'vote' => 'řazené podle hlasů',
+        ]],
         Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
         Event::FEATURE_REPORT => ['bool', 'Zobrazit výstupy (YouTube/Reporty)'],
     ];
@@ -181,7 +186,7 @@ class DashboardPresenter extends BasePresenter
         foreach ($this->simpleConfigs as $key => $data) {
             $formId = $this->ideable($key);
             $item = null;
-            $isRequired = isset($data[2]) && ($data[2] | self::REQUIRED);
+            $isRequired = isset($data[2]) && ($data[2] & self::REQUIRED);
             switch ($data[0]) {
                 case 'text':
                     $item = $form->addText($formId, $data[1])
@@ -254,10 +259,14 @@ class DashboardPresenter extends BasePresenter
         foreach ($this->featureConfigs as $key => $data) {
             $formId = $this->ideable($key);
             $item = null;
-            $isRequired = isset($data[2]) && ($data[2] | self::REQUIRED);
+            $isRequired = isset($data[2]) && ($data[2] & self::REQUIRED);
             switch ($data[0]) {
                 case 'bool':
                     $item = $form->addCheckbox($formId, $data[1])
+                        ->setDefaultValue($this->configManager->get($key, ''));
+                    break;
+                case 'select':
+                    $item = $form->addSelect($formId, $data[1], $data[4])
                         ->setDefaultValue($this->configManager->get($key, ''));
                     break;
                 default:
@@ -329,6 +338,10 @@ class DashboardPresenter extends BasePresenter
                 switch ($config['type']) {
                     case 'bool':
                         $item = $form->addCheckbox($fomId, $config['name'])
+                            ->setDefaultValue($config['value']);
+                        break;
+                    case 'select':
+                        $item = $form->addSelect($fomId, $config['name'], $config['enum'])
                             ->setDefaultValue($config['value']);
                         break;
                     case 'datetime-local':

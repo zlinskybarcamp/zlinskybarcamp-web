@@ -23,6 +23,7 @@ class EventInfoProvider
     const FEATURE_CONFEREE = 'features.registerConferee.enabled';
     const FEATURE_TALK = 'features.registerTalk.enabled';
     const FEATURE_TALK_EDIT = 'features.editTalk.enabled';
+    const FEATURE_TALK_ORDER = 'features.talk.order';
     const FEATURE_VOTE = 'features.voteTalk.enabled';
     const FEATURE_SHOW_VOTE = 'features.showVoteTalk.enabled';
     const FEATURE_PROGRAM = 'features.showProgram.enabled';
@@ -112,6 +113,7 @@ class EventInfoProvider
             'conferee' => $this->config->get(self::FEATURE_CONFEREE),
             'talks' => $this->config->get(self::FEATURE_TALK),
             'talks_edit' => $this->config->get(self::FEATURE_TALK_EDIT),
+            'talks_order' => $this->config->get(self::FEATURE_TALK_ORDER),
             'vote' => $this->config->get(self::FEATURE_VOTE),
             'show_vote' => $this->config->get(self::FEATURE_SHOW_VOTE),
             'program' => $this->config->get(self::FEATURE_PROGRAM),

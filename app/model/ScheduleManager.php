@@ -33,7 +33,12 @@ class ScheduleManager
         [Event::FEATURE_CONFEREE, 'bool', 'Povolit registraci účastníků'],
         [Event::FEATURE_TALK, 'bool', 'Povolit zapisování přednášek'],
         [Event::FEATURE_VOTE, 'bool', 'Povolit hlasování přednášek'],
-        [Event::FEATURE_SHOW_VOTE, 'bool', 'Zobrazit pořadí přednášek (podle hlasování)'],
+        [Event::FEATURE_SHOW_VOTE, 'bool', 'Povolit zobrazení hlasů'],
+        [Event::FEATURE_TALK_ORDER, 'select', 'Přednášky', self::NOFLAG, [
+            '' => 'řazené podle přihlášení',
+            'random' => 'řazené náhodně',
+            'vote' => 'řazené podle hlasů',
+        ]],
         [Event::FEATURE_PROGRAM, 'bool', 'Zobrazit program přednášek'],
         [Event::FEATURE_REPORT, 'bool', 'Zobrazit výstupy (YouTube/Reporty)'],
     ];
