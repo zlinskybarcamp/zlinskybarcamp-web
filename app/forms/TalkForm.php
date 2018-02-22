@@ -7,6 +7,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\Utils\Html;
 use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 
 class TalkForm
 {
@@ -29,9 +30,9 @@ class TalkForm
     /**
      * @param callable $onSuccess
      * @param array|null $categories
+     * @param array|null $durations
      * @param Talk $talk
      * @return Form
-     * @throws Nette\Utils\JsonException
      */
     public function create(callable $onSuccess, array $categories = null, array $durations = null, Talk $talk = null)
     {
@@ -100,7 +101,6 @@ class TalkForm
 
             $talk->title = $values->title;
             $talk->description = $values->description;
-            $talk->purpose = $values->purpose;
             $talk->company = $values->company;
             $talk->notes = $values->notes;
             if (isset($values->category)) {
