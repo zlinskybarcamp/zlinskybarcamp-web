@@ -14,6 +14,7 @@ class ScheduleManager
     const IDX_TYPE = 1;
     const IDX_NAME = 2;
     const IDX_FLAGS = 3;
+    const IDX_ENUM = 4;
 
     /**
      * @var array
@@ -186,7 +187,8 @@ class ScheduleManager
                         'key' => $stepConfig[self::IDX_KEY],
                         'type' => $stepConfig[self::IDX_TYPE],
                         'name' => $stepConfig[self::IDX_NAME],
-                        'isRequired' => isset($stepConfig[self::IDX_FLAGS]) ? ($stepConfig[self::IDX_FLAGS] | self::REQUIRED) !== 0 : false,
+                        'enum' => isset($stepConfig[self::IDX_ENUM]) ? $stepConfig[self::IDX_ENUM] : null,
+                        'isRequired' => isset($stepConfig[self::IDX_FLAGS]) ? ($stepConfig[self::IDX_FLAGS] & self::REQUIRED) !== 0 : false,
                     ];
                     if ($withValues) {
                         $conf['value'] = $this->getConfig($step[0], $stepConfig[self::IDX_KEY]);
@@ -274,6 +276,9 @@ class ScheduleManager
             case 'bool':
                 return (bool)$value;
                 break;
+            case 'select':
+                return $value;
+                break;
             case 'datetime':
             case 'datetime-local':
                 return (new DateTime($value))->format('c');
@@ -302,6 +307,7 @@ class ScheduleManager
                 'key' => $configItem[self::IDX_KEY],
                 'type' => $configItem[self::IDX_TYPE],
                 'name' => $configItem[self::IDX_NAME],
+                'enum' => isset($configItem[self::IDX_ENUM]) ? $configItem[self::IDX_ENUM] : null,
                 'isRequired' => isset($configItem[self::IDX_FLAGS]) ? ($configItem[self::IDX_FLAGS] | self::REQUIRED) !== 0 : false,
             ];
             if ($withValues) {
