@@ -8,7 +8,7 @@
                             <a href="{$post->url}">{$post->name}</a>
                         </h2>
                         <div class="item-text">
-                            {$post->content|striptags}
+                            {$post->content|striptags|noescape}
                         </div>
                         <a href="{$post->url}" class="link-arrow">Více informací</a>
                     </div>

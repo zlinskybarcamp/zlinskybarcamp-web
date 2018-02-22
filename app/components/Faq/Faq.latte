@@ -9,7 +9,7 @@
                     <span class="item-text">{$faq['key']}</span>
                 </h3>
                 <div class="accordion-content">
-                    {$faq['value']}
+                    {$faq['value']|striptags|linkify|noescape}
                 </div>
             </li>
 {if $iterator->getCounter() == $half && !$iterator->isLast()}

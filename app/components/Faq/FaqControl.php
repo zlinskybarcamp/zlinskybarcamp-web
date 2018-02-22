@@ -32,6 +32,11 @@ class FaqControl extends Control
     {
         $this->template->setFile(__DIR__ . '/Faq.latte');
         $this->template->faqs = $this->enumeratorManager->get(EnumeratorManager::SET_FAQS);
+        $this->template->addFilter('linkify', function ($input) {
+            $regex = '@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.\,]*(\?\S+)?)?)*)@';
+            $output = preg_replace($regex, '<a href="$1">$1</a>', $input);
+            return $output;
+        });
         $this->template->render();
     }
 }
