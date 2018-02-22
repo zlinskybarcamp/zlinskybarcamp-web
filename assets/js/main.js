@@ -148,7 +148,7 @@ barcamp.schedule = function () {
                 setSliderFull($sliderBefore);
                 setSliderFull($sliderAfter);
             }
-            if(item.isNext) {
+            if (item.isNext) {
                 $sliderBefore.addClass('active');
                 setSliderPercentagle($sliderBefore);
             }
@@ -173,7 +173,7 @@ barcamp.schedule = function () {
             return 1;
         }
 
-        return (current-start) / (end-start);
+        return (current - start) / (end - start);
     };
     var setSliderSizes = function ($slider, size) {
         $slider.css({
@@ -360,6 +360,79 @@ barcamp.program = function () {
 
 };
 
+barcamp.avatarUploader = function () {
+    var $button = $('#avatar-upload-button');
+    if ($button.length === 0) {
+        return;
+    }
+
+    var $input = $('#avatar-upload-input');
+    var $image = $('#avatar');
+    var uploadUrl = $button.attr('href');
+
+    $button.click(function (e) {
+        e.preventDefault();
+        $input.click();
+    });
+
+    $input.change(function () {
+        $image.addClass('pulse');
+        var file = this.files[0];
+        var form = new FormData();
+        form.append('file', file);
+        upload(form);
+    });
+
+    var upload = function (form) {
+        fetch(uploadUrl, {
+            method: 'POST',
+            body: form
+        })
+        .then(function (response) {
+            $image.removeClass('pulse');
+            return response.json();
+        })
+        .then(function (json) {
+            var value = 'url(\'' + json.avatarUrl + '\')';
+            $image.css('background-image', value);
+        })
+        .catch(function(error) {
+            $image.removeClass('pulse');
+            alert('Tento obrázek není možné načíst, zkuste jej prosím zmenšit.');
+            console.log(error);
+        });
+    };
+};
+
+barcamp.talkVote = function () {
+    var $list = $('.lectures-list');
+
+    if($list.length === 0) {
+        return;
+    }
+
+    $list.on('click', '.vote-ajax', function(e) {
+        e.preventDefault();
+        var $button = $(this);
+        $button.addClass('disabled');
+        var $item = $button.closest('li');
+        var url = $button.attr('href');
+
+        $.ajax({
+            url: url,
+            dataType: 'json'
+        }).done(function(json) {
+            $button.removeClass('disabled');
+            $('.item-count', $item).text(json.votes);
+            $('.is-voted,.is-not-voted', $item).toggle();
+        }).fail(function(error) {
+            alert('Váš hlas se nepovedlo uložit. Omlouváme se. Zkuste to prosím znovu.');
+            console.log(error);
+        });
+    });
+
+};
+
 // TODO: Remove placeholders
 barcamp.disabledLinks = function () {
     $('a.disabled').click(function (e) {
@@ -388,12 +461,14 @@ barcamp.init = function () {
     barcamp.lectures();
     barcamp.tabs();
     barcamp.program();
+    barcamp.avatarUploader();
+    barcamp.talkVote();
     barcamp.disabledLinks();
 };
 
 $(document).ready(function () {
     barcamp.init();
-    $("body").removeClass("preload");
+    $("body").removeClass("preload").removeClass("no-js");
 });
 
 $(window).on("orientationchange", function () {

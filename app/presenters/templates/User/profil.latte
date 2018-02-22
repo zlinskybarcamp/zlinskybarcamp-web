@@ -7,11 +7,13 @@
             <ul class="row people-list flexible mt-xs">
                 <li>
                     <div class="item">
-                        <div class="item-image" style="background-image: url('{$user->identity->pictureUrl|noescape}')"></div>
+                        <div id="avatar" class="item-image" style="background-image: url('{$user->identity->pictureUrl|noescape}')"></div>
                         <div class="item-content">
                             <h2 class="item-title">{$user->identity->name}</h2>
                             <span n:if="$conferee" class="item-meta">{$conferee->bio|striptags|truncate:50}</span>
                             <div class="item-text">
+                                <a href="{link uploadAvatar!}" id="avatar-upload-button" class="btn btn-brand btn-tiny btn-block mt-xs js-only">Nahrát fotku</a>
+
                                 <a href="{link conferee}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit profil</a>
 
                                 {if count($talks)}
@@ -30,6 +32,7 @@
                     </div>
                 </li>
             </ul>
+            <input type="file" accept="image/*" id="avatar-upload-input" style="display:none;">
         </div>
     </div>
 </section>

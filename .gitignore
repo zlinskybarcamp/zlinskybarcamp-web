@@ -9,3 +9,4 @@ vendor/*
 app/config/config.local.neon
 docker/mysql/data/*
 /nbproject/
+www/upload

@@ -57,6 +57,7 @@ database:
         lazy: yes
 
 services:
+    - App\Model\AvatarStorage('%wwwDir%/upload', 'upload')
     - App\Model\ConfigManager
     - App\Model\ConfereeManager
     - App\Model\EventInfoProvider

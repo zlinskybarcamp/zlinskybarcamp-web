@@ -1,3 +1,7 @@
+body.no-js .js-only {
+  display: none;
+}
+
 .container,
 .container-wide,
 .container-condensed,
@@ -1705,6 +1709,16 @@ a.program-item {
     background-position: center;
     overflow: hidden;
     position: relative;
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.05); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 0.3; }
+    }
+
+    &.pulse {
+      animation: pulse 1.5s infinite ease-in-out;
+    }
   }
 
   .item-tip {
@@ -2149,4 +2163,37 @@ form .error {
     color: darkred;
     font-weight: bold;
   }
+}
+
+.talk-detail {
+  .item-author {
+    text-align: center;
+  }
+  .item-author-name {
+    color: #000;
+    font-weight: 600;
+    font-size: 1.3em;
+  }
+  .item-meta {
+    display: block;
+    font-weight: 700;
+    color: rgba(0,0,0,0.4);
+    line-height: 1.4;
+    margin-top: .15rem;
+    font-size: 1em;
+  }
+  .item-image {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: block;
+  }
+  .item-social {
+    font-size: 40px;
+    a {
+      text-decoration: none;
+    }
+  }
+
 }

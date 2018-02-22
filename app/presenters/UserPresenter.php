@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use App\Forms;
+use App\Model\AvatarStorage;
 use App\Model\ConfereeManager;
 use App\Model\ConfereeNotFound;
 use App\Model\EventInfoProvider;
@@ -14,6 +15,7 @@ use App\Model\UserNotFound;
 use App\Orm\Conferee;
 use App\Orm\Talk;
 use Nette\Application\UI\Form;
+use Nette\Http\FileUpload;
 use Nette\Http\IResponse;
 use Tracy\Debugger;
 use Tracy\ILogger;
@@ -44,6 +46,10 @@ class UserPresenter extends BasePresenter
      * @var EventInfoProvider
      */
     private $eventInfoProvider;
+    /**
+     * @var AvatarStorage
+     */
+    private $avatarStorage;
 
 
     /**
@@ -54,6 +60,7 @@ class UserPresenter extends BasePresenter
      * @param Forms\ConfereeForm $confereeForm
      * @param Forms\TalkForm $talkForm
      * @param EventInfoProvider $eventInfoProvider
+     * @param AvatarStorage $avatarStorage
      */
     public function __construct(
         UserManager $userManager,
@@ -61,7 +68,8 @@ class UserPresenter extends BasePresenter
         TalkManager $talkManager,
         Forms\ConfereeForm $confereeForm,
         Forms\TalkForm $talkForm,
-        EventInfoProvider $eventInfoProvider
+        EventInfoProvider $eventInfoProvider,
+        AvatarStorage $avatarStorage
     ) {
         $this->userManager = $userManager;
         $this->confereeManager = $confereeManager;
@@ -69,6 +77,7 @@ class UserPresenter extends BasePresenter
         $this->talkForm = $talkForm;
         $this->talkManager = $talkManager;
         $this->eventInfoProvider = $eventInfoProvider;
+        $this->avatarStorage = $avatarStorage;
     }
 
 
@@ -117,7 +126,7 @@ class UserPresenter extends BasePresenter
      */
     public function renderTalk()
     {
-        if (!$this->eventInfoProvider->getFeatures()[EventInfoProvider::FEATURE_TALK_EDIT]) {
+        if (!$this->eventInfoProvider->getFeatures()['talks_edit']) {
             $this->flashMessage('Upravování přednášek není v tuto chvíli povoleno, omlouváme se');
             $this->redirect(Response::S303_SEE_OTHER, 'profil');
         }
@@ -219,5 +228,50 @@ class UserPresenter extends BasePresenter
         $form->addHidden('id', $talk->id);
 
         return $form;
+    }
+
+
+    /**
+     * @throws NoUserLoggedIn
+     * @throws UserNotFound
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     * @throws \Nette\Utils\ImageException
+     */
+    public function handleUploadAvatar()
+    {
+        $user = $this->userManager->getByLoginUser($this->user);
+        $conferee = $user->conferee;
+
+        $files = $this->getRequest()->getFiles();
+        if (!isset($files['file'])) {
+            Debugger::log('Uploaded empty file', ILogger::WARNING);
+            $this->error('Wrong reguest', IResponse::S400_BAD_REQUEST);
+        }
+
+        /** @var FileUpload $file */
+        $file = $files['file'];
+
+        if (!$file->isOk()) {
+            Debugger::log('Uploaded corrupted file', ILogger::WARNING);
+            $this->error('Wrong reguest', IResponse::S400_BAD_REQUEST);
+        }
+
+        if (!$file->isImage()) {
+            Debugger::log('Uploaded non-image file', ILogger::WARNING);
+            $this->error('Nelze nahrát jiný soubor než obrázek', IResponse::S403_FORBIDDEN);
+        }
+
+        $image = $file->toImage();
+
+        $url = $this->avatarStorage->saveImage($image);
+
+        $user->pictureUrl = $url;
+        $conferee->pictureUrl = $url;
+        $this->user->getIdentity()->pictureUrl = $url;
+
+        $this->userManager->save($user);
+
+        $this->sendJson(['avatarUrl' => $url]);
     }
 }
