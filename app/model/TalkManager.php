@@ -128,6 +128,8 @@ class TalkManager
                 self::COLUMN_USER_ID => (int)$userId,
                 self::COLUMN_TALK_ID => (int)$talkId,
             ]);
+
+        $this->recountVote($talkId);
     }
 
 
@@ -142,11 +144,30 @@ class TalkManager
                 self::COLUMN_USER_ID => (int)$userId,
                 self::COLUMN_TALK_ID => (int)$talkId,
             ])->delete();
+
+        $this->recountVote($talkId);
     }
 
 
     /**
-     * @param $id
+     * @param int $talkId
+     */
+    protected function recountVote($talkId)
+    {
+        $result = $this->database
+            ->query('SELECT COUNT(*) as `count` FROM `talk_votes` WHERE `talk_id` = ?', $talkId)
+            ->fetch();
+        $sum = $result['count'];
+
+        /** @var Talk $talk */
+        $talk = $this->talkRepository->getById($talkId);
+        $talk->votes = $sum;
+        $this->talkRepository->persistAndFlush($talk);
+    }
+
+
+    /**
+     * @param int $id
      * @return Talk|null
      */
     public function getById($id)
@@ -174,12 +195,18 @@ class TalkManager
     }
 
 
+    /**
+     * @return \Nextras\Orm\Collection\ICollection
+     */
     public function findAllProgram()
     {
         return $this->programRepository->findAll();
     }
 
 
+    /**
+     * @return array
+     */
     public function getDurationChoice()
     {
         $choice = [];

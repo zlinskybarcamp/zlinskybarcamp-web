@@ -51,6 +51,7 @@ class ConferencePresenter extends BasePresenter
 
 
     /**
+     * @throws \App\Model\InvalidEnumeratorSetException
      * @throws \Nette\Utils\JsonException
      */
     public function renderTalks()
@@ -108,6 +109,13 @@ class ConferencePresenter extends BasePresenter
     {
         $userId = $this->user->id;
         $this->talkManager->addVote($userId, $talkId);
+        if ($this->isAjax()) {
+            $talk = $this->talkManager->getById($talkId);
+            $this->sendJson([
+                'votes' => $talk->votes,
+                'hasVoted' => true,
+            ]);
+        }
         $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
 
@@ -121,6 +129,14 @@ class ConferencePresenter extends BasePresenter
     {
         $userId = $this->user->id;
         $this->talkManager->removeVote($userId, $talkId);
+        if ($this->isAjax()) {
+            $talk = $this->talkManager->getById($talkId);
+            $this->sendJson([
+                'votes' => $talk->votes,
+                'hasVoted' => false,
+            ]);
+        }
+
         $this->redirect(IResponse::S303_SEE_OTHER, 'this');
     }
 
@@ -143,6 +159,7 @@ class ConferencePresenter extends BasePresenter
     /**
      * @param $id
      * @throws \Nette\Application\BadRequestException
+     * @throws \Nette\Utils\JsonException
      */
     public function renderTalkDetail($id)
     {
@@ -157,6 +174,7 @@ class ConferencePresenter extends BasePresenter
         }
 
         $this->template->talk = $talk;
+        $this->template->extended = Json::decode($talk->extended, Json::FORCE_ARRAY);
     }
 
 

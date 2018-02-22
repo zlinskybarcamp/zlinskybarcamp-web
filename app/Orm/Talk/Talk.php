@@ -11,7 +11,8 @@ use Nextras\Orm\Entity\Entity;
  * @property string                     $title
  * @property string|null                $description
  * @property string|null                $purpose
- * @property int                        $enabled
+ * @property int                        $enabled        {default 1}
+ * @property int                        $votes          {default 0}
  * @property string|null                $category
  * @property string|null                $company
  * @property string|null                $notes

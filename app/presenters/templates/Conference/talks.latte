@@ -41,21 +41,21 @@
                     </div>
                     <div class="item-author-contact show-full">
                         <div class="item-social">
-                            <a n:ifset="$extended['url']['facebook']" href="{$extended['url']['facebook']}">
+                            <a n:if="isset($extended['url']['facebook']) && $extended['url']['facebook']" href="{$extended['url']['facebook']}" target="_blank">
                                 <span class="icon icon-facebook-1"><span class="path1"></span><span class="path2"></span></span>
                             </a>
-                            <a n:ifset="$extended['url']['twitter']" href="{$extended['url']['twitter']}">
+                            <a n:if="isset($extended['url']['twitter']) && $extended['url']['twitter']" href="{$extended['url']['twitter']}" target="_blank">
                                 <span class="icon icon-twitter-2"><span class="path1"></span><span class="path2"></span></span>
                             </a>
-                            <a n:ifset="$extended['url']['google']" href="{$extended['url']['google']}">
+                            <a n:if="isset($extended['url']['google']) && $extended['url']['google']" href="{$extended['url']['google']}" target="_blank">
                                 <span class="icon icon-google-plus"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
                             </a>
-                            <a n:ifset="$extended['url']['linkedin']" href="{$extended['url']['linkedin']}">
+                            <a n:if="isset($extended['url']['linkedin']) && $extended['url']['linkedin']" href="{$extended['url']['linkedin']}" target="_blank">
                                 <span class="icon icon-linkedin"><span class="path1"></span><span class="path2"></span></span>
                             </a>
                         </div>
 
-                        <a n:ifset="$extended['url']['www']" href="{$extended['url']['www']}">{$extended['url']['www']}</a>
+                        <a n:if="isset($extended['url']['www']) && $extended['url']['www']" href="{$extended['url']['www']}" target="_blank">{$extended['url']['www']}</a>
                     </div>
                 </div>
                 <div class="item-content">
@@ -64,7 +64,7 @@
                         <div class="item-text">{$talk->description|truncate:150}</div>
 
                         <div class="item-tags">
-                            <span n:ifcontent class="item-tag"><span>{$category}</span></span>
+                            <span n:if="$category" class="item-tag"><span>{$category}</span></span>
                         </div>
                     </div>
 
@@ -76,21 +76,21 @@
                             <h3>Komu je přednáška určena?</h3>
                             {$talk->purpose|breaklines}
 
-                            <div><a href="{link talkDetail id => $talk->id}" class="btn btn-brand btn-tiny btn-block mt-xs">Zobrazit detail přednášky</a></div>
+                            <div><a href="{link talkDetail id => $talk->id}" class="btn btn-brand btn-sm mt-xs">Zobrazit detail přednášky</a></div>
                         </div>
                     </div>
                 </div>
                 <div class="item-options">
-                    {*<span class="item-count">187</span> hlasů*}
-
+                    {if $features->show_vote}
+                        <span class="item-count">{$talk->votes}</span> hlasů
+                    {/if}
                     <div class="item-buttons">
                         {if $allowVote}
                             {if !$user->isLoggedIn()}
                                 <a href="{link signToVote!}" class="btn btn-sm btn-secondary">Přihlas se a hlasuj</a>
-                            {elseif isset($votes[$talk->id])}
-                                <a href="{link unvote!, talkId => $talk->id}" class="btn btn-sm btn-action-bordered">Má můj hlas</a>
                             {else}
-                                <a href="{link vote!, talkId => $talk->id}" class="btn btn-sm btn-secondary">Dej mi svůj hlas!</a>
+                                <a href="{link unvote!, talkId => $talk->id}" class="btn btn-sm btn-action-bordered vote-ajax is-voted" {if !isset($votes[$talk->id])}style="display:none;"{/if}>Má můj hlas</a>
+                                <a href="{link vote!, talkId => $talk->id}" class="btn btn-sm btn-secondary vote-ajax is-not-voted" {if isset($votes[$talk->id])}style="display:none;"{/if}>Dej mi svůj hlas!</a>
                             {/if}
                         {/if}
 
