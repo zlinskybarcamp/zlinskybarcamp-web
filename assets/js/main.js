@@ -386,7 +386,8 @@ barcamp.avatarUploader = function () {
     var upload = function (form) {
         fetch(uploadUrl, {
             method: 'POST',
-            body: form
+            body: form,
+            credentials: 'same-origin'
         })
         .then(function (response) {
             $image.removeClass('pulse');
