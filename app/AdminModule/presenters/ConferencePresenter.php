@@ -67,7 +67,18 @@ class ConferencePresenter extends BasePresenter
         $df = fopen("php://output", 'w');
         fputcsv(
             $df,
-            ["Jméno", "E-mail", "Registrace", "Newsletter", "Souhlas získán", "Bio", "Firma", "Adresa"],
+            [
+                "E-mail",
+                "Jméno",
+                "Přihlášen",
+                "Newsletter",
+                "Přednášející",
+                "Registrace",
+                "Souhlas získán",
+                "Bio",
+                "Firma",
+                "Adresa"
+            ],
             $delimiter,
             '"'
         );
@@ -80,10 +91,12 @@ class ConferencePresenter extends BasePresenter
                 $extended = [];
             }
             @fputcsv($df, [
-                $conferee->name,
                 $conferee->email,
-                $conferee->created->format(\DateTime::ATOM),
+                $conferee->name,
+                'Ano',
                 $conferee->allowMail ? 'Ano' : 'Ne',
+                count($conferee->talk) ? 'Ano' : 'Ne',
+                $conferee->created->format(\DateTime::ATOM),
                 $conferee->consens ? $conferee->consens->format(\DateTime::ATOM) : null,
                 $conferee->bio,
                 isset($extended['company']) ? $extended['company'] : null,
