@@ -57,8 +57,10 @@ class ConferencePresenter extends BasePresenter
      * @throws \Nette\Application\AbortException
      * @secured
      */
-    public function handleExportConfereeCsv()
+    public function handleExportConfereeCsv($msExcel = false)
     {
+        $delimiter = $msExcel ? ';' : ',';
+
         $allConferee = $this->confereeManager->findAll();
 
         ob_start();
@@ -66,7 +68,7 @@ class ConferencePresenter extends BasePresenter
         fputcsv(
             $df,
             ["Jméno", "E-mail", "Registrace", "Newsletter", "Souhlas získán", "Bio", "Firma", "Adresa"],
-            ";",
+            $delimiter,
             '"'
         );
 
@@ -86,13 +88,15 @@ class ConferencePresenter extends BasePresenter
                 $conferee->bio,
                 isset($extended['company']) ? $extended['company'] : null,
                 isset($extended['address']) ? $extended['address'] : null,
-            ], ";", '"');
+            ], $delimiter, '"');
         }
 
         fclose($df);
         $csv = ob_get_clean();
 
-        $csv = iconv("UTF-8", "WINDOWS-1250", $csv);
+        if ($msExcel) {
+            $csv = iconv("UTF-8", "WINDOWS-1250", $csv);
+        }
 
         $fileDatePostfix = gmdate("Ymd.his");
         header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
@@ -372,7 +376,7 @@ class ConferencePresenter extends BasePresenter
 
         $form->addHidden('id');
 
-        $form->addSelect('type', 'Type', [null=>'== Vyberte =='] + $this->getMergedTalks())
+        $form->addSelect('type', 'Type', [null => '== Vyberte =='] + $this->getMergedTalks())
             ->setRequired(true);
         $form->addRadioList('room', 'Místnost', $this->talkManager->getRooms())->setRequired(true);
         $form->addText('time', 'Čas konání')->setType('time')->setRequired(true);
