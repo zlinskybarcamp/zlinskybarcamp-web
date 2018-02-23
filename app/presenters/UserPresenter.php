@@ -181,8 +181,9 @@ class UserPresenter extends BasePresenter
      * @return Form
      * @throws ConfereeNotFound
      * @throws NoUserLoggedIn
-     * @throws UserNotFound
      * @throws TalkNotFound
+     * @throws UserNotFound
+     * @throws \App\Model\InvalidEnumeratorSetException
      * @throws \Nette\Utils\JsonException
      */
     protected function createComponentTalkForm()

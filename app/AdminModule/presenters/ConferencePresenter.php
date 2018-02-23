@@ -212,7 +212,7 @@ class ConferencePresenter extends BasePresenter
 
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popis');
-        $form->addTextArea('purpose', 'Pro koho je určena');
+//        $form->addTextArea('purpose', 'Pro koho je určena');
         $form->addSelect('category', 'Kategorie', $this->talkManager->getCategories());
         $form->addText('company', 'Firma');
 
