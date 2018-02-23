@@ -277,7 +277,6 @@ class ConferencePresenter extends BasePresenter
      * @param $name
      * @throws JsonException
      * @throws \App\Model\InvalidEnumeratorSetException
-     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnStatusException
      * @throws \Ublaboo\DataGrid\Exception\DataGridException
      */
     public function createComponentProgramDatagrid($name)
@@ -335,6 +334,7 @@ class ConferencePresenter extends BasePresenter
 
     /**
      *
+     * @throws JsonException
      */
     public function getMergedTalks()
     {
@@ -344,9 +344,18 @@ class ConferencePresenter extends BasePresenter
 
         unset($merged['talk']);
 
+        /** @var Talk $talk */
         foreach ($talks as $talk) {
             $id = $talk->id;
-            $merged['talk|' . $id] = "Přednáška: " . $talk->title;
+
+            $requestedDuration = null;
+            $extended = Json::decode($talk->extended, Json::FORCE_ARRAY);
+            $duration = isset($extended['requested_duration']) ? intval($extended['requested_duration']) : null;
+            if ($duration) {
+                $requestedDuration = " (požadováno $duration minut)";
+            }
+
+            $merged['talk|' . $id] = "Přednáška: " . $talk->title . $requestedDuration;
         }
 
         return $merged;
@@ -383,6 +392,12 @@ class ConferencePresenter extends BasePresenter
      */
     public function createComponentProgramForm()
     {
+        $durations = $this->talkManager->getDurations();
+        $durations += $this->talkManager->getDurationChoice();
+        $durations = array_filter($durations, function ($item) {
+            return intval($item);
+        }, ARRAY_FILTER_USE_KEY);
+
         $form = new Form();
 
         $form->addGroup();
@@ -393,9 +408,9 @@ class ConferencePresenter extends BasePresenter
             ->setRequired(true);
         $form->addRadioList('room', 'Místnost', $this->talkManager->getRooms())->setRequired(true);
         $form->addText('time', 'Čas konání')->setType('time')->setRequired(true);
-        $form->addRadioList('duration', 'Délka v minutách', $this->talkManager->getDurationChoice());
+        $form->addRadioList('duration', 'Délka v minutách', $durations);
 
-        $form->addSubmit('submit', 'Odeslat')->setOption('primary', true);
+        $form->addSubmit('submit', 'Uložit')->setOption('primary', true);
 
         $form->addGroup('Vlastní název přednášky v programu');
 
@@ -406,6 +421,7 @@ class ConferencePresenter extends BasePresenter
 
         $form->addGroup();
 
+        $form->addSubmit('submit_rename', 'Uložit a přejmenovat')->setOption('primary', true);
 
         $form->addProtection();
 
