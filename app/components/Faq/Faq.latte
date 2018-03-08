@@ -1,24 +1,31 @@
-<div class="row pure-g pure-p mt-lg">
-    <div class="pure-u-1 pure-u-md-1-2">
-        <ul class="accordion-list">
-{var $half = ceil(count($faqs)/2)}
-{foreach $faqs as $faq}
-            <li>
-                <h3 class="accordion-heading">
-                    <span class="item-icon"></span>
-                    <span class="item-text">{$faq['key']}</span>
-                </h3>
-                <div class="accordion-content">
-                    {$faq['value']|striptags|linkify|noescape}
+<section>
+    <div class="wrapper">
+        <div class="container">
+            <h1 class="lg"><span class="dot-end">Faq</span></h1>
+                <div class="row pure-g pure-p mt-lg">
+                    <div class="pure-u-1 pure-u-md-1-2">
+                        <ul class="accordion-list">
+                {var $half = ceil(count($faqs)/2)}
+                {foreach $faqs as $faq}
+                            <li>
+                                <h3 class="accordion-heading">
+                                    <span class="item-icon"></span>
+                                    <span class="item-text">{$faq['key']}</span>
+                                </h3>
+                                <div class="accordion-content">
+                                    {$faq['value']|striptags|linkify|noescape}
+                                </div>
+                            </li>
+                {if $iterator->getCounter() == $half && !$iterator->isLast()}
+                        </ul>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-2">
+                        <ul class="accordion-list">
+                {/if}
+                {/foreach}
+                        </ul>
+                    </div>
                 </div>
-            </li>
-{if $iterator->getCounter() == $half && !$iterator->isLast()}
-        </ul>
+        </div>
     </div>
-    <div class="pure-u-1 pure-u-md-1-2">
-        <ul class="accordion-list">
-{/if}
-{/foreach}
-        </ul>
-    </div>
-</div>
+</section>

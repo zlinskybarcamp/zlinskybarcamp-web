@@ -30,13 +30,30 @@ class FaqControl extends Control
      */
     public function render()
     {
+        $faqs = $this->enumeratorManager->get(EnumeratorManager::SET_FAQS);
+
+        if (count($faqs)) {
+            $this->renderFaqs($faqs);
+        } else {
+            $this->renderBlank();
+        }
+    }
+
+
+    private function renderFaqs(array $faqs)
+    {
+        $this->template->faqs = $faqs;
         $this->template->setFile(__DIR__ . '/Faq.latte');
-        $this->template->faqs = $this->enumeratorManager->get(EnumeratorManager::SET_FAQS);
         $this->template->addFilter('linkify', function ($input) {
             $regex = '@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.\,]*(\?\S+)?)?)*)@';
             $output = preg_replace($regex, '<a href="$1">$1</a>', $input);
             return $output;
         });
         $this->template->render();
+    }
+
+
+    private function renderBlank()
+    {
     }
 }
