@@ -384,20 +384,20 @@ barcamp.avatarUploader = function () {
     });
 
     var upload = function (form) {
-        fetch(uploadUrl, {
+        $.ajax({
+            url: uploadUrl,
             method: 'POST',
-            body: form,
-            credentials: 'same-origin'
+            data: form,
+            contentType: false,
+            processData: false,
+            dataType: 'json'
         })
-        .then(function (response) {
+        .done(function (json) {
             $image.removeClass('pulse');
-            return response.json();
-        })
-        .then(function (json) {
             var value = 'url(\'' + json.avatarUrl + '\')';
             $image.css('background-image', value);
         })
-        .catch(function(error) {
+        .fail(function(error) {
             $image.removeClass('pulse');
             alert('Tento obrázek není možné načíst, zkuste jej prosím zmenšit.');
             console.log(error);
