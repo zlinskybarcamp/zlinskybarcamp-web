@@ -53,6 +53,7 @@ class Facebook implements IAuthenticator
 
         $helper->getPersistentDataHandler()->set('state', Json::encode([
             'backlink' => $backlink,
+            'callback' => $callbackUrl,
             'csrf' => $helper->getPseudoRandomStringGenerator()->getPseudoRandomString(32),
         ]));
 
@@ -135,7 +136,8 @@ class Facebook implements IAuthenticator
     private function getAccessToken(FacebookRedirectLoginHelper $helper)
     {
         try {
-            $accessToken = $helper->getAccessToken();
+            $callbackUrl = $this->getCallbackUrl();
+            $accessToken = $helper->getAccessToken($callbackUrl);
         } catch (FacebookSDKException $e) {
             Debugger::log($e, ILogger::EXCEPTION);
             throw new AuthenticationException('Autorizace na API selhalo', 0, $e);
@@ -159,6 +161,28 @@ class Facebook implements IAuthenticator
         }
 
         return (string)$accessToken;
+    }
+
+
+    /**
+     * Get callbackUrl from saved state value
+     * @return null|string
+     */
+    protected function getCallbackUrl()
+    {
+        $helper = $this->facebook->getRedirectLoginHelper();
+
+        try {
+            $state = Json::decode($helper->getPersistentDataHandler()->get('state'), Json::FORCE_ARRAY);
+        } catch (JsonException $e) {
+            return null;
+        }
+
+        if (isset($state['callback'])) {
+            return (string)$state['callback'];
+        }
+
+        return null;
     }
 
 
