@@ -117,6 +117,7 @@ class SignPresenter extends BasePresenter
      */
     public function actionFederatedLogin($platform)
     {
+        $this->getSession()->start();
         $callbackUrl = $this->link('//federatedCallback', ['platform' => $platform, 'backlink' => null]);
         $loginUrl = $this->getAuthenticator($platform)->getLoginUrl($callbackUrl, $this->backlink);
         $this->redirectUrl($loginUrl, Response::S303_POST_GET);
