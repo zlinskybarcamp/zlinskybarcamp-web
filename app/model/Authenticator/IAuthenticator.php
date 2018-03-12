@@ -15,9 +15,10 @@ interface IAuthenticator
 {
     /**
      * @param string $callbackUrl
+     * @param string|null $backlink
      * @return string mixed
      */
-    public function getLoginUrl($callbackUrl);
+    public function getLoginUrl($callbackUrl, $backlink = null);
 
 
     /**
@@ -26,6 +27,14 @@ interface IAuthenticator
      * @throws AuthenticationException
      */
     public function authenticate(IRequest $request);
+
+
+    /**
+     * @param IRequest $request
+     * @param string|null $default
+     * @return string|null
+     */
+    public function getBacklink(IRequest $request, $default = null);
 
 
     /**

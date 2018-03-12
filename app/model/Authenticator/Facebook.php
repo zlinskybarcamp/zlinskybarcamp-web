@@ -10,6 +10,7 @@ use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Nette\Http\IRequest;
 use Nette\Security\AuthenticationException;
 use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Tracy\Debugger;
 use Tracy\ILogger;
 
@@ -41,11 +42,19 @@ class Facebook implements IAuthenticator
 
     /**
      * @param string $callbackUrl
+     * @param string|null $backlink
      * @return string
+     * @throws \Nette\Utils\JsonException
+     * @throws FacebookSDKException
      */
-    public function getLoginUrl($callbackUrl)
+    public function getLoginUrl($callbackUrl, $backlink = null)
     {
         $helper = $this->facebook->getRedirectLoginHelper();
+
+        $helper->getPersistentDataHandler()->set('state', Json::encode([
+            'backlink' => $backlink,
+            'csrf' => $helper->getPseudoRandomStringGenerator()->getPseudoRandomString(32),
+        ]));
 
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
@@ -74,6 +83,29 @@ class Facebook implements IAuthenticator
         $identity->token = $accessToken;
 
         return $identity;
+    }
+
+
+    /**
+     * @param IRequest $request
+     * @param string|null $default
+     * @return string|null
+     */
+    public function getBacklink(IRequest $request, $default = null)
+    {
+        $helper = $this->facebook->getRedirectLoginHelper();
+
+        try {
+            $state = Json::decode($helper->getPersistentDataHandler()->get('state'), Json::FORCE_ARRAY);
+        } catch (JsonException $e) {
+            return $default;
+        }
+
+        if (isset($state['backlink'])) {
+            return (string)$state['backlink'];
+        }
+
+        return $default;
     }
 
 
