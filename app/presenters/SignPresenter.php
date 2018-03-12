@@ -115,10 +115,10 @@ class SignPresenter extends BasePresenter
      * @param string $platform
      * @throws \Nette\Application\AbortException
      */
-    public function handleFederated($platform)
+    public function actionFederatedLogin($platform)
     {
-        $callbackUrl = $this->link('//callback!', ['platform' => $platform]);
-        $loginUrl = $this->getAuthenticator($platform)->getLoginUrl($callbackUrl);
+        $callbackUrl = $this->link('//federatedCallback', ['platform' => $platform, 'backlink' => null]);
+        $loginUrl = $this->getAuthenticator($platform)->getLoginUrl($callbackUrl, $this->backlink);
         $this->redirectUrl($loginUrl, Response::S303_POST_GET);
     }
 
@@ -129,11 +129,12 @@ class SignPresenter extends BasePresenter
      * @throws \Nette\Application\AbortException
      * @throws \Nette\Utils\JsonException
      */
-    public function handleCallback($platform)
+    public function actionFederatedCallback($platform)
     {
 
         try {
             $authenticator = $this->getAuthenticator($platform);
+            $this->backlink = $authenticator->getBacklink($this->getHttpRequest(), $this->backlink);
             $identity = $authenticator->authenticate($this->getHttpRequest());
         } catch (AuthenticationException $e) {
             $this->flashMessage('Omlouváme, přihlášení se nepovedlo. Zkuste to prosím znovu.');

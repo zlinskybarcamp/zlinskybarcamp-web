@@ -10,6 +10,7 @@ use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Nette\Http\IRequest;
 use Nette\Security\AuthenticationException;
 use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Tracy\Debugger;
 use Tracy\ILogger;
 
@@ -41,11 +42,20 @@ class Facebook implements IAuthenticator
 
     /**
      * @param string $callbackUrl
+     * @param string|null $backlink
      * @return string
+     * @throws \Nette\Utils\JsonException
+     * @throws FacebookSDKException
      */
-    public function getLoginUrl($callbackUrl)
+    public function getLoginUrl($callbackUrl, $backlink = null)
     {
         $helper = $this->facebook->getRedirectLoginHelper();
+
+        $helper->getPersistentDataHandler()->set('state', Json::encode([
+            'backlink' => $backlink,
+            'callback' => $callbackUrl,
+            'csrf' => $helper->getPseudoRandomStringGenerator()->getPseudoRandomString(32),
+        ]));
 
         $permissions = ['email'];
         $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
@@ -78,6 +88,29 @@ class Facebook implements IAuthenticator
 
 
     /**
+     * @param IRequest $request
+     * @param string|null $default
+     * @return string|null
+     */
+    public function getBacklink(IRequest $request, $default = null)
+    {
+        $helper = $this->facebook->getRedirectLoginHelper();
+
+        try {
+            $state = Json::decode($helper->getPersistentDataHandler()->get('state'), Json::FORCE_ARRAY);
+        } catch (JsonException $e) {
+            return $default;
+        }
+
+        if (isset($state['backlink'])) {
+            return (string)$state['backlink'];
+        }
+
+        return $default;
+    }
+
+
+    /**
      * Copy base user properties from Identity to User
      *
      * @param User $user
@@ -103,7 +136,8 @@ class Facebook implements IAuthenticator
     private function getAccessToken(FacebookRedirectLoginHelper $helper)
     {
         try {
-            $accessToken = $helper->getAccessToken();
+            $callbackUrl = $this->getCallbackUrl();
+            $accessToken = $helper->getAccessToken($callbackUrl);
         } catch (FacebookSDKException $e) {
             Debugger::log($e, ILogger::EXCEPTION);
             throw new AuthenticationException('Autorizace na API selhalo', 0, $e);
@@ -127,6 +161,28 @@ class Facebook implements IAuthenticator
         }
 
         return (string)$accessToken;
+    }
+
+
+    /**
+     * Get callbackUrl from saved state value
+     * @return null|string
+     */
+    protected function getCallbackUrl()
+    {
+        $helper = $this->facebook->getRedirectLoginHelper();
+
+        try {
+            $state = Json::decode($helper->getPersistentDataHandler()->get('state'), Json::FORCE_ARRAY);
+        } catch (JsonException $e) {
+            return null;
+        }
+
+        if (isset($state['callback'])) {
+            return (string)$state['callback'];
+        }
+
+        return null;
     }
 
 

@@ -24,6 +24,16 @@ class RouterFactory
         $router[] = $adminRouter;
 
         $router[] = new Route('<action>', 'Homepage:default');
+        $router[] = new Route('sign/facebook', [
+            'presenter' => 'Sign',
+            'action' => 'federatedLogin',
+            'platform' => 'facebook',
+        ]);
+        $router[] = new Route('sign/facebook/callback', [
+            'presenter' => 'Sign',
+            'action' => 'federatedCallback',
+            'platform' => 'facebook',
+        ]);
         $router[] = new Route('<presenter>/<action>[/<id \d+>]');
 
         return $router;
