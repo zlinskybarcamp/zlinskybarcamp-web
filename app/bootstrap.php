@@ -10,7 +10,7 @@ App\Model\DebugEnabler::setWorkDir(__DIR__ . '/../temp');
 if (App\Model\DebugEnabler::isDebug()) {
     $configurator->setDebugMode(true);
 } else {
-    $configurator->setDebugMode(['212.79.110.126']);//['212.79.110.126','90.177.225.193']); // Automatic detect by Nette
+    $configurator->setDebugMode([]); // Automatic detect by Nette
 }
 
 $configurator->enableTracy(__DIR__ . '/../log', 'zbc-org@googlegroups.com');
