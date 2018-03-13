@@ -12,9 +12,13 @@
                             <h2 class="item-title">{$user->identity->name}</h2>
                             <span n:if="$conferee" class="item-meta">{$conferee->bio|striptags|truncate:50}</span>
                             <div class="item-text">
-                                <a href="{link uploadAvatar!}" id="avatar-upload-button" class="btn btn-brand btn-tiny btn-block mt-xs js-only">Nahrát fotku</a>
+                                {if $conferee}
+                                    <a href="{link uploadAvatar!}" id="avatar-upload-button" class="btn btn-brand btn-tiny btn-block mt-xs js-only">Nahrát fotku</a>
 
-                                <a href="{link conferee}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit profil</a>
+                                    <a href="{link conferee}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit profil</a>
+                                {elseif $allowRegisterConferee}
+                                    <a href="{link Sign:conferee}" class="btn btn-secondary btn-tiny btn-block mt-xs">Zapsat se jako účastník</a>
+                                {/if}
 
                                 {if count($talks)}
                                     <a n:if="$allowEditTalk" href="{link talk}" class="btn btn-brand btn-tiny btn-block mt-xs">Upravit přednášku</a>

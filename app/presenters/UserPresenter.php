@@ -115,6 +115,7 @@ class UserPresenter extends BasePresenter
         $this->template->talks = $talks;
 
         $features = $this->eventInfoProvider->getFeatures();
+        $this->template->allowRegisterConferee = $features['conferee'];
         $this->template->allowRegisterTalk = $features['talks'];
         $this->template->allowEditTalk = $features['talks_edit'];
     }
