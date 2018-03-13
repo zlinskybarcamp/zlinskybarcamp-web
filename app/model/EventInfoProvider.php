@@ -109,7 +109,7 @@ class EventInfoProvider
      */
     public function getFeatures()
     {
-        return ArrayHash::from([
+        $features = ArrayHash::from([
             'conferee' => $this->config->get(self::FEATURE_CONFEREE),
             'talks' => $this->config->get(self::FEATURE_TALK),
             'talks_edit' => $this->config->get(self::FEATURE_TALK_EDIT),
@@ -119,5 +119,9 @@ class EventInfoProvider
             'program' => $this->config->get(self::FEATURE_PROGRAM),
             'report' => $this->config->get(self::FEATURE_REPORT),
         ]);
+
+        $features['talks_show'] = $features['talks'] || $features['vote'] || $features['show_vote'];
+
+        return $features;
     }
 }
