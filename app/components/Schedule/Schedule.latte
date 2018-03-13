@@ -50,11 +50,11 @@
             <span class="item-circle">
                 <span>04</span>
             </span>
-            <div class="item-content">
+            <div class="item-content {if !$urls->way}disabled{/if}">
                 <span class="item-title">Barcamp</span>
                 Barcamp bude {$dates->event|date:'j. n. Y \o\d G:i'}
                 <div>
-                    <a href="https://blog.zlinskybarcamp.cz/2018/01/15/jak-se-k-nam-odstanete/"><span class="btn btn-action btn-sm">Jak se tam dostanu?</span></a>
+                    <a n:tag-if="$urls->way" n:href="$urls->way"><span class="btn btn-action btn-sm">Jak se tam dostanu?</span></a>
                 </div>
             </div>
             <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
