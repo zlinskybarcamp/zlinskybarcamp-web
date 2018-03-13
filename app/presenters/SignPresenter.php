@@ -187,6 +187,7 @@ class SignPresenter extends BasePresenter
     /**
      * @throws UserNotFound
      * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\JsonException
      */
     public function renderUp()
     {
@@ -197,6 +198,11 @@ class SignPresenter extends BasePresenter
             $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
         } catch (NoUserLoggedIn $e) {
             //Expected state - user must not be logged
+        }
+
+        if (!$this->eventInfoProvider->getFeatures()['conferee']) {
+            $this->flashMessage('Registrace ještě nejsou otevřeny, omlouváme se');
+            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
         }
     }
 
