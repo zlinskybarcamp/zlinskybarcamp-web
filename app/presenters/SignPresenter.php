@@ -10,6 +10,7 @@ use App\Model\EventInfoProvider;
 use App\Model\IdentityManager;
 use App\Model\IdentityNotFoundException;
 use App\Model\NoUserLoggedIn;
+use App\Model\RestoredUserIdentity;
 use App\Model\TalkManager;
 use App\Model\UserManager;
 use App\Model\UserNotFound;
@@ -208,39 +209,14 @@ class SignPresenter extends BasePresenter
      */
     public function renderConferee()
     {
-        try {
-            $user = $this->userManager->getByLoginUser($this->user);
-            if ($user->conferee) {
-                $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
-            }
-        } catch (NoUserLoggedIn $e) {
-            // Reuired exception, no action
-        }
-
         if (!$this->eventInfoProvider->getFeatures()['conferee']) {
             $this->flashMessage('Registrace ještě nejsou otevřeny, omlouváme se');
             $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
         }
 
-        /** @var Identity|null $identity */
-        $identity = $this->restoreEntity(Identity::class);
+        $restoredUserIdentity = $this->getRestorableUserIdentity();
 
-        if ($identity instanceof Identity === false) {
-            $this->flashMessage('Pro účast na Barcampu se prosím nejdříve přihlaste nebo registrujte');
-            $this->redirect(Response::S303_SEE_OTHER, 'up');
-        }
-
-        $user = $identity->user;
-
-        if ($user instanceof User === false) {
-            /** @var User|null $user */
-            $user = $this->restoreEntity(User::class);
-        }
-
-        if ($user instanceof User === false) {
-            Debugger::log('Při obnovení profilu pro dokončení registraci se nezachoval User', Logger::ERROR);
-            $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
-        }
+        $user = $restoredUserIdentity->getUser();
 
         /** @var Form $form */
         $form = $this['confereeForm'];
@@ -341,31 +317,17 @@ class SignPresenter extends BasePresenter
     {
         /**
          * @param Conferee $conferee
+         * @throws AuthenticationException
+         * @throws UserNotFound
          * @throws \Nette\Application\AbortException
          * @throws \Nette\Application\BadRequestException
-         * @throws \Nette\Security\AuthenticationException
          */
         $onSubmitCallback = function ($conferee) {
 
-            /** @var Identity|null $identity */
-            $identity = $this->restoreEntity(Identity::class);
+            $restoredUserIdentity = $this->getRestorableUserIdentity();
 
-            if ($identity instanceof Identity === false) {
-                $this->flashMessage('Pro účast na Barcampu se prosím nejdříve přihlaste nebo registrujte');
-                $this->redirect(Response::S303_SEE_OTHER, 'in');
-            }
-
-            $user = $identity->user;
-
-            if ($user instanceof User === false) {
-                /** @var User|null $user */
-                $user = $this->restoreEntity(User::class);
-            }
-
-            if ($user instanceof User === false) {
-                Debugger::log('Při obnovení profilu pro dokončení registraci se nezachoval User', Logger::ERROR);
-                $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
-            }
+            $user = $restoredUserIdentity->getUser();
+            $identity = $restoredUserIdentity->getIdentity();
 
             $this->userManager->save($user);
             $this->identityManager->save($identity);
@@ -474,6 +436,63 @@ class SignPresenter extends BasePresenter
     private function getAuthenticator($platform)
     {
         return $this->authenticatorProvider->provide($platform);
+    }
+
+
+    /**
+     * Get User & Identity from restored object (created by partial login) or load it from logged user
+     * @return RestoredUserIdentity
+     * @throws UserNotFound
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Application\BadRequestException
+     */
+    protected function getRestorableUserIdentity()
+    {
+        $user = null;
+
+        try {
+            $user = $this->userManager->getByLoginUser($this->user);
+            if ($user->conferee) {
+                $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+            }
+        } catch (NoUserLoggedIn $e) {
+            // Reuired exception, no action
+        }
+
+        /** @var Identity|null $identity */
+        $identity = $this->restoreEntity(Identity::class);
+
+        if ($identity instanceof Identity === false && $user instanceof User) {
+            $identities = $user->identity;
+
+            if ($identities->count() > 0) {
+                foreach ($identities as $oneIdentity) {
+                    $identity = $oneIdentity;
+                    break;
+                }
+            }
+        }
+
+        if ($identity instanceof Identity === false) {
+            $this->flashMessage('Pro účast na Barcampu se prosím nejdříve přihlaste nebo registrujte');
+            $this->redirect(Response::S303_SEE_OTHER, 'up');
+        }
+
+        if ($user instanceof User === false) {
+            $user = $identity->user;
+        }
+
+        if ($user instanceof User === false) {
+            /** @var User|null $user */
+            $user = $this->restoreEntity(User::class);
+        }
+
+        if ($user instanceof User === false) {
+            Debugger::log('Při obnovení profilu pro dokončení registraci se nezachoval User', Logger::ERROR);
+            $this->error('Chyba konzistence dat', IResponse::S500_INTERNAL_SERVER_ERROR);
+        }
+
+        return new RestoredUserIdentity($user, $identity);
     }
 
 
