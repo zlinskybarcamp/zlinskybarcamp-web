@@ -55,9 +55,9 @@ class DashboardPresenter extends BasePresenter
         Event::FEATURE_VOTE => ['bool', 'Povolit hlasování přednášek'],
         Event::FEATURE_SHOW_VOTE => ['bool', 'Povolit zobrazení hlasů'],
         Event::FEATURE_TALK_ORDER => ['select', 'Přednášky', self::NOFLAG, null, [
-            '' => 'řazené podle přihlášení',
-            'random' => 'řazené náhodně',
-            'vote' => 'řazené podle hlasů',
+            '' => 'Řazené podle přihlášení',
+            'random' => 'Řazené náhodně',
+            'vote' => 'Řazené podle hlasů',
         ]],
         Event::FEATURE_PROGRAM => ['bool', 'Zobrazit program přednášek'],
         Event::FEATURE_REPORT => ['bool', 'Zobrazit výstupy (YouTube/Reporty)'],
