@@ -5,6 +5,25 @@ barcamp.viewportWidth = function () { // šířka viewportu
     viewportWidth = Math.max($(window).width(), window.innerWidth);
 };
 
+barcamp.imageFailover = function () {
+    $('img.failover').each(function(){
+        var fixator = function(element){
+            element.src = '/img/logo-icon-96.png';
+        };
+
+        if(this.complete) {
+            if(this.naturalHeight === 0) {
+                fixator(this);
+            }
+        }
+        else {
+            $(this).on('error', function(){
+                fixator(this);
+            });
+        }
+    });
+};
+
 barcamp.openNav = function () {
 
     $('.btn-mobile-menu-open-container').click(function () {
@@ -453,6 +472,7 @@ barcamp.netteInit = function () {
 
 barcamp.init = function () {
     barcamp.netteInit();
+    barcamp.imageFailover();
     barcamp.viewportWidth();
     barcamp.openNav();
     barcamp.slider();

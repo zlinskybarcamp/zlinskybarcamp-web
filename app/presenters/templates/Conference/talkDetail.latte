@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="pure-u-1 pure-u-md-1-3 item-author">
-                    <img class="item-image" src="{$talk->conferee->pictureUrl}">
+                    <img class="item-image failover" src="{$talk->conferee->pictureUrl}">
                     <div class="item-author-name">{$talk->conferee->name}</div>
                     <div n:ifcontent class="item-meta">{$talk->company}</div>
                     <div class="item-author-contact">
