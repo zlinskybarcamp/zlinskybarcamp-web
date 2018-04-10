@@ -189,6 +189,17 @@ class TalkManager
     /**
      * @return \Nextras\Orm\Collection\ICollection
      */
+    public function findActive()
+    {
+        return $this->talkRepository->findBy([
+            'enabled' => true
+        ]);
+    }
+
+
+    /**
+     * @return \Nextras\Orm\Collection\ICollection
+     */
     public function findAll()
     {
         return $this->talkRepository->findAll();

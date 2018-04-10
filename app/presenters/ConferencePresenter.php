@@ -57,7 +57,9 @@ class ConferencePresenter extends BasePresenter
     public function renderTalks()
     {
         /** @var ICollection|Talk[] $talks */
-        $talks = $this->talkRepository->findAll();
+        $talks = $this->talkRepository->findBy(
+            ['enabled' => true]
+        );
         $categories = $this->talkManager->getCategories();
 
         $sort = $this->eventInfoProvider->getFeatures()['talks_order'];

@@ -9,6 +9,9 @@
                 <div class="pure-u-1 pure-u-md-2-3">
                     <div class="item-content">
                         <h2 class="item-title">{$talk->title}</h2>
+                        {if ! $talk->enabled}
+                            <p class="remove-note">Přednáška je zrušena a nekoná se!</p>
+                        {/if}
                         <div class="item-text">
                             {$talk->description|breaklines}
                         </div>
