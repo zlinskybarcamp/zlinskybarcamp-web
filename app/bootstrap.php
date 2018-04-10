@@ -13,7 +13,7 @@ if (App\Model\DebugEnabler::isDebug()) {
     $configurator->setDebugMode([]); // Automatic detect by Nette
 }
 
-$configurator->enableTracy(__DIR__ . '/../log', 'zbc-org@googlegroups.com');
+$configurator->enableTracy(__DIR__ . '/../log', 'pan@jakubboucek.cz');
 \Tracy\Debugger::getLogger()->emailSnooze = '1 hour';
 
 $configurator->setTimeZone('Europe/Prague');
