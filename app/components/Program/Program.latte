@@ -155,6 +155,20 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {case 'custom'}
+                                                <div class="program-item t{$program->duration} style2">
+                                                    <div class="item-content">
+                                                        <h3 class="item-title">{$program->title}</h3>
+
+                                                        <div class="item-footer">
+                                                            <span n:ifcontent class="author">{$program->speaker}</span>
+
+                                                            <div class="hover">
+                                                                <span class="time">{$program->startClock} - {$program->endClock}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             {default}
                                                 <a href="{plink :Conference:talkDetail, id => $program->talkId}" class="program-item t{$program->duration} style2">
                                                     <div class="item-content">
