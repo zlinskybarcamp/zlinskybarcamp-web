@@ -46,7 +46,7 @@
             </div>
             <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
         </li>
-        <li class="item-primary" data-step-name="event">
+        <li data-step-name="event">
             <span class="item-circle">
                 <span>04</span>
             </span>
@@ -54,7 +54,7 @@
                 <span class="item-title">Barcamp</span>
                 Barcamp bude {$dates->event|date:'j. n. Y \o\d G:i'}
                 <div>
-                    <a n:tag-if="$urls->way" n:href="$urls->way"><span class="btn btn-action btn-sm">Jak se tam dostanu?</span></a>
+                    <a n:tag-if="$urls->way" href="{$urls->way}"><span class="btn btn-action btn-sm">Jak se tam dostanu?</span></a>
                 </div>
             </div>
             <div class="progress progress-after" data-visual-limits="0;0;20;25;88;88;100;100"></div>
