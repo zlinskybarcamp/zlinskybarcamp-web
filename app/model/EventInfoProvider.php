@@ -33,6 +33,7 @@ class EventInfoProvider
     const URL_YOUTUBE = 'url.social.youtube';
     const URL_INSTAGRAM = 'url.social.instagram';
     const URL_WAY_TO_EVENT = 'url.post.howToWay';
+    const URL_REPORT = 'url.post.report';
 
     const SCHEDULE_VISUAL_DATE_BEGIN = 'schedule.visualDate.begin';
     const SCHEDULE_VISUAL_DATE_END = 'schedule.visualDate.end';
@@ -85,6 +86,7 @@ class EventInfoProvider
             'youtube' => $this->config->get(self::URL_YOUTUBE),
             'instagram' => $this->config->get(self::URL_INSTAGRAM),
             'way' => $this->config->get(self::URL_WAY_TO_EVENT),
+            'report' => $this->config->get(self::URL_REPORT),
         ]);
     }
 

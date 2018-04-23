@@ -44,6 +44,7 @@ class DashboardPresenter extends BasePresenter
         Event::URL_YOUTUBE => ['url', 'URL profilu na YouTube'],
         Event::URL_INSTAGRAM => ['url', 'URL profilu na Instagram'],
         Event::URL_WAY_TO_EVENT => ['url', 'URL na článek Jak se k nám dostanete'],
+        Event::URL_REPORT => ['url', 'URL na report z akce (třeba videa)'],
     ];
 
     /**
