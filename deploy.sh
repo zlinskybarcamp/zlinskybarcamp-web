@@ -22,7 +22,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SSH="ssh ${SERVER_NAME}"
 
 echo "Uploading data to SSH…"
-rsync -rcPn --delete --exclude-from="${DIR}/.rsync-exclude" "${DIR}${LOCAL_DIR}/" "${SERVER_NAME}:$REMOTE_DIR/"
+rsync -rcP --delete --exclude-from="${DIR}/.rsync-exclude" "${DIR}${LOCAL_DIR}/" "${SERVER_NAME}:$REMOTE_DIR/"
 
 echo "Remove temporary files…"
 ${SSH} find ${REMOTE_DIR}/temp -mindepth 2 -type f -delete
