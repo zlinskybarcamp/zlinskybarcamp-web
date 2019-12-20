@@ -98,7 +98,6 @@ class SignPresenter extends BasePresenter
         TalkManager $talkManager,
         EventInfoProvider $eventInfoProvider
     ) {
-        parent::__construct();
         $this->signInFormFactory = $signInFactory;
         $this->signUpFormFactory = $signUpFormFactory;
         $this->confereeForm = $confereeForm;
@@ -140,7 +139,7 @@ class SignPresenter extends BasePresenter
             $identity = $authenticator->authenticate($this->getHttpRequest());
         } catch (AuthenticationException $e) {
             $this->flashMessage('Omlouváme, přihlášení se nepovedlo. Zkuste to prosím znovu.');
-            $this->redirect(IResponse::S303_SEE_OTHER, 'in');
+            $this->redirect('in');
             return;
         }
 
@@ -155,14 +154,14 @@ class SignPresenter extends BasePresenter
         if ($user) {
             $this->login($user);
             $this->restoreRequest($this->backlink);
-            $this->redirect(IResponse::S303_POST_GET, 'User:profil');
+            $this->redirect('User:profil');
         } else {
             $user = new User();
             $authenticator->fillUserWithIdentity($user, $identity);
 
             $this->storeEntity($identity, Identity::class);
             $this->storeEntity($user, User::class);
-            $this->redirect(IResponse::S303_POST_GET, 'conferee');
+            $this->redirect('conferee');
         }
     }
 
@@ -177,7 +176,7 @@ class SignPresenter extends BasePresenter
             $this->userManager->getByLoginUser($this->user);
 
             //When user loaded - already loggedIn
-            $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+            $this->redirect('User:profil');
         } catch (NoUserLoggedIn $e) {
             //Expected state - user must not be logged
         }
@@ -195,14 +194,14 @@ class SignPresenter extends BasePresenter
             $this->userManager->getByLoginUser($this->user);
 
             //When user loaded - already loggedIn
-            $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+            $this->redirect('User:profil');
         } catch (NoUserLoggedIn $e) {
             //Expected state - user must not be logged
         }
 
         if (!$this->eventInfoProvider->getFeatures()['conferee']) {
             $this->flashMessage('Registrace ještě nejsou otevřeny, omlouváme se');
-            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
+            $this->redirect('Homepage:');
         }
     }
 
@@ -217,7 +216,7 @@ class SignPresenter extends BasePresenter
     {
         if (!$this->eventInfoProvider->getFeatures()['conferee']) {
             $this->flashMessage('Registrace ještě nejsou otevřeny, omlouváme se');
-            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
+            $this->redirect('Homepage:');
         }
 
         $restoredUserIdentity = $this->getRestorableUserIdentity();
@@ -245,23 +244,23 @@ class SignPresenter extends BasePresenter
         } catch (NoUserLoggedIn $e) {
             $this->flashMessage('Pro vypsání přednášky na Barcampu se prosím přihlaste nebo registrujte');
             $this->backlink = $this->storeRequest();
-            $this->redirect(Response::S303_SEE_OTHER, 'up');
+            $this->redirect('up');
             return;
         } catch (ConfereeNotFound $e) {
             $this->flashMessage('Pro vypsání přednášky se nejdříve registrujte jako účastník');
             $this->backlink = $this->storeRequest();
-            $this->redirect(Response::S303_SEE_OTHER, 'conferee');
+            $this->redirect('conferee');
             return;
         }
 
         if ($conferee->talk->count() > 0) {
             $this->flashMessage('Momentíček, Vy už přece máte přednášku vypsanou :)');
-            $this->redirect(IResponse::S303_SEE_OTHER, 'User:talk');
+            $this->redirect('User:talk');
         }
 
         if (!$this->eventInfoProvider->getFeatures()['talks']) {
             $this->flashMessage('Vypisování přednášek není v tuto chvíli povoleno, omlouváme se');
-            $this->redirect(Response::S303_SEE_OTHER, 'Homepage:');
+            $this->redirect('Homepage:');
         }
     }
 
@@ -275,7 +274,7 @@ class SignPresenter extends BasePresenter
         $this->getUser()->logout();
 
         $this->flashMessage('Jste odhlášeni');
-        $this->redirect(IResponse::S303_SEE_OTHER, 'Homepage:');
+        $this->redirect('Homepage:');
     }
 
 
@@ -311,7 +310,7 @@ class SignPresenter extends BasePresenter
 
             $this->storeEntity($identity, Identity::class);
             $this->storeEntity($user, User::class);
-            $this->redirect(IResponse::S303_POST_GET, 'conferee');
+            $this->redirect('conferee');
         });
     }
 
@@ -459,7 +458,7 @@ class SignPresenter extends BasePresenter
         try {
             $user = $this->userManager->getByLoginUser($this->user);
             if ($user->conferee) {
-                $this->redirect(IResponse::S303_SEE_OTHER, 'User:profil');
+                $this->redirect('User:profil');
             }
         } catch (NoUserLoggedIn $e) {
             // Reuired exception, no action
@@ -481,7 +480,7 @@ class SignPresenter extends BasePresenter
 
         if ($identity instanceof Identity === false) {
             $this->flashMessage('Pro účast na Barcampu se prosím nejdříve přihlaste nebo registrujte');
-            $this->redirect(Response::S303_SEE_OTHER, 'up');
+            $this->redirect('up');
         }
 
         if ($user instanceof User === false) {

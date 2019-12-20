@@ -1,8 +1,7 @@
 version: '3'
 services:
     web:
-        build:
-            context: docker/web
+        image: jakubboucek/lamp-devstack-php:7.3-debug
         ports:
             - "8000:80"
         volumes:
@@ -14,14 +13,13 @@ services:
         depends_on:
             - mysqldb
     mysqldb:
-        image: mysql
+        image: jakubboucek/lamp-devstack-mysql:10.4
         container_name: zlinskybarcampweb_mysqldb_1
         restart: always
         ports:
             - "8686:3306"
         volumes:
             - "./docker/mysql/data:/var/lib/mysql"
-            - "./docker/mysql/conf.d:/etc/mysql/conf.d"
         environment:
             - MYSQL_DATABASE=zlinskybarcamp
             - MYSQL_ROOT_PASSWORD=redbitmasters

@@ -56,7 +56,6 @@ class HomepagePresenter extends BasePresenter
         IFaqControlFactory $faqFactory,
         FeedFactory $feedFactory
     ) {
-        parent::__construct();
         $this->scheduleFactory = $scheduleFactory;
         $this->buttonsFactory = $buttonsFactory;
         $this->newsletterFactory = $newsletterFormFactory;

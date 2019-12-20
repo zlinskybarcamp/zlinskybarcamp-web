@@ -7,6 +7,7 @@ use Kdyby\Replicator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
+use Nette\ComponentModel\IComponent;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\ArrayHash;
@@ -30,13 +31,12 @@ class EnumeratorFormControl extends Control
      */
     public function __construct($setName, EnumeratorManager $enumeratorManager)
     {
-        parent::__construct();
         $this->setName = $setName;
         $this->enumeratorManager = $enumeratorManager;
     }
 
 
-    protected function attached($presenter)
+    protected function attached(IComponent $presenter): void
     {
         parent::attached($presenter);
 
@@ -82,12 +82,12 @@ class EnumeratorFormControl extends Control
             $enums->addText('value', 'Hodnota', 50);
 
             $enums->addSubmit('remove', 'Odstranit')
-                ->setValidationScope(false)
+                ->setValidationScope(null)
                 ->onClick[] = $removeEvent;
         }, 1);
 
         $enums->addSubmit('add', 'Přidat další otázku')
-            ->setValidationScope(false)
+            ->setValidationScope(null)
             ->onClick[] = [$this, 'addClicked'];
 
         $form->addSubmit('submit', 'Uložit');

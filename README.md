@@ -48,7 +48,7 @@ Na stránce `http://localhost:8000` by se měl objevit aktuální web.
 Požadavky pro běh
 -----------------
 
-PHP 5.6 nebo vyšší, Mysql 5 nebo vyšší, Git, Unzip. 
+PHP 7.3 nebo vyšší, MariaDB 10 nebo vyšší, Git, Unzip. 
 
 V PHP jsou potřeba rozšření: mysqli, pdo_mysql.
 
