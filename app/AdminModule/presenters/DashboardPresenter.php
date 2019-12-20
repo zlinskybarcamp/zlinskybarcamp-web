@@ -95,7 +95,6 @@ class DashboardPresenter extends BasePresenter
         ScheduleManager $scheduleManager,
         IEnumeratorFormControlFactory $enumeratorFormControlFactory
     ) {
-        parent::__construct();
         $this->configManager = $configManager;
         $this->scheduleManager = $scheduleManager;
         $this->enumeratorFormControlFactory = $enumeratorFormControlFactory;
@@ -139,7 +138,7 @@ class DashboardPresenter extends BasePresenter
 
         $messageAppend = $step ? 'Web byl nastaven podle nastavení kroku.' : 'Natavení webu se nijak nezměnilo.';
         $this->flashMessage('Harmonogram byl úspěšně převeden do zvoleného kroku. ' . $messageAppend, 'success');
-        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
+        $this->redirect('this');
     }
 
 
@@ -319,7 +318,7 @@ class DashboardPresenter extends BasePresenter
         }
 
         $this->flashMessage('Nastavení bylo upraveno a změny se hned projevily na webu', 'success');
-        $this->redirect(IResponse::S303_SEE_OTHER, 'this');
+        $this->redirect('this');
     }
 
 

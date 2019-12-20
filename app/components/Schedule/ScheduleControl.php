@@ -19,14 +19,13 @@ class ScheduleControl extends Control
     private $scheduleManager;
 
 
-    /**
+    /**Enumerator/EnumeratorFormControl.php
      * ScheduleControl constructor.
      * @param EventInfoProvider $infoProvider
      * @param ScheduleManager $scheduleManager
      */
     public function __construct(EventInfoProvider $infoProvider, ScheduleManager $scheduleManager)
     {
-        parent::__construct();
         $this->infoProvider = $infoProvider;
         $this->scheduleManager = $scheduleManager;
     }

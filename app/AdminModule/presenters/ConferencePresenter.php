@@ -25,6 +25,7 @@ class ConferencePresenter extends BasePresenter
      * @var TalkManager
      */
     private $talkManager;
+    private $icon_prefix;
 
 
     /**
@@ -137,7 +138,8 @@ class ConferencePresenter extends BasePresenter
         $rooms = $this->talkManager->getRooms();
 
         $grid = new DataGrid($this, $name);
-        DataGrid::$icon_prefix = 'glyphicon glyphicon-';
+        $this->icon_prefix = DataGrid::$iconPrefix;
+        $this->icon_prefix = 'glyphicon glyphicon-';
 
         $grid->setDataSource($this->talkManager->findAll());
 
@@ -287,7 +289,7 @@ class ConferencePresenter extends BasePresenter
             ->orderBy('time', ICollection::ASC);
 
         $grid = new DataGrid($this, $name);
-        DataGrid::$icon_prefix = 'glyphicon glyphicon-';
+        DataGrid::$iconPrefix = 'glyphicon glyphicon-';
 
         $grid->setDataSource($program);
 

@@ -21,7 +21,7 @@ class BasePresenter extends Presenter
 
         if (!$this->user->isLoggedIn()) {
             $this->flashMessage('Pro přístup do administrace se nejdříve přihlaste.');
-            $this->redirect(301, ':Sign:in', ['backlink' => $this->storeRequest()]);
+            $this->redirectPermanent(':Sign:in', ['backlink' => $this->storeRequest()]);
         }
 
         if (!$this->user->isInRole('admin')) {

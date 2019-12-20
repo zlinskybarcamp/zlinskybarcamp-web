@@ -19,7 +19,6 @@ class FaqControl extends Control
      */
     public function __construct(EnumeratorManager $enumeratorManager)
     {
-        parent::__construct();
         $this->enumeratorManager = $enumeratorManager;
     }
 

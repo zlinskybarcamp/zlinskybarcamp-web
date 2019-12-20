@@ -91,11 +91,11 @@ class UserPresenter extends BasePresenter
             $this->userManager->getByLoginUser($this->user);
         } catch (NoUserLoggedIn $e) {
             $backlink = $this->storeRequest();
-            $this->redirect(IResponse::S303_SEE_OTHER, ':Sign:conferee', ['backlink' => $backlink]);
+            $this->redirect(':Sign:conferee', ['backlink' => $backlink]);
         } catch (UserNotFound $e) {
             $this->user->logout();
             $backlink = $this->storeRequest();
-            $this->redirect(IResponse::S303_SEE_OTHER, ':Sign:in', ['backlink' => $backlink]);
+            $this->redirect(':Sign:in', ['backlink' => $backlink]);
         }
     }
 
@@ -129,7 +129,7 @@ class UserPresenter extends BasePresenter
     {
         if (!$this->eventInfoProvider->getFeatures()['talks_edit']) {
             $this->flashMessage('Upravování přednášek není v tuto chvíli povoleno, omlouváme se');
-            $this->redirect(Response::S303_SEE_OTHER, 'profil');
+            $this->redirect('profil');
         }
     }
 
